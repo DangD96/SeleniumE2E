@@ -61,13 +61,16 @@ abstract class BasePage {
     public String getURL() {
         return driver.getCurrentUrl();
     }
+
     public void openBurgerMenu() {
         waitForElementToBeVisible(burgerMenuOpen);
+        burgerMenuOpen.click();
         waitForElementToBeVisible(burgerMenuContents);
     }
     public LoginPage logOut() {
         waitForElementToBeVisible(burgerMenuLogout);
         burgerMenuLogout.click();
+        waitForElementToBeInvisible(burgerMenuContents);
         return new LoginPage(driver);
     }
 

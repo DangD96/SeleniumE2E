@@ -12,6 +12,8 @@ public class LoginPage extends BasePage {
     WebElement passwordField;
     @FindBy(id = "login-button")
     WebElement loginButton;
+    @FindBy(className = "error-message-container error")
+    WebElement loginErrorMessage;
 
     public LoginPage(WebDriver driver) {
         super(driver);

@@ -67,6 +67,7 @@ abstract class BasePage {
         burgerMenuOpen.click();
         waitForElementToBeVisible(burgerMenuContents);
     }
+
     public LoginPage logOut() {
         openBurgerMenu();
         waitForElementToBeVisible(burgerMenuLogout);

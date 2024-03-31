@@ -1,2 +1,9 @@
-package org.djd;public class CheckoutPage {
+package org.djd;
+
+import org.openqa.selenium.WebDriver;
+
+public class CheckoutPage extends BasePage{
+    public CheckoutPage(WebDriver driver) {
+        super(driver);
+    }
 }

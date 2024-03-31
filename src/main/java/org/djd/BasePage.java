@@ -15,7 +15,6 @@ abstract class BasePage {
 
     @FindBy(css = "a.shopping_cart_link")
     WebElement shoppingCartLink;
-
     @FindBy(id = "react-burger-menu-btn")
     WebElement burgerMenuOpen;
     @FindBy(css = "nav.bm-item-list")

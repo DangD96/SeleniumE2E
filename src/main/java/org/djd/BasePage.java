@@ -13,6 +13,7 @@ import java.time.Duration;
 abstract class BasePage {
     protected WebDriver driver;
 
+
     @FindBy(css = "a.shopping_cart_link")
     WebElement shoppingCartLink;
     @FindBy(id = "react-burger-menu-btn")
@@ -66,9 +67,7 @@ abstract class BasePage {
         burgerMenuOpen.click();
         waitForElementToBeVisible(burgerMenuContents);
     }
-
     public LoginPage logOut() {
-        openBurgerMenu();
         waitForElementToBeVisible(burgerMenuLogout);
         burgerMenuLogout.click();
         waitForElementToBeInvisible(burgerMenuContents);

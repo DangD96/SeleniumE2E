@@ -12,6 +12,7 @@ import java.time.Duration;
 
 abstract class BasePage {
     protected WebDriver driver;
+    int a = 5;
 
     @FindBy(css = "a.shopping_cart_link")
     WebElement shoppingCartLink;
@@ -66,9 +67,7 @@ abstract class BasePage {
         burgerMenuOpen.click();
         waitForElementToBeVisible(burgerMenuContents);
     }
-
     public LoginPage logOut() {
-        openBurgerMenu();
         waitForElementToBeVisible(burgerMenuLogout);
         burgerMenuLogout.click();
         waitForElementToBeInvisible(burgerMenuContents);

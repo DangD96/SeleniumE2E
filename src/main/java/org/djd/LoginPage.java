@@ -1,18 +1,27 @@
 package org.djd;
 
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.Select;
 
 public class LoginPage extends BasePage {
-    @FindBy(id = "user-name")
+    JavascriptExecutor js = (JavascriptExecutor) driver;
+    @FindBy(id = "username")
     WebElement usernameField;
     @FindBy(id = "password")
     WebElement passwordField;
-    @FindBy(id = "login-button")
+    @FindBy(css = "input[value='admin']")
+    WebElement adminRadioBtn;
+    @FindBy(css = "input[value='user']")
+    WebElement userRadioBtn;
+    @FindBy(css = "select.form-control")
+    WebElement roleDropdown;
+    @FindBy(id = "terms")
+    WebElement termsAndServicesCheckbox;
+    @FindBy(id = "signInBtn")
     WebElement loginButton;
-    @FindBy(className = "error-message-container error")
+    @FindBy(css = ".alert.alert-danger")
     WebElement loginErrorMessage;
 
     public LoginPage(WebDriver driver) {
@@ -20,13 +29,44 @@ public class LoginPage extends BasePage {
         PageFactory.initElements(driver, this);
     }
 
-    public CatalogPage logIn(String username, String password) {
+    public CatalogPage logIn(String username, String password, String userType, String userRole, Boolean acceptTerms) throws InterruptedException {
+        // Just using JS to fill them out because why not
         super.waitForElementToBeVisible(usernameField);
-        usernameField.sendKeys(username);
+        js.executeScript("arguments[0].value = arguments[1]", usernameField, username);
+        Thread.sleep(1000);
+
         super.waitForElementToBeVisible(passwordField);
-        passwordField.sendKeys(password);
+        js.executeScript("arguments[0].value = arguments[1]", passwordField, password);
+        Thread.sleep(1000);
+
+        // if (!userType.isEmpty()) // do something
+        if (!userRole.isEmpty()) selectDropDownOption(userRole);
+        if (acceptTerms) acceptTermsAndServices();
+
         super.waitForElementToBeVisible(loginButton);
         loginButton.click();
+        Thread.sleep(1000);
+
         return new CatalogPage(driver);
     }
+
+    public void selectDropDownOption(String option) {
+        waitForElementToBeVisible(roleDropdown);
+        Select roles = new Select(roleDropdown);
+        roles.selectByVisibleText(option);
+    }
+    public void clearUsername() {
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("arguments[0].value = ''", usernameField);
+    }
+    public void clearPassword() {
+        // the element.clear() method doesn't work on the password field for some reason so using JS
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("arguments[0].value = ''", passwordField);
+    }
+    public void acceptTermsAndServices() {
+        waitForElementToBeVisible(termsAndServicesCheckbox);
+        termsAndServicesCheckbox.click();
+    }
+
 }

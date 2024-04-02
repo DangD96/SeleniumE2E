@@ -19,7 +19,7 @@ public class LoginTest extends BaseTest{
         LoginPage loginPage = new LoginPage(driver);
         loginPage.clearUsername();
         loginPage.clearPassword();
-        Thread.sleep(1000);
+
         CatalogPage catalogPage = loginPage.logIn("rahulshettyacademy", "learning", "", "", false);
         Assert.assertTrue(catalogPage.waitForElementToBeVisible(catalogPage.productList));
         Assert.assertEquals(catalogPage.getURL(), "https://rahulshettyacademy.com/angularpractice/shop");

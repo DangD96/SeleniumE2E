@@ -17,9 +17,6 @@ public class LoginTest extends BaseTest{
     @Test(description = "Successful Login")
     public void loginValid() throws InterruptedException {
         LoginPage loginPage = new LoginPage(driver);
-        loginPage.clearUsername();
-        loginPage.clearPassword();
-
         CatalogPage catalogPage = loginPage.logIn("rahulshettyacademy", "learning", "", "", false);
         Assert.assertTrue(catalogPage.waitForElementToBeVisible(catalogPage.productList));
         Assert.assertEquals(catalogPage.getURL(), "https://rahulshettyacademy.com/angularpractice/shop");

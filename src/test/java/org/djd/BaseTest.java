@@ -5,10 +5,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeSuite;
-import org.testng.annotations.BeforeTest;
+import org.testng.annotations.*;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -27,7 +24,7 @@ public class BaseTest {
         props.load(reader);
     }
 
-    @BeforeTest
+    @BeforeMethod
     public void initDriver() throws IOException {
         parseProps();
         String browser = props.getProperty("browser");
@@ -37,7 +34,7 @@ public class BaseTest {
         driver.manage().window().maximize();
     }
 
-    @BeforeTest(dependsOnMethods = {"initDriver"})
+    @BeforeMethod(dependsOnMethods = {"initDriver"})
     public void launchApp() {
         try {
             driver.get(props.getProperty("testURL"));
@@ -46,7 +43,7 @@ public class BaseTest {
         }
     }
 
-    @AfterClass
+    @AfterMethod
     public void tearDown() {
         driver.quit();
     }

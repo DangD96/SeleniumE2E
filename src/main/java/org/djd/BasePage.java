@@ -9,6 +9,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.List;
 
 abstract class BasePage {
     protected WebDriver driver;
@@ -38,6 +39,11 @@ abstract class BasePage {
 
     public String getURL() {
         return driver.getCurrentUrl();
+    }
+
+    public boolean waitForElementsToBeVisible(List<WebElement> elements) {
+        new WebDriverWait(driver, Duration.ofSeconds(3)).until(ExpectedConditions.visibilityOfAllElements(elements));
+        return true;
     }
 
 }

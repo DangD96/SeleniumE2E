@@ -19,7 +19,7 @@ public class LoginTest extends BaseTest{
     public void loginValid() throws InterruptedException {
         LoginPage loginPage = new LoginPage(driver);
         CatalogPage catalogPage = loginPage.logIn("rahulshettyacademy", "learning", "", "", false);
-        Assert.assertTrue(catalogPage.waitForElementToBeVisible((WebElement) catalogPage.productList));
+        Assert.assertTrue(catalogPage.waitForElementsToBeVisible(catalogPage.productList));
         Assert.assertEquals(catalogPage.getURL(), "https://rahulshettyacademy.com/angularpractice/shop");
     }
 

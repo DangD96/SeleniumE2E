@@ -31,6 +31,12 @@ public class CatalogPage extends BasePage{
         return productList.size();
     }
 
+    public WebElement addProductToCart(String productName) {
+        WebElement product = productList.stream().filter(p -> p.getText().contains(productName)).toList().get(0);
+        product.findElement(By.cssSelector(".card-footer button")).click();
+        return product;
+    }
+
     public BigDecimal getProductPrice(WebElement product) {
         String rawPriceStr = product.findElement(By.cssSelector(".card-body h5")).getText();
         String[] splitPriceStr = rawPriceStr.split("\\$");

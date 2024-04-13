@@ -1,5 +1,6 @@
 package org.djd;
 
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
@@ -18,7 +19,7 @@ public class LoginTest extends BaseTest{
     public void loginValid() throws InterruptedException {
         LoginPage loginPage = new LoginPage(driver);
         CatalogPage catalogPage = loginPage.logIn("rahulshettyacademy", "learning", "", "", false);
-        Assert.assertTrue(catalogPage.waitForElementToBeVisible(catalogPage.productList));
+        Assert.assertTrue(catalogPage.waitForElementToBeVisible((WebElement) catalogPage.productList));
         Assert.assertEquals(catalogPage.getURL(), "https://rahulshettyacademy.com/angularpractice/shop");
     }
 

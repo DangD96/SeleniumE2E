@@ -13,7 +13,9 @@ import java.util.Properties;
 public class BaseTest {
     protected WebDriver driver;
     private Properties props;
+    private String browser;
 
+    @BeforeSuite
     public void parseProps() throws IOException {
         // In IntelliJ, it's like the project/module directory
         String currentDirectory = System.getProperty("user.dir"); // C:\Users\david\coding\java\Udemy_Practice\SeleniumE2E
@@ -22,27 +24,26 @@ public class BaseTest {
         props.load(reader);
     }
 
+    @BeforeSuite(dependsOnMethods = {"parseProps"})
+    public void getBrowser() throws IOException {
+        browser = props.getProperty("browser");
+    }
+
     @BeforeMethod
-    public void initDriver() throws IOException {
-        parseProps();
-        String browser = props.getProperty("browser");
+    public void launchApp() {
         if (browser.equalsIgnoreCase("Chrome")) {driver = new ChromeDriver();}
         else if (browser.equalsIgnoreCase("Edge")) {driver = new EdgeDriver();}
         else if (browser.equalsIgnoreCase("Firefox")) {driver = new FirefoxDriver();}
         driver.manage().window().maximize();
-    }
-
-    @BeforeMethod(dependsOnMethods = {"initDriver"})
-    public void launchApp() {
         try {
             driver.get(props.getProperty("testURL"));
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println("Error: " + e);
         }
     }
 
     @AfterMethod
     public void tearDown() {
-        driver.quit();
+        driver.quit(); // Nulls the driver object
     }
 }

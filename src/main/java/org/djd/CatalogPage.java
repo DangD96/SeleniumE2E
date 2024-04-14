@@ -7,7 +7,6 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.List;
 
 public class CatalogPage extends BasePage{
@@ -39,8 +38,7 @@ public class CatalogPage extends BasePage{
 
     public BigDecimal getProductPrice(WebElement product) {
         String rawPriceStr = product.findElement(By.cssSelector(".card-body h5")).getText();
-        String[] splitPriceStr = rawPriceStr.split("\\$");
-        String price = Arrays.asList(splitPriceStr).get(1);
+        String price = rawPriceStr.replace("$","");
         return new BigDecimal(price);
     }
 

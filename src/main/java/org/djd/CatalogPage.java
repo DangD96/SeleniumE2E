@@ -20,12 +20,6 @@ public class CatalogPage extends BasePage{
         PageFactory.initElements(driver, this);
     }
 
-    public ShoppingCart goToShoppingCart() {
-        waitForElementToBeVisible(checkoutBtn);
-        checkoutBtn.click();
-        return new ShoppingCart(driver);
-    }
-
     public int getNumberOfProducts() {
         return productList.size();
     }

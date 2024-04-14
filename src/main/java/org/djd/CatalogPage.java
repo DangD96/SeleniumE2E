@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class CatalogPage extends BasePage{
-    @FindBy(tagName = "app-card-list")
+    @FindBy(css = "app-card-list app-card")
     List<WebElement> productList;
     @FindBy(partialLinkText = "Checkout")
     WebElement checkoutBtn;

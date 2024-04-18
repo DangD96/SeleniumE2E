@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 public class ProductTest extends BaseTest{
     LoginPage loginPage;
     CatalogPage catalogPage;
+    ShoppingCart shoppingCart;
     @Test(description = "Add correct product to shopping cart")
     public void addProductTest() throws InterruptedException {
         loginPage = new LoginPage(driver);
@@ -20,6 +21,8 @@ public class ProductTest extends BaseTest{
         Assert.assertEquals(catalogPage.getProductPrice(e).toString(), "24.99");
 
         Assert.assertTrue(catalogPage.checkoutBtn.getText().contains("Checkout ( 1 )"));
+
+        shoppingCart = catalogPage.goToShoppingCart();
     }
 
     @Test(description = "Verify correct product was added to shopping cart", dependsOnMethods = {"addProductTest"}, enabled = false)

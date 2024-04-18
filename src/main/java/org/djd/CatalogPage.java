@@ -41,4 +41,10 @@ public class CatalogPage extends BasePage{
         return new BigDecimal(price);
     }
 
+    public ShoppingCart goToShoppingCart() {
+        waitForElementToBeVisible(checkoutBtn);
+        checkoutBtn.click();
+        return new ShoppingCart(driver);
+    }
+
 }

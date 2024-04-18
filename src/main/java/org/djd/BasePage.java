@@ -45,6 +45,4 @@ abstract class BasePage {
         new WebDriverWait(driver, timeout).until(ExpectedConditions.visibilityOfAllElements(elements));
         return true;
     }
-
 }
-

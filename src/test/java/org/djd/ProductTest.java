@@ -29,5 +29,4 @@ public class ProductTest extends BaseTest{
         Assert.assertEquals(cart.getNumberOfProductsInCart(), 1);
         Assert.assertEquals(cart.getProductName(1), "Nokia Edge");
     }
-
 }

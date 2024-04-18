@@ -7,6 +7,8 @@ import org.openqa.selenium.support.ui.Select;
 
 public class LoginPage extends BasePage {
     JavascriptExecutor js = (JavascriptExecutor) driver;
+
+    // NOTE: Even if the element doesn't actually exist, selenium won't throw an error unless you interact with it
     @FindBy(id = "username")
     WebElement usernameField;
     @FindBy(id = "password")
@@ -25,7 +27,7 @@ public class LoginPage extends BasePage {
     WebElement loginErrorMessage;
 
     public LoginPage(WebDriver driver) {
-        super(driver);
+        super(driver); // Pass the driver to the parent class so the methods in there work
         PageFactory.initElements(driver, this);
     }
 
@@ -41,7 +43,7 @@ public class LoginPage extends BasePage {
         if (!userRole.isEmpty()) selectDropDownOption(userRole);
         if (toggleTermsBox) toggleTermsAndServices();
 
-        super.waitForElementToBeVisible(loginButton);
+        waitForElementToBeVisible(loginButton);
         loginButton.click();
 
         return new CatalogPage(driver);
@@ -73,5 +75,4 @@ public class LoginPage extends BasePage {
         waitForElementToBeVisible(termsAndServicesCheckbox);
         termsAndServicesCheckbox.click();
     }
-
 }

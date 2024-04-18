@@ -33,7 +33,7 @@ public class CatalogPage extends BasePage{
     public BigDecimal getProductPrice(WebElement product) {
         String rawPriceStr = product.findElement(By.cssSelector(".card-body h5")).getText();
         String price = rawPriceStr.replace("$","");
-        return new BigDecimal(price);
+        return new BigDecimal(price); // return a BigDecimal due to floating point imprecision
     }
 
     public BigDecimal getProductPrice(String productName) {
@@ -46,5 +46,4 @@ public class CatalogPage extends BasePage{
         checkoutBtn.click();
         return new ShoppingCart(driver);
     }
-
 }

@@ -19,5 +19,4 @@ public class LoginTest extends BaseTest{
         Assert.assertTrue(catalogPage.waitForElementsToBeVisible(catalogPage.productList));
         Assert.assertEquals(catalogPage.getURL(), "https://rahulshettyacademy.com/angularpractice/shop");
     }
-
 }

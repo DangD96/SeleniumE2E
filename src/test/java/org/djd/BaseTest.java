@@ -14,6 +14,7 @@ public class BaseTest {
     protected WebDriver driver;
     private Properties props;
 
+    // One way to set up browser and baseURL. Could also use TestNG parameters
     public void parseProps() throws IOException {
         // In IntelliJ, it's like the project/module directory
         String currentDirectory = System.getProperty("user.dir"); // C:\Users\david\coding\java\Udemy_Practice\SeleniumE2E

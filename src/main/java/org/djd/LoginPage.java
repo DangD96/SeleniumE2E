@@ -37,7 +37,7 @@ public class LoginPage extends BasePage {
         super.waitForElementToBeVisible(passwordField);
         js.executeScript("arguments[0].value = arguments[1]", passwordField, password);
 
-        // if (!userType.isEmpty()) // do something
+        if (!userType.isEmpty()) selectUserType(userType);
         if (!userRole.isEmpty()) selectDropDownOption(userRole);
         if (toggleTermsBox) toggleTermsAndServices();
 
@@ -51,6 +51,14 @@ public class LoginPage extends BasePage {
         waitForElementToBeVisible(roleDropdown);
         Select roles = new Select(roleDropdown);
         roles.selectByVisibleText(option);
+    }
+    public void selectUserType(String userType) {
+        waitForElementToBeVisible(userRadioBtn);
+        if (userType.equalsIgnoreCase("Admin")) {
+            adminRadioBtn.click();
+            return;
+        }
+        userRadioBtn.click();
     }
     public void clearUsername() {
         JavascriptExecutor js = (JavascriptExecutor) driver;

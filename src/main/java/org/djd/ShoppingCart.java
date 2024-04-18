@@ -20,7 +20,7 @@ public class ShoppingCart extends BasePage {
         PageFactory.initElements(driver, this);
     }
 
-    public int getNumberOfRows() {
+    public int getNumberOfProductsInCart() {
         return productsInCart.size();
     }
 
@@ -36,7 +36,7 @@ public class ShoppingCart extends BasePage {
     }
 
     public void removeProduct(String productName) {
-        Optional<WebElement> e = productsInCart.stream().filter(p -> this.getProductName(p).equals(productName)).findFirst();
+        Optional<WebElement> e = Optional.of(productsInCart.stream().filter(p -> this.getProductName(p).equals(productName)).findFirst().orElseThrow());
         e.ifPresent(WebElement::click);
     }
 }

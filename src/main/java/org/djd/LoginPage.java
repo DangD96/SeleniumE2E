@@ -31,10 +31,10 @@ public class LoginPage extends BasePage {
 
     public CatalogPage logIn(String username, String password, String userType, String userRole, Boolean toggleTermsBox) throws InterruptedException {
         // Just using JS to fill them out because why not
-        super.waitForElementToBeVisible(usernameField);
+        waitForElementToBeVisible(usernameField);
         js.executeScript("arguments[0].value = arguments[1]", usernameField, username);
 
-        super.waitForElementToBeVisible(passwordField);
+        waitForElementToBeVisible(passwordField);
         js.executeScript("arguments[0].value = arguments[1]", passwordField, password);
 
         if (!userType.isEmpty()) selectUserType(userType);

@@ -11,4 +11,9 @@
                 </class>
             </classes>
         </test>
+        <test verbose="2" preserve-order="true" name="Add Product">
+            <classes>
+                <class name="org.djd.ProductTest"/>
+            </classes>
+        </test>
     </suite>

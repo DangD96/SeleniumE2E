@@ -16,17 +16,14 @@ import java.util.Properties;
 
 public class BaseTest {
     protected WebDriver driver;
-    private Properties props;
-    
+    private String browser;
+    private String baseURL;
+
     @BeforeMethod(alwaysRun = true) // Always run so don't get skipped over if using TestNG Groups
     public void launchApp() throws IOException {
         parseConfig();
         setUpDriver();
-        try {
-            driver.get(props.getProperty("testURL"));
-        } catch (Exception e) {
-            System.out.println("Error: " + e);
-        }
+        driver.get(baseURL);
     }
 
     @AfterMethod(alwaysRun = true)
@@ -36,15 +33,16 @@ public class BaseTest {
 
     // One way to set up browser and baseURL. Could also use TestNG parameters
     private void parseConfig() throws IOException {
-        // In IntelliJ, it's like the project/module directory
+        // In IntelliJ, user.dir is like the project/module directory
         String currentDirectory = System.getProperty("user.dir"); // C:\Users\david\coding\java\Udemy_Practice\SeleniumE2E
-        props = new Properties();
+        Properties props = new Properties();
         FileReader reader = new FileReader(currentDirectory + "\\src\\test\\java\\org\\djd\\Test.properties"); // Double backslash because single backslash is escape character
         props.load(reader);
+        browser = props.getProperty("browser");
+        baseURL = props.getProperty("testURL");
     }
 
     private void setUpDriver() {
-        String browser = props.getProperty("browser");
         if (browser.equalsIgnoreCase("Chrome")) {
             driver = new ChromeDriver();
         }

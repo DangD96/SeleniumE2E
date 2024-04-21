@@ -23,7 +23,7 @@ public class BaseTest {
         props.load(reader);
     }
 
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true) // Always run so don't get skipped over if using Groups
     public void launchApp() throws IOException {
         parseProps();
         String browser = props.getProperty("browser");
@@ -38,7 +38,7 @@ public class BaseTest {
         }
     }
 
-    @AfterMethod
+    @AfterMethod(alwaysRun = true)
     public void tearDown() {
         driver.quit(); // Nulls the driver object
     }

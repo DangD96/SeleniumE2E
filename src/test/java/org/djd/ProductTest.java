@@ -10,7 +10,7 @@ public class ProductTest extends BaseTest{
     LoginPage loginPage;
     CatalogPage catalogPage;
     ShoppingCart cart;
-    @Test(description = "Add correct product to shopping cart")
+    @Test(description = "Add correct product to shopping cart", groups = {"DJDGroup"})
     public void addProductTest() throws InterruptedException {
         loginPage = new LoginPage(driver);
         catalogPage = loginPage.logIn("rahulshettyacademy", "learning", "", "Teacher", true);

@@ -12,7 +12,7 @@ public class LoginTest extends BaseTest{
         loginPage.logIn("wrong_username", "learning", "", "Teacher", true);
         Assert.assertTrue(loginPage.waitForElementToBeVisible(loginPage.loginErrorMessage));
     }
-    @Test(description = "Successful Login")
+    @Test(description = "Successful Login", groups = {"DJDGroup"})
     public void loginValid() throws InterruptedException {
         loginPage = new LoginPage(driver);
         CatalogPage catalogPage = loginPage.logIn("rahulshettyacademy", "learning", "", "", false);

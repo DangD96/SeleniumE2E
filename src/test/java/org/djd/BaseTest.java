@@ -52,9 +52,7 @@ public class BaseTest {
                 options.addArguments("--headless=new");
                 driver = new ChromeDriver(options);
             }
-            else {
-                driver = new ChromeDriver();
-            }
+            else {driver = new ChromeDriver();}
         }
         else if (browser.equalsIgnoreCase("Edge")) {
             if (isHeadless) {
@@ -62,9 +60,7 @@ public class BaseTest {
                 options.addArguments("--headless=new");
                 driver = new EdgeDriver(options);
             }
-            else {
-                driver = new EdgeDriver();
-            }
+            else {driver = new EdgeDriver();}
         }
         else if (browser.equalsIgnoreCase("Firefox")) {
             if (isHeadless) {
@@ -72,9 +68,7 @@ public class BaseTest {
                 options.addArguments("--headless"); // Firefox just needs the "headless" part to work for some reason            }
                 driver = new FirefoxDriver(options);
             }
-            else {
-                driver = new FirefoxDriver();
-            }
+            else {driver = new FirefoxDriver();}
         }
         driver.manage().window().maximize();
     }

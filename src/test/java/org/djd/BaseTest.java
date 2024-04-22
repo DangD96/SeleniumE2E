@@ -47,28 +47,25 @@ public class BaseTest {
 
     private void setUpDriver() {
         if (browser.equalsIgnoreCase("Chrome")) {
-            if (isHeadless) {
-                ChromeOptions options = new ChromeOptions();
-                options.addArguments("--headless=new");
-                driver = new ChromeDriver(options);
-            }
-            else {driver = new ChromeDriver();}
+            // https://peter.sh/experiments/chromium-command-line-switches/
+            ChromeOptions options = new ChromeOptions();
+            options.addArguments("--guest");
+            if (isHeadless) {options.addArguments("--headless=new");}
+            driver = new ChromeDriver(options);
         }
         else if (browser.equalsIgnoreCase("Edge")) {
-            if (isHeadless) {
-                EdgeOptions options = new EdgeOptions();
-                options.addArguments("--headless=new");
-                driver = new EdgeDriver(options);
-            }
-            else {driver = new EdgeDriver();}
+            // https://peter.sh/experiments/chromium-command-line-switches/
+            EdgeOptions options = new EdgeOptions();
+            options.addArguments("--guest"); // Need to add this so Edge doesn't show random popups
+            if (isHeadless) {options.addArguments("--headless=new");}
+            driver = new EdgeDriver(options);
         }
         else if (browser.equalsIgnoreCase("Firefox")) {
-            if (isHeadless) {
-                FirefoxOptions options = new FirefoxOptions();
-                options.addArguments("--headless"); // Firefox just needs the "headless" part to work for some reason            }
-                driver = new FirefoxDriver(options);
-            }
-            else {driver = new FirefoxDriver();}
+            // https://wiki.mozilla.org/Firefox/CommandLineOptions
+            FirefoxOptions options = new FirefoxOptions();
+            options.addArguments("-private");
+            if (isHeadless) {options.addArguments("-headless");}
+            driver = new FirefoxDriver(options);
         }
         driver.manage().window().maximize();
     }

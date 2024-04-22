@@ -5,6 +5,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.chromium.ChromiumOptions;
 import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.AbstractDriverOptions;
@@ -18,6 +19,7 @@ public class BaseTest {
     protected WebDriver driver;
     private String browser;
     private String baseURL;
+    private Boolean isHeadless;
 
     @BeforeMethod(alwaysRun = true) // Always run so don't get skipped over if using TestNG Groups
     public void launchApp() throws IOException {
@@ -40,17 +42,39 @@ public class BaseTest {
         props.load(reader);
         browser = props.getProperty("browser");
         baseURL = props.getProperty("testURL");
+        isHeadless = Boolean.valueOf(props.getProperty("headless"));
     }
 
     private void setUpDriver() {
         if (browser.equalsIgnoreCase("Chrome")) {
-            driver = new ChromeDriver();
+            if (isHeadless) {
+                ChromeOptions options = new ChromeOptions();
+                options.addArguments("--headless=new");
+                driver = new ChromeDriver(options);
+            }
+            else {
+                driver = new ChromeDriver();
+            }
         }
         else if (browser.equalsIgnoreCase("Edge")) {
-            driver = new EdgeDriver();
+            if (isHeadless) {
+                EdgeOptions options = new EdgeOptions();
+                options.addArguments("--headless=new");
+                driver = new EdgeDriver(options);
+            }
+            else {
+                driver = new EdgeDriver();
+            }
         }
         else if (browser.equalsIgnoreCase("Firefox")) {
-            driver = new FirefoxDriver();
+            if (isHeadless) {
+                FirefoxOptions options = new FirefoxOptions();
+                options.addArguments("--headless"); // Firefox just needs the "headless" part to work for some reason            }
+                driver = new FirefoxDriver(options);
+            }
+            else {
+                driver = new FirefoxDriver();
+            }
         }
         driver.manage().window().maximize();
     }

@@ -27,9 +27,7 @@ public class BaseTest {
     }
 
     @AfterMethod(alwaysRun = true)
-    public void tearDown() {
-        driver.quit(); // Nulls the driver object
-    }
+    public void tearDown() {driver.quit();} // Nulls the driver object
 
     // One way to set up browser and baseURL. Could also use TestNG parameters
     private void parseConfig() throws IOException {

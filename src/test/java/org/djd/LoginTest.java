@@ -9,8 +9,14 @@ public class LoginTest extends BaseTest{
     @Test(description = "Unsuccessful Login")
     public void loginInvalid() {
         loginPage = new LoginPage(driver);
+        // Make sure you get error
         loginPage.logIn("wrong_username", "learning", "", "Teacher", true);
         Assert.assertTrue(loginPage.waitForElementToBeVisible(loginPage.loginErrorMessage));
+
+        // Confirm you can log in normally after invalid log in
+        loginPage.clearUsername();
+        loginPage.clearPassword();
+        loginValid();
     }
     @Test(description = "Successful Login", groups = {"DJDGroup"})
     public void loginValid() {

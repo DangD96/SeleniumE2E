@@ -4,14 +4,12 @@ import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import java.math.BigDecimal;
-
 public class ProductTest extends BaseTest{
     LoginPage loginPage;
     CatalogPage catalogPage;
     ShoppingCart cart;
     @Test(description = "Add correct product to shopping cart", groups = {"DJDGroup"})
-    public void addProductTest() throws InterruptedException {
+    public void addProductTest() {
         loginPage = new LoginPage(driver);
         catalogPage = loginPage.logIn("rahulshettyacademy", "learning", "", "Teacher", true);
         catalogPage.waitForElementsToBeVisible(catalogPage.productList);

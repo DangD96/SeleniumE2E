@@ -7,13 +7,13 @@ public class LoginTest extends BaseTest{
     private LoginPage loginPage; // Make this a class variable since it's used multiple times in tests
 
     @Test(description = "Unsuccessful Login")
-    public void loginInvalid() throws InterruptedException {
+    public void loginInvalid() {
         loginPage = new LoginPage(driver);
         loginPage.logIn("wrong_username", "learning", "", "Teacher", true);
         Assert.assertTrue(loginPage.waitForElementToBeVisible(loginPage.loginErrorMessage));
     }
     @Test(description = "Successful Login", groups = {"DJDGroup"})
-    public void loginValid() throws InterruptedException {
+    public void loginValid() {
         loginPage = new LoginPage(driver);
         CatalogPage catalogPage = loginPage.logIn("rahulshettyacademy", "learning", "", "", false);
         Assert.assertTrue(catalogPage.waitForElementsToBeVisible(catalogPage.productList));

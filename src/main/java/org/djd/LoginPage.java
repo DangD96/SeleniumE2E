@@ -31,7 +31,7 @@ public class LoginPage extends BasePage {
         PageFactory.initElements(driver, this);
     }
 
-    public CatalogPage logIn(String username, String password, String userType, String userRole, Boolean toggleTermsBox) throws InterruptedException {
+    public CatalogPage logIn(String username, String password, String userType, String userRole, Boolean toggleTermsBox) {
         // Just using JS to fill them out because why not
         waitForElementToBeVisible(usernameField);
         js.executeScript("arguments[0].value = arguments[1]", usernameField, username);

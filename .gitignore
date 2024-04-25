@@ -13,7 +13,7 @@ target/
 *.iws
 *.iml
 *.ipr
-test-output/
+test-output/emailable-report.html
 
 ### Eclipse ###
 .apt_generated

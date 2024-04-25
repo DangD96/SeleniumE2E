@@ -19,14 +19,14 @@ public class BaseTest {
     private String baseURL;
     private Boolean isHeadless;
 
-    @BeforeMethod(alwaysRun = true) // Always run so don't get skipped over if using TestNG Groups
+    @BeforeTest(alwaysRun = true) // Always run so don't get skipped over if using TestNG Groups
     public void launchApp() throws IOException {
         parseConfig();
         setUpDriver();
         driver.get(baseURL);
     }
 
-    @AfterMethod(alwaysRun = true)
+    @AfterTest(alwaysRun = true)
     public void tearDown() {driver.quit();} // Nulls the driver object
 
     // One way to set up browser and baseURL. Could also use TestNG parameters

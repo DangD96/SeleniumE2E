@@ -29,6 +29,12 @@ public class LoginPage extends BasePage {
     @FindBy(css = ".alert.alert-danger")
     WebElement loginErrorMessage;
 
+    By loginButtonBy = By.id("signInBtn"); // Map using By to showcase other location methods
+
+    // Intentionally not selecting on ID using # shortcut because I want to test out character escapes
+    String script = "return document.querySelector(\"[id='signInBtn']\")";
+    WebElement loginButtonJS = (WebElement) js.executeScript(script); // Map using JS to showcase other location methods
+
     public LoginPage(WebDriver driver) {
         super(driver); // Pass the driver to the parent class so the methods in there work
         PageFactory.initElements(driver, this);

@@ -8,7 +8,10 @@ import org.openqa.selenium.support.ui.Select;
 public class LoginPage extends BasePage {
     JavascriptExecutor js = (JavascriptExecutor) driver;
 
-    // NOTE: Even if the element doesn't actually exist, selenium won't throw an error unless you interact with it
+    /*
+    With PageFactory, even if the element doesn't actually exist, selenium won't
+    throw an error until you try to interact with it
+     */
     @FindBy(id = "username")
     WebElement usernameField;
     @FindBy(id = "password")

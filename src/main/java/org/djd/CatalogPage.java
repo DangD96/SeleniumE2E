@@ -38,7 +38,10 @@ public class CatalogPage extends BasePage{
     }
 
     public BigDecimal getProductPrice(String productName) {
-        String price = productList.stream().filter(p -> p.getText().contains(productName)).toList().get(0).getText().replace("$","");
+        String price = productList.stream()
+                .filter(p -> p.getText().contains(productName))
+                .toList().get(0).findElement(By.cssSelector(".card-body h5"))
+                .getText().replace("$","");
         return new BigDecimal(price);
     }
 

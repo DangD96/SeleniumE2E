@@ -18,6 +18,7 @@ public class ProductTest extends BaseTest{
         // Add to cart
         WebElement e = catalogPage.addProductToCart("Nokia Edge");
         Assert.assertEquals(catalogPage.getProductPrice(e).toString(), "24.99");
+        Assert.assertEquals(catalogPage.getProductPrice("Nokia Edge").toString(), "24.99"); // Test out overloaded version
 
         Assert.assertTrue(catalogPage.checkoutBtn.getText().contains("Checkout ( 1 )"));
 

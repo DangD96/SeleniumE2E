@@ -14,6 +14,7 @@ public class CatalogPage extends BasePage{
     List<WebElement> productList;
     @FindBy(partialLinkText = "Checkout")
     WebElement checkoutBtn;
+    By checkoutBtnBy = By.partialLinkText("Checkout"); // Map using By to showcase other location methods
 
     public CatalogPage(WebDriver driver) {
         super(driver);

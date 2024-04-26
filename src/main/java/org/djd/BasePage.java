@@ -24,8 +24,9 @@ abstract class BasePage {
         return true; // If we get down here then the above line didn't fail
     }
 
-    public WebElement waitForElementToBeVisible(By locator) {
-        return new WebDriverWait(driver, timeout).until(ExpectedConditions.visibilityOfElementLocated(locator));
+    public boolean waitForElementToBeVisible(By locator) {
+        new WebDriverWait(driver, timeout).until(ExpectedConditions.visibilityOfElementLocated(locator));
+        return true;
     }
 
     public boolean waitForElementToBeInvisible(WebElement element) {

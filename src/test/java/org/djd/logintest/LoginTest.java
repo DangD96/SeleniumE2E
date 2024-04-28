@@ -1,4 +1,4 @@
-package org.djd.LoginTest;
+package org.djd.logintest;
 
 import org.djd.BaseTest;
 import org.djd.CatalogPage;

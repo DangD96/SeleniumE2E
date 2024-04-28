@@ -1,4 +1,4 @@
-package org.djd.ProductTest;
+package org.djd.producttest;
 
 import org.djd.BaseTest;
 import org.djd.CatalogPage;

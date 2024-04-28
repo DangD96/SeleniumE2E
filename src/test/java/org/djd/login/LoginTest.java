@@ -14,7 +14,7 @@ public class LoginTest extends BaseTest {
     private LoginPage loginPage; // Make this a class variable since it's used multiple times in tests
 
     @Test(description = "Unsuccessful Login", dataProvider = "getTestData")
-    /* Method below runs n times, where n is the number of objects in the array returned by dataProvider.
+    /* Method below runs n times, where n is the number of objects in the array returned by dataProvider in superclass.
     The Object returned by dataProvider during each iteration gets passed as argument to the input parameter I defined.
     The dataProvider lives in the super class, so all subclasses can access it */
     public void loginInvalid(HashMap<String, String> input) {

@@ -17,6 +17,7 @@ public class LoginTest extends BaseTest {
     @Test(description = "Unsuccessful Login", dataProvider = "getTestData")
     // Test method runs as many times as the number of objects in the array returned by dataProvider
     // Object returned by dataProvider each iteration gets passed as argument to the input parameter
+    // The dataProvider lives in the super class, so all subclasses can access it
     public void loginInvalid(HashMap<String, String> input) {
         loginPage = new LoginPage(driver);
         loginPage.logIn(input.get("username"), input.get("password"), "", "Teacher", true);

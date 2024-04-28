@@ -4,10 +4,8 @@ import org.djd.BaseTest;
 import org.djd.CatalogPage;
 import org.djd.LoginPage;
 import org.testng.Assert;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import java.io.IOException;
 import java.util.HashMap;
 
 public class LoginTest extends BaseTest {

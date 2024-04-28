@@ -21,10 +21,18 @@ public class BaseTest {
     private String browser;
     private String baseURL;
     private Boolean isHeadless;
-    // In IntelliJ, user.dir is like the project/module directory
-    // System.getProperty("user.dir") = C:\Users\david\coding\java\Udemy_Practice\SeleniumE2E
-    // Double backslash below because single backslash is escape character
+
+    /* In IntelliJ, user.dir is like the project/module directory
+    System.getProperty("user.dir") = C:\Users\david\coding\java\Udemy_Practice\SeleniumE2E
+    Double backslash below because single backslash is escape character */
     private final String PATH_TO_TEST_SOURCES_ROOT = System.getProperty("user.dir") + "\\src\\test\\java\\";
+
+    // PackageName will vary depending on which subclass is running the test
+    // PackageName uses the "." separator like "org.djd.Something"
+    private final String PACKAGE_NAME = this.getClass().getPackageName();
+
+    // Convert to file path using "\" like "org\djd\Something"
+    private final String PATH_TO_PACKAGE = PATH_TO_TEST_SOURCES_ROOT + PACKAGE_NAME.replace(".", "\\");
 
     @BeforeTest(alwaysRun = true) // Always run so don't get skipped over if using TestNG Groups
     public void launchApp() throws IOException {
@@ -38,13 +46,9 @@ public class BaseTest {
 
     // One way to set up browser and baseURL. Could also use TestNG parameters
     private void parseConfig() throws IOException {
-        // PackageName will vary depending on which subclass is running a test
-        String packageName = this.getClass().getPackageName();
-
         // Every Test should have its own Setup.properties file living under its own package
-        String pathToSetupFile = convertToPath(packageName) + "\\Setup.properties";
-
-        FileReader reader = new FileReader(PATH_TO_TEST_SOURCES_ROOT + pathToSetupFile);
+        String pathToSetupFile = PATH_TO_PACKAGE + "\\Setup.properties";
+        FileReader reader = new FileReader(pathToSetupFile);
         Properties props = new Properties();
         props.load(reader);
         browser = props.getProperty("browser");
@@ -91,11 +95,5 @@ public class BaseTest {
         and that is faster compared to LinkedList */
         ObjectMapper mapper = new ObjectMapper();
         return mapper.readValue(new File(path), new TypeReference<>(){});
-    }
-
-    // Takes a packageName that uses the "." separator like "org.djd.Something"
-    // Returns the equivalent file path using "\" like "org\djd\Something"
-    public String convertToPath(String packageName) {
-        return packageName.replace(".", "\\");
     }
 }

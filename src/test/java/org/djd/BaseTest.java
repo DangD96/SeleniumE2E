@@ -21,6 +21,10 @@ public class BaseTest {
     private String browser;
     private String baseURL;
     private Boolean isHeadless;
+    // In IntelliJ, user.dir is like the project/module directory
+    // System.getProperty("user.dir") = C:\Users\david\coding\java\Udemy_Practice\SeleniumE2E
+    // Double backslash below because single backslash is escape character
+    private final String PATH_TO_TEST_SOURCES_ROOT = System.getProperty("user.dir") + "\\src\\test\\java\\";
 
     @BeforeTest(alwaysRun = true) // Always run so don't get skipped over if using TestNG Groups
     public void launchApp() throws IOException {
@@ -34,10 +38,15 @@ public class BaseTest {
 
     // One way to set up browser and baseURL. Could also use TestNG parameters
     private void parseConfig() throws IOException {
-        // In IntelliJ, user.dir is like the project/module directory
-        String currentDirectory = System.getProperty("user.dir"); // C:\Users\david\coding\java\Udemy_Practice\SeleniumE2E
+        // PackageName will vary depending on which subclass is running a test
+        // returns in format like this: org.djd.Something
+        String packageName = this.getClass().getPackageName();
+
+        // Every Test should have its own Setup.properties file living under its own package
+        String pathToSetupFile = packageName.replace(".", "\\") + "\\Setup.properties";
+
+        FileReader reader = new FileReader(PATH_TO_TEST_SOURCES_ROOT + pathToSetupFile);
         Properties props = new Properties();
-        FileReader reader = new FileReader(currentDirectory + "\\src\\test\\java\\org\\djd\\Test.properties"); // Double backslash because single backslash is escape character
         props.load(reader);
         browser = props.getProperty("browser");
         baseURL = props.getProperty("testURL");

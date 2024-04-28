@@ -13,7 +13,7 @@ import java.util.HashMap;
 public class LoginTest extends BaseTest {
     private LoginPage loginPage; // Make this a class variable since it's used multiple times in tests
 
-    // Pass filepath into super class's getTestData method to get the test data so don't have to hardcode filepaths
+    // Pass filepath into super class's getTestData method to get the test data so don't have to hardcode filepath
     @DataProvider
     public Object[] getTestData() throws IOException {
         return super.getTestData(System.getProperty("user.dir") + "\\src\\test\\java\\org\\djd\\login\\Data.json");

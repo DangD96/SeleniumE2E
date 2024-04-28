@@ -1,17 +1,26 @@
 package org.djd;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.Assert;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
 
 public class LoginTest extends BaseTest{
     private LoginPage loginPage; // Make this a class variable since it's used multiple times in tests
 
-    @Test(description = "Unsuccessful Login")
-    public void loginInvalid() {
+    @Test(description = "Unsuccessful Login", dataProvider = "getTestData")
+    // Test method runs as many times as the number of objects in the array returned by dataProvider
+    // Object returned by dataProvider each iteration gets passed as argument to the input parameter
+    public void loginInvalid(HashMap<String,String> input) {
         loginPage = new LoginPage(driver);
-        // Make sure you get error
-        loginPage.logIn("wrong_username", "learning", "", "Teacher", true);
-        Assert.assertTrue(loginPage.waitForElementToBeVisible(loginPage.loginErrorMessage));
+        loginPage.logIn(input.get("username"), input.get("password"), "", "Teacher", true);
+        Assert.assertTrue(loginPage.waitForElementToBeVisible(loginPage.loginErrorMessage)); // Make sure you get error
     }
     @Test(description = "Successful Login", groups = {"DJDGroup"})
     public void loginValid() {
@@ -23,5 +32,17 @@ public class LoginTest extends BaseTest{
         Assert.assertTrue(loginPage.waitForElementToBeInvisible(loginPage.loginButton));
         Assert.assertTrue(loginPage.waitForElementToBeInvisible(loginPage.loginButtonBy)); // Try out the overloaded version because why not
         Assert.assertEquals(catalogPage.getURL(), "https://rahulshettyacademy.com/angularpractice/shop");
+    }
+
+    @DataProvider
+    public Object[][] getTestData() throws IOException {
+        String filepath = System.getProperty("user.dir") + "\\src\\test\\java\\org\\djd\\Data.json";
+        List<HashMap<String,String>> data = getJsonTestDataAsHashMap(filepath);
+        return new Object[][] {{data.get(0)}, {data.get(1)}};
+    }
+
+    public List<HashMap<String, String>> getJsonTestDataAsHashMap(String path) throws IOException {
+        ObjectMapper mapper = new ObjectMapper(); // Use Jackson API to convert JSON to a HashMap
+        return mapper.readValue(new File(path), new TypeReference<>() {});
     }
 }

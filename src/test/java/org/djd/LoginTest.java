@@ -1,15 +1,9 @@
 package org.djd;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.Assert;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 
 public class LoginTest extends BaseTest {
     private LoginPage loginPage; // Make this a class variable since it's used multiple times in tests
@@ -24,7 +18,7 @@ public class LoginTest extends BaseTest {
         Assert.assertTrue(loginPage.waitForElementToBeVisible(loginPage.loginErrorMessage)); // Make sure you get error
     }
 
-    @Test(description = "Successful Login", groups = {"DJDGroup"},enabled = false)
+    @Test(description = "Successful Login", groups = {"DJDGroup"})
     public void loginValid() {
         loginPage.clearUsername();
         loginPage.clearPassword();

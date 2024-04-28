@@ -25,10 +25,10 @@ public class LoginPage extends BasePage {
     @FindBy(id = "terms")
     WebElement termsAndServicesCheckbox;
     @FindBy(id = "signInBtn")
-    WebElement loginButton;
+    public WebElement loginButton;
     @FindBy(css = ".alert.alert-danger")
-    WebElement loginErrorMessage;
-    By loginButtonBy = By.id("signInBtn"); // Map using By to showcase other location methods
+    public WebElement loginErrorMessage;
+    public By loginButtonBy = By.id("signInBtn"); // Map using By to showcase other location methods
 
     public LoginPage(WebDriver driver) {
         super(driver); // Pass the driver to the parent class so the methods in there work

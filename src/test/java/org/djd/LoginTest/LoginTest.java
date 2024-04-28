@@ -1,5 +1,8 @@
-package org.djd;
+package org.djd.LoginTest;
 
+import org.djd.BaseTest;
+import org.djd.CatalogPage;
+import org.djd.LoginPage;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 

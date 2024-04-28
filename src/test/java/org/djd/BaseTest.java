@@ -71,6 +71,13 @@ public class BaseTest {
         driver.manage().window().maximize();
     }
 
+    @DataProvider
+    public Object[][] getTestData() throws IOException {
+        String filepath = System.getProperty("user.dir") + "\\src\\test\\java\\org\\djd\\Data.json";
+        List<HashMap<String, String>> data = getJsonTestDataAsHashMap(filepath);
+        return new Object[][]{{data.get(0)}, {data.get(1)}};
+    }
+
     public List<HashMap<String, String>> getJsonTestDataAsHashMap(String path) throws IOException {
         ObjectMapper mapper = new ObjectMapper(); // Use Jackson API to convert JSON to a HashMap
         return mapper.readValue(new File(path), new TypeReference<>() {});

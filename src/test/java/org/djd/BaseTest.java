@@ -22,17 +22,18 @@ public class BaseTest {
     private String baseURL;
     private Boolean isHeadless;
 
-    /* In IntelliJ, user.dir is like the project/module directory
-    System.getProperty("user.dir") = C:\Users\david\coding\java\Udemy_Practice\SeleniumE2E
-    Double backslash below because single backslash is escape character */
-    private final String PATH_TO_TEST_SOURCES_ROOT = System.getProperty("user.dir") + "\\src\\test\\java\\";
+    // system dependent file separator
+    private final String FS = File.separator;
+
+    // System.getProperty("user.dir") = C:\Users\david\coding\java\Udemy_Practice\SeleniumE2E
+    private final String PATH_TO_TEST_SOURCES_ROOT = System.getProperty("user.dir")+FS+"src"+FS+"test"+FS+"java"+FS;
 
     // PackageName will vary depending on which subclass is running the test
     // PackageName uses the "." separator like "org.djd.Something"
     private final String PACKAGE_NAME = this.getClass().getPackageName();
 
-    // Convert to file path using "\" like "org\djd\Something"
-    private final String PATH_TO_PACKAGE = PATH_TO_TEST_SOURCES_ROOT + PACKAGE_NAME.replace(".", "\\");
+    // Convert to file path
+    private final String PATH_TO_PACKAGE = PATH_TO_TEST_SOURCES_ROOT + PACKAGE_NAME.replace(".", FS);
 
     @BeforeTest(alwaysRun = true) // Always run so don't get skipped over if using TestNG Groups
     public void launchApp() throws IOException {
@@ -47,7 +48,7 @@ public class BaseTest {
     // One way to set up browser and baseURL. Could also use TestNG parameters
     private void parseConfig() throws IOException {
         // Every Test should have its own Setup.properties file living under its own package
-        String pathToSetupFile = PATH_TO_PACKAGE + "\\Setup.properties";
+        String pathToSetupFile = PATH_TO_PACKAGE + FS + "Setup.properties";
         FileReader reader = new FileReader(pathToSetupFile);
         Properties props = new Properties();
         props.load(reader);
@@ -83,7 +84,7 @@ public class BaseTest {
 
     @DataProvider
     public Object[] getTestData() throws IOException {
-        String pathToDataFile = PATH_TO_PACKAGE + "\\Data.json";
+        String pathToDataFile = PATH_TO_PACKAGE + FS + "Data.json";
         ArrayList<HashMap<String, String>> data = deserializeJSON(pathToDataFile);
         int size = data.size();
         Object[] objAry = new Object[size]; // Object array to store the hashmaps

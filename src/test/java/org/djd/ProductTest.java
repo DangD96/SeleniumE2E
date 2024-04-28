@@ -4,7 +4,7 @@ import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-public class ProductTest extends BaseTest{
+public class ProductTest extends BaseTest {
     LoginPage loginPage;
     CatalogPage catalogPage;
     ShoppingCart cart;

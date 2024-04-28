@@ -1,15 +1,23 @@
-package org.djd.logintest;
+package org.djd.login;
 
 import org.djd.BaseTest;
 import org.djd.CatalogPage;
 import org.djd.LoginPage;
 import org.testng.Assert;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 public class LoginTest extends BaseTest {
     private LoginPage loginPage; // Make this a class variable since it's used multiple times in tests
+
+    // Pass filepath into super class's getTestData method to get the test data so don't have to hardcode filepaths
+    @DataProvider
+    public Object[] getTestData() throws IOException {
+        return super.getTestData(System.getProperty("user.dir") + "\\src\\test\\java\\org\\djd\\login\\Data.json");
+    }
 
     @Test(description = "Unsuccessful Login", dataProvider = "getTestData")
     /* Method below runs n times, where n is the number of objects in the array returned by dataProvider.

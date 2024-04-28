@@ -69,9 +69,7 @@ public class BaseTest {
         driver.manage().window().maximize();
     }
 
-    @DataProvider
-    public Object[] getTestData() throws IOException {
-        String filepath = System.getProperty("user.dir") + "\\src\\test\\java\\org\\djd\\Data.json";
+    public Object[] getTestData(String filepath) throws IOException {
         ArrayList<HashMap<String, String>> data = deserializeJSON(filepath);
         int size = data.size();
         Object[] objAry = new Object[size]; // Object array to store the hashmaps

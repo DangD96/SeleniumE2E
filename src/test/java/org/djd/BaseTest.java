@@ -1,5 +1,7 @@
 package org.djd;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -9,8 +11,11 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.testng.annotations.*;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Properties;
 
 public class BaseTest {
@@ -64,5 +69,10 @@ public class BaseTest {
             driver = new FirefoxDriver(options);
         }
         driver.manage().window().maximize();
+    }
+
+    public List<HashMap<String, String>> getJsonTestDataAsHashMap(String path) throws IOException {
+        ObjectMapper mapper = new ObjectMapper(); // Use Jackson API to convert JSON to a HashMap
+        return mapper.readValue(new File(path), new TypeReference<>() {});
     }
 }

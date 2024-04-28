@@ -79,7 +79,8 @@ public class BaseTest {
     }
 
     public List<HashMap<String, String>> getJsonTestDataAsHashMap(String path) throws IOException {
-        ObjectMapper mapper = new ObjectMapper(); // Use Jackson API to convert JSON to a HashMap
+        // Use Jackson API to convert JSON to a HashMap
+        ObjectMapper mapper = new ObjectMapper();
         return mapper.readValue(new File(path), new TypeReference<>() {});
     }
 }

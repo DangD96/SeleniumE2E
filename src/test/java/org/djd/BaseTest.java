@@ -75,7 +75,7 @@ public class BaseTest {
     public Object[][] getTestData() throws IOException {
         String filepath = System.getProperty("user.dir") + "\\src\\test\\java\\org\\djd\\Data.json";
         List<HashMap<String, String>> data = deserializeJSON(filepath);
-        return new Object[][]{{data.get(0)}, {data.get(1)}};
+        return new Object[][] {{data.get(0)}, {data.get(1)}}; // array of Objects
     }
 
     public List<HashMap<String, String>> deserializeJSON(String path) throws IOException {

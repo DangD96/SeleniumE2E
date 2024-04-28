@@ -39,11 +39,10 @@ public class BaseTest {
     // One way to set up browser and baseURL. Could also use TestNG parameters
     private void parseConfig() throws IOException {
         // PackageName will vary depending on which subclass is running a test
-        // returns in format like this: org.djd.Something
         String packageName = this.getClass().getPackageName();
 
         // Every Test should have its own Setup.properties file living under its own package
-        String pathToSetupFile = packageName.replace(".", "\\") + "\\Setup.properties";
+        String pathToSetupFile = convertToPath(packageName) + "\\Setup.properties";
 
         FileReader reader = new FileReader(PATH_TO_TEST_SOURCES_ROOT + pathToSetupFile);
         Properties props = new Properties();
@@ -92,5 +91,11 @@ public class BaseTest {
         and that is faster compared to LinkedList */
         ObjectMapper mapper = new ObjectMapper();
         return mapper.readValue(new File(path), new TypeReference<>(){});
+    }
+
+    // Takes a packageName that uses the "." separator like "org.djd.Something"
+    // Returns the equivalent file path using "\" like "org\djd\Something"
+    public String convertToPath(String packageName) {
+        return packageName.replace(".", "\\");
     }
 }

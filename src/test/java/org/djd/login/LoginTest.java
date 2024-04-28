@@ -13,12 +13,6 @@ import java.util.HashMap;
 public class LoginTest extends BaseTest {
     private LoginPage loginPage; // Make this a class variable since it's used multiple times in tests
 
-    // Pass filepath into super class's getTestData method to get the test data so don't have to hardcode filepath
-    @DataProvider
-    public Object[] getTestData() throws IOException {
-        return super.getTestData(System.getProperty("user.dir") + "\\src\\test\\java\\org\\djd\\login\\Data.json");
-    }
-
     @Test(description = "Unsuccessful Login", dataProvider = "getTestData")
     /* Method below runs n times, where n is the number of objects in the array returned by dataProvider.
     The Object returned by dataProvider during each iteration gets passed as argument to the input parameter I defined.

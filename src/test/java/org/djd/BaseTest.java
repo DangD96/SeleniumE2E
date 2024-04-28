@@ -80,7 +80,9 @@ public class BaseTest {
     }
 
     public ArrayList<HashMap<String, String>> deserializeJSON(String path) throws IOException {
-        // Use Jackson API to convert JSON objects to HashMaps
+        /* Use Jackson API to convert JSON objects to HashMaps.
+        Return as ArrayList because getTestData will need to retrieve data from it
+        and that is faster compared to LinkedList */
         ObjectMapper mapper = new ObjectMapper();
         return mapper.readValue(new File(path), new TypeReference<>(){});
     }

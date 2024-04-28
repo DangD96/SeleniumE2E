@@ -74,13 +74,13 @@ public class BaseTest {
     @DataProvider
     public Object[][] getTestData() throws IOException {
         String filepath = System.getProperty("user.dir") + "\\src\\test\\java\\org\\djd\\Data.json";
-        List<HashMap<String, String>> data = getJsonTestDataAsHashMap(filepath);
+        List<HashMap<String, String>> data = deserializeJSON(filepath);
         return new Object[][]{{data.get(0)}, {data.get(1)}};
     }
 
-    public List<HashMap<String, String>> getJsonTestDataAsHashMap(String path) throws IOException {
+    public List<HashMap<String, String>> deserializeJSON(String path) throws IOException {
         // Use Jackson API to convert JSON to a HashMap
         ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(new File(path), new TypeReference<>() {});
+        return mapper.readValue(new File(path), new TypeReference<>(){});
     }
 }

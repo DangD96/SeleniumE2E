@@ -14,9 +14,7 @@ import org.testng.annotations.*;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 public class BaseTest {
     protected WebDriver driver;
@@ -72,13 +70,16 @@ public class BaseTest {
     }
 
     @DataProvider
-    public Object[][] getTestData() throws IOException {
+    public Object[] getTestData() throws IOException {
         String filepath = System.getProperty("user.dir") + "\\src\\test\\java\\org\\djd\\Data.json";
-        List<HashMap<String, String>> data = deserializeJSON(filepath);
-        return new Object[][] {{data.get(0)}, {data.get(1)}}; // array of Objects
+        ArrayList<HashMap<String, String>> data = deserializeJSON(filepath);
+        int size = data.size();
+        Object[] objAry = new Object[size]; // Object array to store the hashmaps
+        for (int i = 0; i < size; i++) {objAry[i] = data.get(i);}
+        return objAry;
     }
 
-    public List<HashMap<String, String>> deserializeJSON(String path) throws IOException {
+    public ArrayList<HashMap<String, String>> deserializeJSON(String path) throws IOException {
         // Use Jackson API to convert JSON to a HashMap
         ObjectMapper mapper = new ObjectMapper();
         return mapper.readValue(new File(path), new TypeReference<>(){});

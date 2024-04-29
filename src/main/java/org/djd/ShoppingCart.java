@@ -35,9 +35,4 @@ public class ShoppingCart extends BasePage {
     public void removeProduct(int row) {
         productsInCart.get(row-1).findElement(By.cssSelector("td button")).click();
     }
-
-    public void removeProduct(String productName) {
-        Optional<WebElement> e = Optional.of(productsInCart.stream().filter(p -> this.getProductName(p).equals(productName)).findFirst().orElseThrow());
-        e.ifPresent(WebElement::click);
-    }
 }

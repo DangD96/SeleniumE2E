@@ -105,8 +105,8 @@ public class BaseTest {
 
     public void takeScreenshot() throws IOException {
         TakesScreenshot screenshotMode = (TakesScreenshot) driver;
-        File srcFile = screenshotMode.getScreenshotAs(OutputType.FILE);
+        File tempFile = screenshotMode.getScreenshotAs(OutputType.FILE);
         File destFile = new File(PATH_TO_PACKAGE+FS+"screenshots"+FS+"screenshot.png");
-        FileUtils.copyFile(srcFile, destFile);
+        FileUtils.copyFile(tempFile, destFile);
     }
 }

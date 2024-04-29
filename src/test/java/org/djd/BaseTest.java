@@ -2,6 +2,9 @@ package org.djd;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -98,5 +101,12 @@ public class BaseTest {
         and that is faster compared to LinkedList */
         ObjectMapper mapper = new ObjectMapper();
         return mapper.readValue(new File(path), new TypeReference<>(){});
+    }
+
+    public void takeScreenshot() throws IOException {
+        TakesScreenshot screenshotMode = (TakesScreenshot) driver;
+        File srcFile = screenshotMode.getScreenshotAs(OutputType.FILE);
+        File destFile = new File(PATH_TO_PACKAGE+FS+"screenshots"+FS+"screenshot.png");
+        FileUtils.copyFile(srcFile, destFile);
     }
 }

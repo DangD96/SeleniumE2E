@@ -8,12 +8,14 @@ import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.io.IOException;
+
 public class ProductTest extends BaseTest {
     LoginPage loginPage;
     CatalogPage catalogPage;
     ShoppingCart cart;
     @Test(description = "Add correct product to shopping cart", groups = {"DJDGroup"})
-    public void addProductTest() {
+    public void addProductTest() throws IOException {
         loginPage = new LoginPage(driver);
         catalogPage = loginPage.logIn("rahulshettyacademy", "learning", "", "Teacher", true);
         catalogPage.waitForElementsToBeVisible(catalogPage.productList);
@@ -31,5 +33,6 @@ public class ProductTest extends BaseTest {
         cart.waitForElementToBeVisible(cart.shoppingCart);
         Assert.assertEquals(cart.getNumberOfProductsInCart(), 1);
         Assert.assertEquals(cart.getProductName(1), "Nokia Edge");
+        takeScreenshot();
     }
 }

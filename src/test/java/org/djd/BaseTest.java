@@ -33,6 +33,7 @@ public class BaseTest {
 
     // PackageName will vary depending on which subclass is running the test
     // PackageName uses the "." separator like "org.djd.Something"
+    // Use Reflection API to get info about class name and package name
     private final String PACKAGE_NAME = this.getClass().getPackageName();
 
     // Convert to file path

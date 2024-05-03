@@ -10,8 +10,8 @@ import java.util.List;
 
 public class ShoppingCart extends BasePage {
     @FindBy(tagName = "table")
-    public
-    WebElement shoppingCart;
+    public WebElement shoppingCart;
+
     @FindBy(css = "tr:has(td[class*='col-sm'])")
     List<WebElement> productsInCart;
 

@@ -11,10 +11,11 @@ import java.util.List;
 
 public class CatalogPage extends BasePage{
     @FindBy(css = "app-card-list app-card")
-    public
-    List<WebElement> productList;
+    public List<WebElement> productList;
+
     @FindBy(partialLinkText = "Checkout")
     public WebElement checkoutBtn;
+
     public By checkoutBtnBy = By.partialLinkText("Checkout"); // Map using By to showcase other location methods
 
     public CatalogPage(WebDriver driver) {

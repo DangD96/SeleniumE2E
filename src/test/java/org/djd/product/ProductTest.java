@@ -1,9 +1,9 @@
 package org.djd.product;
 
 import org.djd.BaseTest;
-import org.djd.CatalogPage;
-import org.djd.LoginPage;
-import org.djd.ShoppingCart;
+import org.djd.pages.CatalogPage;
+import org.djd.pages.LoginPage;
+import org.djd.pages.ShoppingCart;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.Test;

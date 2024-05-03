@@ -14,20 +14,28 @@ public class LoginPage extends BasePage {
      */
     @FindBy(id = "username")
     WebElement usernameField;
+
     @FindBy(id = "password")
     WebElement passwordField;
+
     @FindBy(css = "input[value='admin']")
     WebElement adminRadioBtn;
+
     @FindBy(css = "input[value='user']")
     WebElement userRadioBtn;
+
     @FindBy(css = "select.form-control")
     WebElement roleDropdown;
+
     @FindBy(id = "terms")
     WebElement termsAndServicesCheckbox;
+
     @FindBy(id = "signInBtn")
     public WebElement loginButton;
+
     @FindBy(css = ".alert.alert-danger")
     public WebElement loginErrorMessage;
+
     public By loginButtonBy = By.id("signInBtn"); // Map using By to showcase other location methods
 
     public LoginPage(WebDriver driver) {

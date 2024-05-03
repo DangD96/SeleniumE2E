@@ -1,4 +1,4 @@
-package org.djd.pages;
+package org.djd;
 
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;

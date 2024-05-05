@@ -34,8 +34,8 @@ public class LoginTest extends BaseTest {
         Assert.assertEquals(catalogPage.getURL(), "https://rahulshettyacademy.com/angularpractice/shop");
     }
 
-    @Test(description = "Testing a failure",enabled = false)
+    @Test(description = "Testing a failure")
     public void intentionalFail() {
-        loginPage.fakeElement.click();
+        loginPage.loginButton.click();
     }
 }

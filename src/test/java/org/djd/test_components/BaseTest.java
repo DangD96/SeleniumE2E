@@ -1,4 +1,4 @@
-package org.djd;
+package org.djd.test_components;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

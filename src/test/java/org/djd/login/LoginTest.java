@@ -1,6 +1,6 @@
 package org.djd.login;
 
-import org.djd.BaseTest;
+import org.djd.test_components.BaseTest;
 import org.djd.CatalogPage;
 import org.djd.LoginPage;
 import org.testng.Assert;

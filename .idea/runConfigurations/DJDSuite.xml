@@ -13,7 +13,9 @@
     <option name="OUTPUT_DIRECTORY" value="" />
     <option name="PROPERTIES_FILE" value="" />
     <properties />
-    <listeners />
+    <listeners>
+      <listener class="org.djd.test_components.BaseTest" />
+    </listeners>
     <method v="2">
       <option name="Make" enabled="true" />
     </method>

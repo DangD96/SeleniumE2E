@@ -1,6 +1,7 @@
 package org.djd.test_components;
 
 import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,6 +15,7 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
+import org.testng.ITestClass;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
@@ -24,21 +26,21 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
-public class BaseTest implements ITestListener {
+public class BaseTest {
     protected WebDriver driver;
     private String browser;
     private String baseURL;
     private Boolean isHeadless;
 
+    // System.getProperty("user.dir") = C:\Users\david\coding\java\Udemy_Practice\SeleniumE2E
     private final String USER_DIR = System.getProperty("user.dir");
 
     // system dependent file separator
     private final String FS = File.separator;
 
-    // System.getProperty("user.dir") = C:\Users\david\coding\java\Udemy_Practice\SeleniumE2E
     private final String PATH_TO_TEST_SOURCES_ROOT = USER_DIR + FS + "src" + FS + "test" + FS + "java" + FS;
 
-    // PackageName will vary depending on which subclass is running the test
+    // PackageName will vary depending on which SUBCLASS is running the test
     // PackageName uses the "." separator like "org.djd.Something"
     // Use Reflection API to get info about class name and package name
     private final String PACKAGE_NAME = this.getClass().getPackageName();
@@ -46,33 +48,39 @@ public class BaseTest implements ITestListener {
     // Convert to file path
     private final String PATH_TO_PACKAGE = PATH_TO_TEST_SOURCES_ROOT + PACKAGE_NAME.replace(".", FS);
 
-    @BeforeTest(alwaysRun = true) // Always run so don't get skipped over if using TestNG Groups
+    ExtentReports report;
+    ExtentTest test;
+
+    // "Test" = The <Test/> tag in XML file (if running a test suite)
+    @BeforeClass(alwaysRun = true) // Always run so don't get skipped over if using TestNG Groups
     public void launchApp() throws IOException {
+        report = createTestReport();
         parseConfig();
         setUpDriver();
         driver.get(baseURL);
     }
 
+    // "Method" = Method with @Test annotation
+    @BeforeMethod(alwaysRun = true)
+    public void createTest (ITestResult result){
+        test = report.createTest(result.getMethod().getMethodName());
+    }
+
+    @AfterMethod(alwaysRun = true)
+    public void flush(ITestResult result) {
+        System.out.println("method done");
+        int status = result.getStatus(); // Status of 1 = Pass / 2 = Fail
+        report.flush();
+    }
+
     @AfterTest(alwaysRun = true)
-    public void tearDown() {driver.quit();} // Nulls the driver object
-
-    @Override
-    public void onTestSuccess(ITestResult result) {
-        ITestListener.super.onTestSuccess(result);
-    }
-
-    @Override
-    public void onTestFailure(ITestResult result) {
-        ITestListener.super.onTestFailure(result);
-    }
-
-    @Override
-    public void onFinish(ITestContext context) {
-        ITestListener.super.onFinish(context);
-    }
+    public void tearDown() {
+        System.out.println("test done");
+        driver.quit();
+    } // Nulls the driver object
 
     @DataProvider
-    private Object[] getTestData() throws IOException {
+    public Object[] getTestData() throws IOException {
         String pathToDataFile = PATH_TO_PACKAGE + FS + "Data.json";
         ArrayList<HashMap<String, String>> data = deserializeJSON(pathToDataFile);
         int size = data.size();
@@ -134,10 +142,16 @@ public class BaseTest implements ITestListener {
         return destFile;
     }
 
-    private void configExtentReport() {
-        // directory where output is to be printed
-        ExtentSparkReporter reporter = new ExtentSparkReporter(USER_DIR + FS + "extent-reports");
+    ExtentReports createTestReport() {
+        String name = this.getClass().getSimpleName();
+
+        // filename where output is to be printed
+        ExtentSparkReporter reporter = new ExtentSparkReporter(USER_DIR + FS + "test-results" + FS + name + FS + "results.html");
+        reporter.config().setReportName("Results for " + name);
+        reporter.config().setDocumentTitle("Test Results");
+
         ExtentReports report = new ExtentReports();
         report.attachReporter(reporter);
+        return report;
     }
 }

@@ -4,6 +4,7 @@ import org.djd.test_components.BaseTest;
 import org.djd.CatalogPage;
 import org.djd.LoginPage;
 import org.testng.Assert;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import java.util.HashMap;
@@ -31,5 +32,10 @@ public class LoginTest extends BaseTest {
         Assert.assertTrue(loginPage.waitForElementToBeInvisible(loginPage.loginButton));
         Assert.assertTrue(loginPage.waitForElementToBeInvisible(loginPage.loginButtonBy)); // Try out the overloaded version because why not
         Assert.assertEquals(catalogPage.getURL(), "https://rahulshettyacademy.com/angularpractice/shop");
+    }
+
+    @Test(description = "Testing a failure",enabled = false)
+    public void intentionalFail() {
+        loginPage.fakeElement.click();
     }
 }

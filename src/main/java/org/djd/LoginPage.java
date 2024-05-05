@@ -20,6 +20,7 @@ public class LoginPage extends BasePage {
     @FindBy(id = "terms") WebElement termsAndServicesCheckbox;
     @FindBy(id = "signInBtn") public WebElement loginButton;
     @FindBy(css = ".alert.alert-danger") public WebElement loginErrorMessage;
+    @FindBy(id = "DJD") public WebElement fakeElement;
     public By loginButtonBy = By.id("signInBtn"); // Map using By to showcase other location methods
 
     public LoginPage(WebDriver driver) {

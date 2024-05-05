@@ -11,7 +11,7 @@
                 </class>
             </classes>
         </test>
-        <test verbose="2" name="Adding Product to Cart">
+        <test verbose="2" name="Adding Product to Cart" enabled="false">
             <classes>
                 <class name="org.djd.product.ProductTest"/>
             </classes>

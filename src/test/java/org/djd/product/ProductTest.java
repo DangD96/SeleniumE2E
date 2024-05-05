@@ -1,6 +1,6 @@
 package org.djd.product;
 
-import org.djd.test_components.BaseTest;
+import org.djd.BaseTest;
 import org.djd.CatalogPage;
 import org.djd.LoginPage;
 import org.djd.ShoppingCart;
@@ -8,13 +8,11 @@ import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import java.io.IOException;
-
 public class ProductTest extends BaseTest {
     LoginPage loginPage;
     CatalogPage catalogPage;
     ShoppingCart cart;
-    @Test(description = "Add correct product to shopping cart", groups = {"DJDGroup"})
+    @Test(description = "Add correct product to shopping cart")
     public void addProductTest() {
         loginPage = new LoginPage(driver);
         catalogPage = loginPage.logIn("rahulshettyacademy", "learning", "", "Teacher", true);

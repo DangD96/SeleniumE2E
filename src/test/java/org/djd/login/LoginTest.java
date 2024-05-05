@@ -1,15 +1,17 @@
 package org.djd.login;
 
-import org.djd.test_components.BaseTest;
+import org.djd.BaseTest;
 import org.djd.CatalogPage;
 import org.djd.LoginPage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.Assert;
-import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import java.util.HashMap;
 
 public class LoginTest extends BaseTest {
+    private static final Logger log = LoggerFactory.getLogger(LoginTest.class);
     private LoginPage loginPage; // Make this a class variable since it's used multiple times in tests
 
     @Test(description = "Unsuccessful Login", dataProvider = "getTestData")
@@ -22,8 +24,14 @@ public class LoginTest extends BaseTest {
         Assert.assertTrue(loginPage.waitForElementToBeVisible(loginPage.loginErrorMessage)); // Make sure you get error
     }
 
-    @Test(description = "Successful Login", groups = {"DJDGroup"})
-    public void loginValid() {
+    @Test
+    public void intentionalFail() throws InterruptedException {
+        Thread.sleep(2000);
+        loginPage.loginButton.click();
+    }
+
+    @Test(description = "Successful Login")
+    public void loginValid()  {
         loginPage.clearUsername();
         loginPage.clearPassword();
         CatalogPage catalogPage = loginPage.logIn("rahulshettyacademy", "learning", "", "", false);
@@ -32,10 +40,5 @@ public class LoginTest extends BaseTest {
         Assert.assertTrue(loginPage.waitForElementToBeInvisible(loginPage.loginButton));
         Assert.assertTrue(loginPage.waitForElementToBeInvisible(loginPage.loginButtonBy)); // Try out the overloaded version because why not
         Assert.assertEquals(catalogPage.getURL(), "https://rahulshettyacademy.com/angularpractice/shop");
-    }
-
-    @Test(description = "Testing a failure")
-    public void intentionalFail() {
-        loginPage.loginButton.click();
     }
 }

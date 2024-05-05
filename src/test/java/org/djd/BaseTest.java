@@ -1,7 +1,8 @@
-package org.djd.test_components;
+package org.djd;
 
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.MediaEntityBuilder;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,8 +16,6 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
-import org.testng.ITestClass;
-import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
@@ -26,7 +25,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
-public class BaseTest {
+public class BaseTest implements ITestListener {
     protected WebDriver driver;
     private String browser;
     private String baseURL;
@@ -51,7 +50,6 @@ public class BaseTest {
     ExtentReports report;
     ExtentTest test;
 
-    // "Test" = The <Test/> tag in XML file (if running a test suite)
     @BeforeClass(alwaysRun = true) // Always run so don't get skipped over if using TestNG Groups
     public void launchApp() throws IOException {
         report = createTestReport();
@@ -67,17 +65,18 @@ public class BaseTest {
     }
 
     @AfterMethod(alwaysRun = true)
-    public void flush(ITestResult result) {
-        System.out.println("method done");
-        int status = result.getStatus(); // Status of 1 = Pass / 2 = Fail
+    public void flush(ITestResult result) throws IOException {
+        // Doing this because onTestFailure listener keeps logging twice
+        if (result.getStatus() == ITestResult.FAILURE) {
+            //String path = getScreenshot();
+            test.fail(result.getThrowable());
+            //test.addScreenCaptureFromPath(path);
+        }
         report.flush();
     }
 
     @AfterTest(alwaysRun = true)
-    public void tearDown() {
-        System.out.println("test done");
-        driver.quit();
-    } // Nulls the driver object
+    public void tearDown() {driver.quit();} // Nulls the driver object
 
     @DataProvider
     public Object[] getTestData() throws IOException {
@@ -134,19 +133,19 @@ public class BaseTest {
         return mapper.readValue(new File(path), new TypeReference<>(){});
     }
 
-    private File takeScreenshot() throws IOException {
+    private String getScreenshot() throws IOException {
         TakesScreenshot screenshotMode = (TakesScreenshot) driver;
         File tempFile = screenshotMode.getScreenshotAs(OutputType.FILE);
         File destFile = new File(PATH_TO_PACKAGE+FS+"screenshots"+FS+"screenshot.png");
         FileUtils.copyFile(tempFile, destFile);
-        return destFile;
+        return destFile.getAbsolutePath();
     }
 
     ExtentReports createTestReport() {
         String name = this.getClass().getSimpleName();
 
         // filename where output is to be printed
-        ExtentSparkReporter reporter = new ExtentSparkReporter(USER_DIR + FS + "test-results" + FS + name + FS + "results.html");
+        ExtentSparkReporter reporter = new ExtentSparkReporter(USER_DIR + FS + "test-results");
         reporter.config().setReportName("Results for " + name);
         reporter.config().setDocumentTitle("Test Results");
 

@@ -1,5 +1,7 @@
 package org.djd.test_components;
 
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.FileUtils;
@@ -28,11 +30,13 @@ public class BaseTest implements ITestListener {
     private String baseURL;
     private Boolean isHeadless;
 
+    private final String USER_DIR = System.getProperty("user.dir");
+
     // system dependent file separator
     private final String FS = File.separator;
 
     // System.getProperty("user.dir") = C:\Users\david\coding\java\Udemy_Practice\SeleniumE2E
-    private final String PATH_TO_TEST_SOURCES_ROOT = System.getProperty("user.dir")+FS+"src"+FS+"test"+FS+"java"+FS;
+    private final String PATH_TO_TEST_SOURCES_ROOT = USER_DIR + FS + "src" + FS + "test" + FS + "java" + FS;
 
     // PackageName will vary depending on which subclass is running the test
     // PackageName uses the "." separator like "org.djd.Something"
@@ -51,6 +55,31 @@ public class BaseTest implements ITestListener {
 
     @AfterTest(alwaysRun = true)
     public void tearDown() {driver.quit();} // Nulls the driver object
+
+    @Override
+    public void onTestSuccess(ITestResult result) {
+        ITestListener.super.onTestSuccess(result);
+    }
+
+    @Override
+    public void onTestFailure(ITestResult result) {
+        ITestListener.super.onTestFailure(result);
+    }
+
+    @Override
+    public void onFinish(ITestContext context) {
+        ITestListener.super.onFinish(context);
+    }
+
+    @DataProvider
+    private Object[] getTestData() throws IOException {
+        String pathToDataFile = PATH_TO_PACKAGE + FS + "Data.json";
+        ArrayList<HashMap<String, String>> data = deserializeJSON(pathToDataFile);
+        int size = data.size();
+        Object[] objAry = new Object[size]; // Object array to store the hashmaps
+        for (int i = 0; i < size; i++) {objAry[i] = data.get(i);}
+        return objAry;
+    }
 
     // One way to set up browser and baseURL. Could also use TestNG parameters
     private void parseConfig() throws IOException {
@@ -89,16 +118,6 @@ public class BaseTest implements ITestListener {
         driver.manage().window().maximize();
     }
 
-    @DataProvider
-    private Object[] getTestData() throws IOException {
-        String pathToDataFile = PATH_TO_PACKAGE + FS + "Data.json";
-        ArrayList<HashMap<String, String>> data = deserializeJSON(pathToDataFile);
-        int size = data.size();
-        Object[] objAry = new Object[size]; // Object array to store the hashmaps
-        for (int i = 0; i < size; i++) {objAry[i] = data.get(i);}
-        return objAry;
-    }
-
     private ArrayList<HashMap<String, String>> deserializeJSON(String path) throws IOException {
         /* Use Jackson API to convert JSON objects to HashMaps.
         Return as ArrayList because getTestData will need to retrieve data from it
@@ -116,31 +135,9 @@ public class BaseTest implements ITestListener {
     }
 
     private void configExtentReport() {
-
-    }
-
-    @Override
-    public void onTestStart(ITestResult result) {
-        ITestListener.super.onTestStart(result);
-    }
-
-    @Override
-    public void onTestSuccess(ITestResult result) {
-        ITestListener.super.onTestSuccess(result);
-    }
-
-    @Override
-    public void onTestFailure(ITestResult result) {
-        ITestListener.super.onTestFailure(result);
-    }
-
-    @Override
-    public void onStart(ITestContext context) {
-        ITestListener.super.onStart(context);
-    }
-
-    @Override
-    public void onFinish(ITestContext context) {
-        ITestListener.super.onFinish(context);
+        // directory where output is to be printed
+        ExtentSparkReporter reporter = new ExtentSparkReporter(USER_DIR + FS + "extent-reports");
+        ExtentReports report = new ExtentReports();
+        report.attachReporter(reporter);
     }
 }

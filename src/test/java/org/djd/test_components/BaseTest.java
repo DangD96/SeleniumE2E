@@ -12,6 +12,9 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
+import org.testng.ITestContext;
+import org.testng.ITestListener;
+import org.testng.ITestResult;
 import org.testng.annotations.*;
 
 import java.io.File;
@@ -19,7 +22,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
-public class BaseTest {
+public class BaseTest implements ITestListener {
     protected WebDriver driver;
     private String browser;
     private String baseURL;
@@ -110,5 +113,30 @@ public class BaseTest {
         File destFile = new File(PATH_TO_PACKAGE+FS+"screenshots"+FS+"screenshot.png");
         FileUtils.copyFile(tempFile, destFile);
         return destFile;
+    }
+
+    @Override
+    public void onTestStart(ITestResult result) {
+        ITestListener.super.onTestStart(result);
+    }
+
+    @Override
+    public void onTestSuccess(ITestResult result) {
+        ITestListener.super.onTestSuccess(result);
+    }
+
+    @Override
+    public void onTestFailure(ITestResult result) {
+        ITestListener.super.onTestFailure(result);
+    }
+
+    @Override
+    public void onStart(ITestContext context) {
+        ITestListener.super.onStart(context);
+    }
+
+    @Override
+    public void onFinish(ITestContext context) {
+        ITestListener.super.onFinish(context);
     }
 }

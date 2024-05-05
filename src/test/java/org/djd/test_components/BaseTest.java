@@ -90,7 +90,7 @@ public class BaseTest implements ITestListener {
     }
 
     @DataProvider
-    public Object[] getTestData() throws IOException {
+    private Object[] getTestData() throws IOException {
         String pathToDataFile = PATH_TO_PACKAGE + FS + "Data.json";
         ArrayList<HashMap<String, String>> data = deserializeJSON(pathToDataFile);
         int size = data.size();
@@ -99,7 +99,7 @@ public class BaseTest implements ITestListener {
         return objAry;
     }
 
-    public ArrayList<HashMap<String, String>> deserializeJSON(String path) throws IOException {
+    private ArrayList<HashMap<String, String>> deserializeJSON(String path) throws IOException {
         /* Use Jackson API to convert JSON objects to HashMaps.
         Return as ArrayList because getTestData will need to retrieve data from it
         and that is faster compared to LinkedList */
@@ -107,12 +107,16 @@ public class BaseTest implements ITestListener {
         return mapper.readValue(new File(path), new TypeReference<>(){});
     }
 
-    public File takeScreenshot() throws IOException {
+    private File takeScreenshot() throws IOException {
         TakesScreenshot screenshotMode = (TakesScreenshot) driver;
         File tempFile = screenshotMode.getScreenshotAs(OutputType.FILE);
         File destFile = new File(PATH_TO_PACKAGE+FS+"screenshots"+FS+"screenshot.png");
         FileUtils.copyFile(tempFile, destFile);
         return destFile;
+    }
+
+    private void configExtentReport() {
+
     }
 
     @Override

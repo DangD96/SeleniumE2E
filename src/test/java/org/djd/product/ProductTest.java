@@ -33,7 +33,6 @@ public class ProductTest extends BaseTest {
         cart.waitForElementToBeVisible(cart.shoppingCart);
         Assert.assertEquals(cart.getNumberOfProductsInCart(), 1);
         Assert.assertEquals(cart.getProductName(1), "Nokia Edge");
-        takeScreenshot();
 
         // Remove product from cart
         cart.removeProduct(1);

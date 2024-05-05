@@ -15,7 +15,7 @@ public class ProductTest extends BaseTest {
     CatalogPage catalogPage;
     ShoppingCart cart;
     @Test(description = "Add correct product to shopping cart", groups = {"DJDGroup"})
-    public void addProductTest() throws IOException {
+    public void addProductTest() {
         loginPage = new LoginPage(driver);
         catalogPage = loginPage.logIn("rahulshettyacademy", "learning", "", "Teacher", true);
         catalogPage.waitForElementsToBeVisible(catalogPage.productList);

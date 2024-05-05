@@ -104,10 +104,11 @@ public class BaseTest {
         return mapper.readValue(new File(path), new TypeReference<>(){});
     }
 
-    public void takeScreenshot() throws IOException {
+    public File takeScreenshot() throws IOException {
         TakesScreenshot screenshotMode = (TakesScreenshot) driver;
         File tempFile = screenshotMode.getScreenshotAs(OutputType.FILE);
         File destFile = new File(PATH_TO_PACKAGE+FS+"screenshots"+FS+"screenshot.png");
         FileUtils.copyFile(tempFile, destFile);
+        return destFile;
     }
 }

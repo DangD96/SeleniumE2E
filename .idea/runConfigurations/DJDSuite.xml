@@ -3,7 +3,7 @@
     <module name="SeleniumE2E" />
     <shortenClasspath name="NONE" />
     <useClassPathOnly />
-    <option name="SUITE_NAME" value="$PROJECT_DIR$/testngConfiguration/DJDSuite.xml" />
+    <option name="SUITE_NAME" value="$PROJECT_DIR$/test-suites/DJDSuite.xml" />
     <option name="PACKAGE_NAME" value="" />
     <option name="MAIN_CLASS_NAME" value="" />
     <option name="METHOD_NAME" value="" />

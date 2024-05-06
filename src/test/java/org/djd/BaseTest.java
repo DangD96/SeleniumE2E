@@ -17,7 +17,6 @@ import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.testng.ITestContext;
-import org.testng.ITestListener;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 
@@ -25,7 +24,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-public abstract class BaseTest implements ITestListener {
+public abstract class BaseTest {
     /* TestNG will create a new instance of the test class for you per each test.
     If you want to share your variables - make them static (addresses the "this.<variable> is null" error)
     https://stackoverflow.com/questions/69721031/lateinit-variable-is-not-initialized-in-testngs-beforesuite */

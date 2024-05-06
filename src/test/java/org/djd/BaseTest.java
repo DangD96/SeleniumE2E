@@ -54,8 +54,8 @@ public class BaseTest implements ITestListener {
     // Convert to file path
     private final String PATH_TO_PACKAGE = PATH_TO_TEST_SOURCES_ROOT + PACKAGE_NAME.replace(".", FS);
 
-
-    @BeforeSuite(alwaysRun = true) // Always run so don't get skipped over if using TestNG Groups
+    // Always run so don't get skipped over if using TestNG Groups
+    @BeforeSuite(alwaysRun = true)
     public void setUp() {
         report = createTestReport();
     }
@@ -74,12 +74,12 @@ public class BaseTest implements ITestListener {
     }
 
     @AfterMethod(alwaysRun = true)
-    public void listenForResult(ITestResult result) {
+    public void listenForResult(ITestResult result) throws IOException {
         // Doing this because onTestFailure listener keeps logging twice
         if (result.getStatus() == ITestResult.FAILURE) {
-            //String path = getScreenshot();
+            String path = getScreenshot();
             testMethod.fail(result.getThrowable());
-            //test.addScreenCaptureFromPath(path);
+            testMethod.addScreenCaptureFromPath(path);
         }
         else {
             testMethod.log(Status.PASS, "Success");

@@ -15,20 +15,20 @@ public class LoginTest extends BaseTest {
     /* Method below runs n times, where n is the number of objects in the array returned by dataProvider in superclass.
     The Object returned by dataProvider during each iteration gets passed as argument to the input parameter I defined.
     The dataProvider lives in the super class, so all subclasses can access it */
-    public void loginInvalid(HashMap<String, String> input) {
+    protected void loginInvalid(HashMap<String, String> input) {
         loginPage = new LoginPage(driver);
         loginPage.logIn(input.get("username"), input.get("password"), "", "Teacher", true);
         Assert.assertTrue(loginPage.waitForElementToBeVisible(loginPage.loginErrorMessage)); // Make sure you get error
     }
 
     @Test(description = "fail")
-    public void intentionalFail() throws InterruptedException {
+    protected void intentionalFail() throws InterruptedException {
         Thread.sleep(2000);
         loginPage.loginButton.click();
     }
 
     @Test(description = "Successful Login")
-    public void loginValid()  {
+    protected void loginValid()  {
         loginPage = new LoginPage(driver);
         loginPage.clearUsername();
         loginPage.clearPassword();

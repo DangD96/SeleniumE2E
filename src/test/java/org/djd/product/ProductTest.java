@@ -13,7 +13,7 @@ public class ProductTest extends BaseTest {
     CatalogPage catalogPage;
     ShoppingCart cart;
     @Test(description = "Add correct product to shopping cart")
-    public void addProductTest() {
+    protected void addProductTest() {
         loginPage = new LoginPage(driver);
         catalogPage = loginPage.logIn("rahulshettyacademy", "learning", "", "Teacher", true);
         catalogPage.waitForElementsToBeVisible(catalogPage.productList);

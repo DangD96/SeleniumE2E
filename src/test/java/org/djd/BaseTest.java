@@ -22,21 +22,20 @@ import org.testng.ITestResult;
 import org.testng.annotations.*;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
-public class BaseTest implements ITestListener {
-    // TestNG will create a new instance of BaseTest class for you per each test.
+public abstract class BaseTest implements ITestListener {
+    // TestNG will create a new instance of the test class for you per each test.
     // If you want to share your variables - make them static
     // https://stackoverflow.com/questions/69721031/lateinit-variable-is-not-initialized-in-testngs-beforesuite
     protected static WebDriver driver;
-    static ExtentReports report;
+    private static ExtentReports report;
+    private static String browser;
+    private static String baseURL;
+    private static Boolean isHeadless;
 
     private ExtentTest testMethod;
-    private String browser;
-    private String baseURL;
-    private Boolean isHeadless;
 
     // System.getProperty("user.dir") = C:\Users\david\coding\java\Udemy_Practice\SeleniumE2E
     private final String USER_DIR = System.getProperty("user.dir");
@@ -56,28 +55,30 @@ public class BaseTest implements ITestListener {
 
     // Always run so don't get skipped over if using TestNG Groups
     @BeforeSuite(alwaysRun = true)
-    public void setUp() {
+    @Parameters({"testURL", "testBrowser", "headlessMode"})
+    protected void setUp(String testURL, String testBrowser, String headlessMode) {
         report = new ExtentReports();
+        baseURL = testURL;
+        browser = testBrowser;
+        isHeadless = Boolean.parseBoolean(headlessMode);
     }
 
     // Using native dependency injection https://testng.org/#_native_dependency_injection
     // "Test" = <Test/> tag defined in XML
     @BeforeTest(alwaysRun = true)
-    public void launchApp(ITestContext context) throws IOException {
+    protected void launchApp(ITestContext context) {
         attachReporter(context);
-        parseConfig();
-        setUpDriver();
-        driver.get(baseURL);
+        setUpDriver(baseURL, browser, isHeadless);
     }
 
     // "Method" = Method with @Test annotation
     @BeforeMethod(alwaysRun = true)
-    public void createTest (ITestResult result) {
+    protected void createTest (ITestResult result) {
         testMethod = report.createTest(result.getMethod().getMethodName());
     }
 
     @AfterMethod(alwaysRun = true)
-    public void listenForResult(ITestResult result) throws IOException {
+    protected void listenForResult(ITestResult result) throws IOException {
         // Doing this because onTestFailure listener keeps logging twice
         if (result.getStatus() == ITestResult.FAILURE) {
             String path = getScreenshot();
@@ -90,17 +91,17 @@ public class BaseTest implements ITestListener {
     }
 
     @AfterTest(alwaysRun = true)
-    public void tearDown() {
+    protected void tearDown() {
         driver.quit();
     }
 
     @AfterSuite(alwaysRun = true)
-    public void saveReport() {
+    protected void saveReport() {
         report.flush();
     }
 
     @DataProvider
-    public Object[] getTestData() throws IOException {
+    protected Object[] getTestData() throws IOException {
         String pathToDataFile = PATH_TO_PACKAGE + FS + "Data.json";
         ArrayList<HashMap<String, String>> data = deserializeJSON(pathToDataFile);
         int size = data.size();
@@ -109,19 +110,7 @@ public class BaseTest implements ITestListener {
         return objAry;
     }
 
-    // One way to set up browser and baseURL. Could also use TestNG parameters
-    private void parseConfig() throws IOException {
-        // Every Test should have its own Setup.properties file living under its own package
-        String pathToSetupFile = PATH_TO_PACKAGE + FS + "Setup.properties";
-        FileReader reader = new FileReader(pathToSetupFile);
-        Properties props = new Properties();
-        props.load(reader);
-        browser = props.getProperty("browser");
-        baseURL = props.getProperty("testURL");
-        isHeadless = Boolean.valueOf(props.getProperty("headless"));
-    }
-
-    private void setUpDriver() {
+    private void setUpDriver(String url, String browser, boolean isHeadless) {
         if (browser.equalsIgnoreCase("Chrome")) {
             // https://peter.sh/experiments/chromium-command-line-switches/
             ChromeOptions options = new ChromeOptions();
@@ -144,6 +133,7 @@ public class BaseTest implements ITestListener {
             driver = new FirefoxDriver(options);
         }
         driver.manage().window().maximize();
+        driver.get(url);
     }
 
     private ArrayList<HashMap<String, String>> deserializeJSON(String path) throws IOException {

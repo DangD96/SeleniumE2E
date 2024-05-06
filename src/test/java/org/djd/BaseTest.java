@@ -32,8 +32,8 @@ public class BaseTest implements ITestListener {
     // https://stackoverflow.com/questions/69721031/lateinit-variable-is-not-initialized-in-testngs-beforesuite
     protected static WebDriver driver;
     static ExtentReports report;
-    static ExtentTest testMethod;
 
+    private ExtentTest testMethod;
     private String browser;
     private String baseURL;
     private Boolean isHeadless;
@@ -61,6 +61,7 @@ public class BaseTest implements ITestListener {
     }
 
     // Using native dependency injection https://testng.org/#_native_dependency_injection
+    // "Test" = <Test/> tag defined in XML
     @BeforeTest(alwaysRun = true)
     public void launchApp(ITestContext context) throws IOException {
         attachReporter(context);
@@ -156,7 +157,7 @@ public class BaseTest implements ITestListener {
     private String getScreenshot() throws IOException {
         TakesScreenshot screenshotMode = (TakesScreenshot) driver;
         File tempFile = screenshotMode.getScreenshotAs(OutputType.FILE);
-        File destFile = new File(PATH_TO_TEST_SOURCES_ROOT + FS + "screenshots" + FS + "screenshot.png");
+        File destFile = new File(USER_DIR + FS + "screenshots" + FS + "screenshot.png");
         FileUtils.copyFile(tempFile, destFile);
         return destFile.getAbsolutePath();
     }

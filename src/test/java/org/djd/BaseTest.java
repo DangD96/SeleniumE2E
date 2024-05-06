@@ -26,9 +26,9 @@ import java.io.IOException;
 import java.util.*;
 
 public abstract class BaseTest implements ITestListener {
-    // TestNG will create a new instance of the test class for you per each test.
-    // If you want to share your variables - make them static (addresses the "this.<variable> is null" error)
-    // https://stackoverflow.com/questions/69721031/lateinit-variable-is-not-initialized-in-testngs-beforesuite
+    /* TestNG will create a new instance of the test class for you per each test.
+    If you want to share your variables - make them static (addresses the "this.<variable> is null" error)
+    https://stackoverflow.com/questions/69721031/lateinit-variable-is-not-initialized-in-testngs-beforesuite */
     protected static WebDriver driver;
     private static ExtentReports report;
     private static String browser;
@@ -37,23 +37,25 @@ public abstract class BaseTest implements ITestListener {
 
     private ExtentTest testMethod;
 
-    // System.getProperty("user.dir") = C:\Users\david\coding\java\Udemy_Practice\SeleniumE2E
+    // C:\Users\david\coding\java\Udemy_Practice\SeleniumE2E
     private final String USER_DIR = System.getProperty("user.dir");
 
-    // system dependent file separator
+    // System dependent file separator (so tests can run on windows or unix)
     private final String FS = File.separator;
 
-    private final String PATH_TO_TEST_SOURCES_ROOT = USER_DIR + FS + "src" + FS + "test" + FS + "java" + FS;
+    private final String PATH_TO_TEST_SOURCES_ROOT = USER_DIR+FS+"src"+FS+"test"+FS+"java"+FS;
 
-    // PackageName will vary depending on which SUBCLASS is running the test
-    // PackageName uses the "." separator like "org.djd.Something"
-    // Use Reflection API to get info about class name and package name
+    /* PackageName will vary depending on which SUBCLASS is running the test (TestNG creates an object of the subclass)
+    PackageName uses the "." separator like "org.djd.Something"
+    Use Reflection API to get info about class name and package name */
     private final String PACKAGE_NAME = this.getClass().getPackageName();
 
     // Convert to file path
     private final String PATH_TO_PACKAGE = PATH_TO_TEST_SOURCES_ROOT + PACKAGE_NAME.replace(".", FS);
 
-    // Always run so don't get skipped over if using TestNG Groups
+    /* Always run so don't get skipped over if using TestNG Groups
+    Parameters set in the Intellij Run Configuration. Get injected into setUp method's parameters.
+    Could also set in the XML file */
     @BeforeSuite(alwaysRun = true)
     @Parameters({"testURL", "testBrowser", "headlessMode"})
     protected void setUp(String testURL, String testBrowser, String headlessMode) {
@@ -79,26 +81,19 @@ public abstract class BaseTest implements ITestListener {
 
     @AfterMethod(alwaysRun = true)
     protected void listenForResult(ITestResult result) throws IOException {
-        // Doing this because onTestFailure listener keeps logging twice
+        // Doing this because ITestResult's onTestFailure listener keeps logging twice
         if (result.getStatus() == ITestResult.FAILURE) {
             String path = getScreenshot();
             testMethod.fail(result.getThrowable());
             testMethod.addScreenCaptureFromPath(path);
-        }
-        else {
-            testMethod.log(Status.PASS, "Success");
-        }
+        } else {testMethod.log(Status.PASS, "Success");}
     }
 
     @AfterTest(alwaysRun = true)
-    protected void tearDown() {
-        driver.quit();
-    }
+    protected void tearDown() {driver.quit();} // Nulls driver object
 
     @AfterSuite(alwaysRun = true)
-    protected void saveReport() {
-        report.flush();
-    }
+    protected void saveReport() {report.flush();}
 
     @DataProvider
     protected Object[] getTestData() throws IOException {
@@ -154,10 +149,8 @@ public abstract class BaseTest implements ITestListener {
 
     private void attachReporter(ITestContext context) {
         String suiteName = context.getSuite().getName();
-
         // directory where output is to be printed
         ExtentSparkReporter reporter = new ExtentSparkReporter(USER_DIR + FS + "test-results" + FS + suiteName.replace(" ", "_") + ".html");
-
         reporter.config().setReportName("Results for " + suiteName);
         reporter.config().setDocumentTitle(suiteName);
         report.attachReporter(reporter);

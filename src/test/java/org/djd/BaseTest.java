@@ -27,7 +27,13 @@ import java.io.IOException;
 import java.util.*;
 
 public class BaseTest implements ITestListener {
+    // TestNG will create a new instance of BaseTest class for you per each test.
+    // If you want to share your variables - make them static
+    // https://stackoverflow.com/questions/69721031/lateinit-variable-is-not-initialized-in-testngs-beforesuite
     protected static WebDriver driver;
+    static ExtentReports report;
+    static ExtentTest testMethod;
+
     private String browser;
     private String baseURL;
     private Boolean isHeadless;
@@ -48,8 +54,6 @@ public class BaseTest implements ITestListener {
     // Convert to file path
     private final String PATH_TO_PACKAGE = PATH_TO_TEST_SOURCES_ROOT + PACKAGE_NAME.replace(".", FS);
 
-    static ExtentReports report;
-    static ExtentTest testMethod;
 
     @BeforeSuite(alwaysRun = true) // Always run so don't get skipped over if using TestNG Groups
     public void setUp() {

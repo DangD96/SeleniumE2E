@@ -2,7 +2,7 @@ package org.djd;
 
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
-import com.aventstack.extentreports.MediaEntityBuilder;
+import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,6 +16,7 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
+import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
@@ -26,7 +27,7 @@ import java.io.IOException;
 import java.util.*;
 
 public class BaseTest implements ITestListener {
-    protected WebDriver driver;
+    protected static WebDriver driver;
     private String browser;
     private String baseURL;
     private Boolean isHeadless;
@@ -47,12 +48,16 @@ public class BaseTest implements ITestListener {
     // Convert to file path
     private final String PATH_TO_PACKAGE = PATH_TO_TEST_SOURCES_ROOT + PACKAGE_NAME.replace(".", FS);
 
-    ExtentReports report;
-    ExtentTest test;
+    static ExtentReports report;
+    static ExtentTest testMethod;
 
-    @BeforeClass(alwaysRun = true) // Always run so don't get skipped over if using TestNG Groups
-    public void launchApp() throws IOException {
+    @BeforeSuite(alwaysRun = true) // Always run so don't get skipped over if using TestNG Groups
+    public void setUp() {
         report = createTestReport();
+    }
+
+    @BeforeTest(alwaysRun = true)
+    public void launchApp() throws IOException {
         parseConfig();
         setUpDriver();
         driver.get(baseURL);
@@ -60,23 +65,32 @@ public class BaseTest implements ITestListener {
 
     // "Method" = Method with @Test annotation
     @BeforeMethod(alwaysRun = true)
-    public void createTest (ITestResult result){
-        test = report.createTest(result.getMethod().getMethodName());
+    public void createTest (ITestResult result) {
+        testMethod = report.createTest(result.getMethod().getMethodName());
     }
 
     @AfterMethod(alwaysRun = true)
-    public void flush(ITestResult result) throws IOException {
+    public void listenForResult(ITestResult result) {
         // Doing this because onTestFailure listener keeps logging twice
         if (result.getStatus() == ITestResult.FAILURE) {
             //String path = getScreenshot();
-            test.fail(result.getThrowable());
+            testMethod.fail(result.getThrowable());
             //test.addScreenCaptureFromPath(path);
         }
-        report.flush();
+        else {
+            testMethod.log(Status.PASS, "Success");
+        }
     }
 
     @AfterTest(alwaysRun = true)
-    public void tearDown() {driver.quit();} // Nulls the driver object
+    public void tearDown() {
+        driver.quit();
+    }
+
+    @AfterSuite(alwaysRun = true)
+    public void saveReport() {
+        report.flush();
+    }
 
     @DataProvider
     public Object[] getTestData() throws IOException {
@@ -142,11 +156,9 @@ public class BaseTest implements ITestListener {
     }
 
     ExtentReports createTestReport() {
-        String name = this.getClass().getSimpleName();
-
         // filename where output is to be printed
         ExtentSparkReporter reporter = new ExtentSparkReporter(USER_DIR + FS + "test-results");
-        reporter.config().setReportName("Results for " + name);
+        reporter.config().setReportName("Results");
         reporter.config().setDocumentTitle("Test Results");
 
         ExtentReports report = new ExtentReports();

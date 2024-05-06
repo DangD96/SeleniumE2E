@@ -3,16 +3,13 @@ package org.djd.login;
 import org.djd.BaseTest;
 import org.djd.CatalogPage;
 import org.djd.LoginPage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.util.HashMap;
 
 public class LoginTest extends BaseTest {
-    private static final Logger log = LoggerFactory.getLogger(LoginTest.class);
-    private LoginPage loginPage; // Make this a class variable since it's used multiple times in tests
+    private LoginPage loginPage;
 
     @Test(description = "Unsuccessful Login", dataProvider = "getTestData")
     /* Method below runs n times, where n is the number of objects in the array returned by dataProvider in superclass.
@@ -24,7 +21,7 @@ public class LoginTest extends BaseTest {
         Assert.assertTrue(loginPage.waitForElementToBeVisible(loginPage.loginErrorMessage)); // Make sure you get error
     }
 
-    @Test
+    @Test(description = "fail")
     public void intentionalFail() throws InterruptedException {
         Thread.sleep(2000);
         loginPage.loginButton.click();
@@ -32,6 +29,7 @@ public class LoginTest extends BaseTest {
 
     @Test(description = "Successful Login")
     public void loginValid()  {
+        loginPage = new LoginPage(driver);
         loginPage.clearUsername();
         loginPage.clearPassword();
         CatalogPage catalogPage = loginPage.logIn("rahulshettyacademy", "learning", "", "", false);

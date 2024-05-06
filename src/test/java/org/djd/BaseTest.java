@@ -61,7 +61,7 @@ public abstract class BaseTest implements ITestListener {
     protected void setUp(String testURL, String testBrowser, String headlessMode) {
         report = new ExtentReports();
         baseURL = testURL;
-        browser = testBrowser;
+        browser = testBrowser.toUpperCase();
         isHeadless = Boolean.parseBoolean(headlessMode);
     }
 
@@ -106,26 +106,28 @@ public abstract class BaseTest implements ITestListener {
     }
 
     private void setUpDriver(String url, String browser, boolean isHeadless) {
-        if (browser.equalsIgnoreCase("Chrome")) {
-            // https://peter.sh/experiments/chromium-command-line-switches/
-            ChromeOptions options = new ChromeOptions();
-            options.addArguments("--guest");
-            if (isHeadless) {options.addArguments("--headless=new");}
-            driver = new ChromeDriver(options);
-        }
-        else if (browser.equalsIgnoreCase("Edge")) {
-            // https://peter.sh/experiments/chromium-command-line-switches/
-            EdgeOptions options = new EdgeOptions();
-            options.addArguments("--guest"); // Need to add this so Edge doesn't show random popups
-            if (isHeadless) {options.addArguments("--headless=new");}
-            driver = new EdgeDriver(options);
-        }
-        else if (browser.equalsIgnoreCase("Firefox")) {
-            // https://wiki.mozilla.org/Firefox/CommandLineOptions
-            FirefoxOptions options = new FirefoxOptions();
-            options.addArguments("-private");
-            if (isHeadless) {options.addArguments("-headless");}
-            driver = new FirefoxDriver(options);
+        switch (browser) {
+            case "EDGE":
+                // https://peter.sh/experiments/chromium-command-line-switches/
+                EdgeOptions edgeOptions = new EdgeOptions();
+                edgeOptions.addArguments("--guest"); // Need to add this so Edge doesn't show random popups
+                if (isHeadless) {edgeOptions.addArguments("--headless=new");}
+                driver = new EdgeDriver(edgeOptions);
+                break;
+            case "FIREFOX":
+                // https://wiki.mozilla.org/Firefox/CommandLineOptions
+                FirefoxOptions firefoxOptions = new FirefoxOptions();
+                firefoxOptions.addArguments("-private");
+                if (isHeadless) {firefoxOptions.addArguments("-headless");}
+                driver = new FirefoxDriver(firefoxOptions);
+                break;
+            default:
+                // https://peter.sh/experiments/chromium-command-line-switches/
+                ChromeOptions chromeOptions = new ChromeOptions();
+                chromeOptions.addArguments("--guest");
+                if (isHeadless) {chromeOptions.addArguments("--headless=new");}
+                driver = new ChromeDriver(chromeOptions);
+                break;
         }
         driver.manage().window().maximize();
         driver.get(url);

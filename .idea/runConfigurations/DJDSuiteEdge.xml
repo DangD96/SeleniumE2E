@@ -1,0 +1,25 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="DJDSuiteEdge" type="TestNG">
+    <module name="SeleniumE2E" />
+    <shortenClasspath name="NONE" />
+    <useClassPathOnly />
+    <option name="SUITE_NAME" value="$PROJECT_DIR$/test-suites/DJDSuite.xml" />
+    <option name="PACKAGE_NAME" value="" />
+    <option name="MAIN_CLASS_NAME" value="" />
+    <option name="METHOD_NAME" value="" />
+    <option name="GROUP_NAME" value="" />
+    <option name="TEST_OBJECT" value="SUITE" />
+    <option name="PARAMETERS" value="" />
+    <option name="OUTPUT_DIRECTORY" value="" />
+    <option name="PROPERTIES_FILE" value="" />
+    <properties>
+      <property name="headlessMode" value="false" />
+      <property name="testURL" value="https://www.rahulshettyacademy.com/loginpagePractise/" />
+      <property name="testBrowser" value="edge" />
+    </properties>
+    <listeners />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

@@ -16,6 +16,7 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
+import org.testng.ITest;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
@@ -57,11 +58,13 @@ public class BaseTest implements ITestListener {
     // Always run so don't get skipped over if using TestNG Groups
     @BeforeSuite(alwaysRun = true)
     public void setUp() {
-        report = createTestReport();
+        report = new ExtentReports();
     }
 
+    // Using native dependency injection https://testng.org/#_native_dependency_injection
     @BeforeTest(alwaysRun = true)
-    public void launchApp() throws IOException {
+    public void launchApp(ITestContext context) throws IOException {
+        attachReporter(context);
         parseConfig();
         setUpDriver();
         driver.get(baseURL);
@@ -159,14 +162,14 @@ public class BaseTest implements ITestListener {
         return destFile.getAbsolutePath();
     }
 
-    ExtentReports createTestReport() {
-        // filename where output is to be printed
-        ExtentSparkReporter reporter = new ExtentSparkReporter(USER_DIR + FS + "test-results");
-        reporter.config().setReportName("Results");
-        reporter.config().setDocumentTitle("Test Results");
+    private void attachReporter(ITestContext context) {
+        String suiteName = context.getSuite().getName();
 
-        ExtentReports report = new ExtentReports();
+        // directory where output is to be printed
+        ExtentSparkReporter reporter = new ExtentSparkReporter(USER_DIR + FS + "test-results" + FS + suiteName.replace(" ", "_") + ".html");
+
+        reporter.config().setReportName("Results for " + suiteName);
+        reporter.config().setDocumentTitle(suiteName);
         report.attachReporter(reporter);
-        return report;
     }
 }

@@ -156,7 +156,7 @@ public class BaseTest implements ITestListener {
     private String getScreenshot() throws IOException {
         TakesScreenshot screenshotMode = (TakesScreenshot) driver;
         File tempFile = screenshotMode.getScreenshotAs(OutputType.FILE);
-        File destFile = new File(PATH_TO_PACKAGE+FS+"screenshots"+FS+"screenshot.png");
+        File destFile = new File(PATH_TO_TEST_SOURCES_ROOT + FS + "screenshots" + FS + "screenshot.png");
         FileUtils.copyFile(tempFile, destFile);
         return destFile.getAbsolutePath();
     }

@@ -27,7 +27,7 @@ import java.util.*;
 
 public abstract class BaseTest implements ITestListener {
     // TestNG will create a new instance of the test class for you per each test.
-    // If you want to share your variables - make them static
+    // If you want to share your variables - make them static (addresses the "this.<variable> is null" error)
     // https://stackoverflow.com/questions/69721031/lateinit-variable-is-not-initialized-in-testngs-beforesuite
     protected static WebDriver driver;
     private static ExtentReports report;

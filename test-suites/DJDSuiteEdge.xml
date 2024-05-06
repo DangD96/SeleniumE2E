@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+    <suite name="DJD Test Suite Edge">
+        <test verbose="2" name="Logging In">
+            <classes>
+                <class name="org.djd.login.LoginTest">
+                    <methods>
+                        <include name="loginInvalid"/>
+                        <include name="loginValid"/>
+                        <include name="intentionalFail"/>
+                    </methods>
+                </class>
+            </classes>
+        </test>
+        <test verbose="2" name="Adding Product to Cart">
+            <classes>
+                <class name="org.djd.product.ProductTest"/>
+            </classes>
+        </test>
+    </suite>

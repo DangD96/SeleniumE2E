@@ -2,6 +2,7 @@ package org.djd;
 
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.MediaEntityBuilder;
 import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -85,6 +86,7 @@ public abstract class BaseTest {
             String path = getScreenshot();
             testMethod.fail(result.getThrowable());
             testMethod.addScreenCaptureFromPath(path);
+            testMethod.fail(MediaEntityBuilder.createScreenCaptureFromPath(path).build());
         } else {testMethod.log(Status.PASS, "Success");}
     }
 
@@ -143,7 +145,7 @@ public abstract class BaseTest {
     private String getScreenshot() throws IOException {
         TakesScreenshot screenshotMode = (TakesScreenshot) driver;
         File tempFile = screenshotMode.getScreenshotAs(OutputType.FILE);
-        File destFile = new File(USER_DIR + FS + "screenshots" + FS + "screenshot.png");
+        File destFile = new File(USER_DIR + FS + "test-results" + FS + "screenshot.png");
         FileUtils.copyFile(tempFile, destFile);
         return destFile.getAbsolutePath();
     }

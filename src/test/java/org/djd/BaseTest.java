@@ -84,9 +84,8 @@ public abstract class BaseTest {
         // Doing this because ITestResult's onTestFailure listener keeps logging twice
         if (result.getStatus() == ITestResult.FAILURE) {
             String path = getScreenshot();
-            testMethod.fail(result.getThrowable());
-            testMethod.addScreenCaptureFromPath(path);
-            testMethod.fail(MediaEntityBuilder.createScreenCaptureFromPath(path).build());
+            // Won't work with absolute path for some reason. Needs relative path from project directory
+            testMethod.fail(result.getThrowable()).addScreenCaptureFromPath(path);
         } else {testMethod.log(Status.PASS, "Success");}
     }
 
@@ -147,7 +146,15 @@ public abstract class BaseTest {
         File tempFile = screenshotMode.getScreenshotAs(OutputType.FILE);
         File destFile = new File(USER_DIR + FS + "test-results" + FS + "screenshot.png");
         FileUtils.copyFile(tempFile, destFile);
-        return destFile.getAbsolutePath();
+        String absolutePath = destFile.getAbsolutePath();
+        return getRelativePath(absolutePath);
+    }
+
+    private String getRelativePath(String absolutePath) {
+        // Need to double escape for regex
+        String[] results = USER_DIR.split("\\\\"); // Split on "\"
+        String projectName = results[results.length-1];
+        return absolutePath.split(projectName)[1]; // In my case, get everything that comes after "SeleniumE2E"
     }
 
     private void attachReporter(ITestContext context) {

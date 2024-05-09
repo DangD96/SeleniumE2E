@@ -8,8 +8,5 @@ Utilizes TestNG for assertions and test suite setup.
 # Rules and Guidance
 1. Page object methods wait for elements to be visible before interacting with them. If you're checking for the visibility or invisibility of discrete elements, that needs to be handled by your test. All page objects have wait methods you can call.
 2. All Page classes must live under **src.main.java.org.djd**
-3. The **src.test.java.org.djd** package will contain subpackages each representing individual tests and all files they need to run.
-   1. Each subpackage must have a Test Class.
-   2. Each subpackage must have a Setup.properties file.
-   3. Each subpackage may optionally have a Data.json file.
+3. If your test requires data to be used in a data provider, provide the data in a .json file of the same name.
 4. Every Test must extend BaseTest.

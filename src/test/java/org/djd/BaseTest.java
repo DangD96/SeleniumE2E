@@ -44,10 +44,12 @@ public abstract class BaseTest {
 
     private final String PATH_TO_TEST_SOURCES_ROOT = USER_DIR+FS+"src"+FS+"test"+FS+"java"+FS;
 
-    /* PackageName will vary depending on which SUBCLASS is running the test (TestNG creates an object of the subclass)
+    /* Will vary depending on which SUBCLASS is running the test (TestNG creates an object of the subclass)
     PackageName uses the "." separator like "org.djd.Something"
     Use Reflection API to get info about class name and package name */
     private final String PACKAGE_NAME = this.getClass().getPackageName();
+
+    private final String CLASS_NAME = this.getClass().getSimpleName();
 
     // Convert to file path
     private final String PATH_TO_PACKAGE = PATH_TO_TEST_SOURCES_ROOT + PACKAGE_NAME.replace(".", FS);
@@ -96,7 +98,7 @@ public abstract class BaseTest {
 
     @DataProvider
     protected Object[] getTestData() throws IOException {
-        String pathToDataFile = PATH_TO_PACKAGE + FS + "Data.json";
+        String pathToDataFile = PATH_TO_PACKAGE + FS + CLASS_NAME + ".json";
         ArrayList<HashMap<String, String>> data = deserializeJSON(pathToDataFile);
         int size = data.size();
         Object[] objAry = new Object[size]; // Object array to store the hashmaps

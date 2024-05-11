@@ -63,10 +63,10 @@ public abstract class BaseTest {
     @BeforeSuite(alwaysRun = true)
     @Parameters({"testURL", "testBrowser", "headlessMode", "runName"})
     protected void setUp(String testURL, String testBrowser, String headlessMode, String runName) {
-        createReport(testBrowser, headlessMode, runName);
         baseURL = testURL;
         browser = testBrowser.toUpperCase();
         isHeadless = Boolean.parseBoolean(headlessMode);
+        createReport(browser, headlessMode, runName);
     }
 
     // Using native dependency injection https://testng.org/#_native_dependency_injection
@@ -137,15 +137,16 @@ public abstract class BaseTest {
     protected void createReport(String browser, String headlessMode, String runName) {
         // directory where output is to be printed
         ExtentSparkReporter reporter = new ExtentSparkReporter(USER_DIR + FS + "test-results" + FS + runName.replace(" ", "_") + ".html");
-        reporter.config().setReportName("Results for " + runName);
-        reporter.config().setDocumentTitle(runName);
+        reporter.config().setReportName("Test Run Results");
+        reporter.config().setDocumentTitle("DJD Automation");
         reporter.config().setTheme(Theme.DARK);
         reporter.config().setTimelineEnabled(true);
 
         report = new ExtentReports();
         report.setSystemInfo("OS Used During Runtime", OS_NAME);
+        report.setSystemInfo("Test Run", runName);
         report.setSystemInfo("Browser", browser);
-        report.setSystemInfo("Headless Mode", headlessMode);
+        report.setSystemInfo("Headless?", headlessMode);
         report.attachReporter(reporter);
     }
 

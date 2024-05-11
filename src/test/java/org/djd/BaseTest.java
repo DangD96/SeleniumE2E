@@ -3,7 +3,9 @@ package org.djd;
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.Status;
+import com.aventstack.extentreports.model.ReportStats;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
+import com.aventstack.extentreports.reporter.configuration.Theme;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.FileUtils;
@@ -55,6 +57,8 @@ public abstract class BaseTest {
     // Convert to file path
     private final String PATH_TO_PACKAGE = PATH_TO_TEST_SOURCES_ROOT + PACKAGE_NAME.replace(".", FS);
 
+    private final String OS_NAME = System.getProperty("os.name");
+
     /* Always run so don't get skipped over if using TestNG Groups
     Parameters set in the Intellij Run Configuration. Get injected into setUp method's parameters.
     Could also set in the XML file */
@@ -62,6 +66,9 @@ public abstract class BaseTest {
     @Parameters({"testURL", "testBrowser", "headlessMode"})
     protected void setUp(String testURL, String testBrowser, String headlessMode) {
         report = new ExtentReports();
+        report.setSystemInfo("OS Name", OS_NAME);
+        report.setSystemInfo("Browser", testBrowser);
+        report.setSystemInfo("Headless Mode", headlessMode);
         baseURL = testURL;
         browser = testBrowser.toUpperCase();
         isHeadless = Boolean.parseBoolean(headlessMode);
@@ -165,6 +172,7 @@ public abstract class BaseTest {
         ExtentSparkReporter reporter = new ExtentSparkReporter(USER_DIR + FS + "test-results" + FS + suiteName.replace(" ", "_") + ".html");
         reporter.config().setReportName("Results for " + suiteName);
         reporter.config().setDocumentTitle(suiteName);
+        reporter.config().setTheme(Theme.DARK);
         report.attachReporter(reporter);
     }
 }

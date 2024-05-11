@@ -17,7 +17,6 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
-import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 
@@ -62,12 +61,9 @@ public abstract class BaseTest {
     Parameters set in the Intellij Run Configuration. Get injected into setUp method's parameters.
     Could also set in the XML file */
     @BeforeSuite(alwaysRun = true)
-    @Parameters({"testURL", "testBrowser", "headlessMode"})
-    protected void setUp(String testURL, String testBrowser, String headlessMode) {
-        report = new ExtentReports();
-        report.setSystemInfo("OS Used During Runtime", OS_NAME);
-        report.setSystemInfo("Browser", testBrowser);
-        report.setSystemInfo("Headless Mode", headlessMode);
+    @Parameters({"testURL", "testBrowser", "headlessMode", "runName"})
+    protected void setUp(String testURL, String testBrowser, String headlessMode, String runName) {
+        createReport(testBrowser, headlessMode, runName);
         baseURL = testURL;
         browser = testBrowser.toUpperCase();
         isHeadless = Boolean.parseBoolean(headlessMode);
@@ -76,10 +72,7 @@ public abstract class BaseTest {
     // Using native dependency injection https://testng.org/#_native_dependency_injection
     // "Test" = <Test/> tag defined in XML
     @BeforeTest(alwaysRun = true)
-    protected void launchApp(ITestContext context) {
-        attachReporter(context);
-        setUpDriver(baseURL, browser, isHeadless);
-    }
+    protected void launchApp() {setUpDriver(baseURL, browser, isHeadless);}
 
     // "Method" = Method with @Test annotation
     @BeforeMethod(alwaysRun = true)
@@ -141,6 +134,21 @@ public abstract class BaseTest {
         driver.get(url);
     }
 
+    protected void createReport(String browser, String headlessMode, String runName) {
+        // directory where output is to be printed
+        ExtentSparkReporter reporter = new ExtentSparkReporter(USER_DIR + FS + "test-results" + FS + runName.replace(" ", "_") + ".html");
+        reporter.config().setReportName("Results for " + runName);
+        reporter.config().setDocumentTitle(runName);
+        reporter.config().setTheme(Theme.DARK);
+        reporter.config().setTimelineEnabled(true);
+
+        report = new ExtentReports();
+        report.setSystemInfo("OS Used During Runtime", OS_NAME);
+        report.setSystemInfo("Browser", browser);
+        report.setSystemInfo("Headless Mode", headlessMode);
+        report.attachReporter(reporter);
+    }
+
     private ArrayList<HashMap<String, String>> deserializeJSON(String path) throws IOException {
         /* Use Jackson API to convert JSON objects to HashMaps.
         Return as ArrayList because getTestData will need to retrieve data from it
@@ -163,15 +171,5 @@ public abstract class BaseTest {
         String[] results = USER_DIR.split("\\\\"); // Split on "\"
         String projectName = results[results.length-1];
         return absolutePath.split(projectName)[1]; // In my case, get everything that comes after "SeleniumE2E"
-    }
-
-    private void attachReporter(ITestContext context) {
-        String suiteName = context.getSuite().getName();
-        // directory where output is to be printed
-        ExtentSparkReporter reporter = new ExtentSparkReporter(USER_DIR + FS + "test-results" + FS + suiteName.replace(" ", "_") + ".html");
-        reporter.config().setReportName("Results for " + suiteName);
-        reporter.config().setDocumentTitle(suiteName);
-        reporter.config().setTheme(Theme.DARK);
-        report.attachReporter(reporter);
     }
 }

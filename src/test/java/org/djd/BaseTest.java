@@ -61,12 +61,12 @@ public abstract class BaseTest {
     Parameters set in the Intellij Run Configuration. Get injected into setUp method's parameters.
     Could also set in the XML file */
     @BeforeSuite(alwaysRun = true)
-    @Parameters({"testURL", "testBrowser", "headlessMode", "runName"})
-    protected void setUp(String testURL, String testBrowser, String headlessMode, String runName) {
+    @Parameters({"testURL", "testBrowser", "headless", "runName"})
+    protected void setUp(String testURL, String testBrowser, String headless, String runName) {
         baseURL = testURL;
         browser = testBrowser.toUpperCase();
-        isHeadless = Boolean.parseBoolean(headlessMode);
-        createReport(browser, headlessMode, runName);
+        isHeadless = Boolean.parseBoolean(headless);
+        createReport(browser, headless, runName);
     }
 
     // Using native dependency injection https://testng.org/#_native_dependency_injection

@@ -13,7 +13,7 @@
     <option name="OUTPUT_DIRECTORY" value="" />
     <option name="PROPERTIES_FILE" value="" />
     <properties>
-      <property name="headlessMode" value="false" />
+      <property name="headless" value="true" />
       <property name="runName" value="DJD Chrome Run Parallel" />
       <property name="testURL" value="https://www.rahulshettyacademy.com/loginpagePractise/" />
       <property name="testBrowser" value="chrome" />

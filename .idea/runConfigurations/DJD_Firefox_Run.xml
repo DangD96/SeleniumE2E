@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="DJD FireFox Run" type="TestNG">
+  <configuration default="false" name="DJD Firefox Run" type="TestNG">
     <module name="SeleniumE2E" />
     <shortenClasspath name="NONE" />
     <useClassPathOnly />
@@ -13,7 +13,7 @@
     <option name="OUTPUT_DIRECTORY" value="" />
     <option name="PROPERTIES_FILE" value="" />
     <properties>
-      <property name="headlessMode" value="false" />
+      <property name="headless" value="true" />
       <property name="runName" value="DJD Firefox Run" />
       <property name="testURL" value="https://www.rahulshettyacademy.com/loginpagePractise/" />
       <property name="testBrowser" value="firefox" />

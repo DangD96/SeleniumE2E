@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-    <suite name="DJD Test Suite Chrome">
+    <suite name="DJD Test Suite Chrome" parallel="tests" thread-count="3">
         <test verbose="2" name="Logging In">
             <classes>
                 <class name="org.djd.LoginTest">

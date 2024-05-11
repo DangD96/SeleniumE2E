@@ -161,7 +161,7 @@ public abstract class BaseTest {
     private String getScreenshot() throws IOException {
         TakesScreenshot screenshotMode = (TakesScreenshot) driver;
         File tempFile = screenshotMode.getScreenshotAs(OutputType.FILE);
-        File destFile = new File(USER_DIR + FS + "test-results" + FS + "screenshot.png");
+        File destFile = new File(USER_DIR + FS + "screenshots" + FS + "screenshot.png");
         FileUtils.copyFile(tempFile, destFile);
         String absolutePath = destFile.getAbsolutePath();
         return getRelativePath(absolutePath);

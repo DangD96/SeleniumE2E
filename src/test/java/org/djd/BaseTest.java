@@ -65,7 +65,7 @@ public abstract class BaseTest {
     @Parameters({"testURL", "testBrowser", "headlessMode"})
     protected void setUp(String testURL, String testBrowser, String headlessMode) {
         report = new ExtentReports();
-        report.setSystemInfo("OS Name", OS_NAME);
+        report.setSystemInfo("OS Used During Runtime", OS_NAME);
         report.setSystemInfo("Browser", testBrowser);
         report.setSystemInfo("Headless Mode", headlessMode);
         baseURL = testURL;

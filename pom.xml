@@ -74,7 +74,7 @@
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-surefire-plugin</artifactId>
             <configuration>
-              <!-- Can do system properties by using below syntax if don't want to define in maven run configurations
+              <!-- Can do system properties by using below syntax if you don't want to define in maven run configs
               <systemPropertyVariables>
                 <browser>firefox</browser>
                 <headless>false</headless>

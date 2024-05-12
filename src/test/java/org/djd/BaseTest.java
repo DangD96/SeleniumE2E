@@ -57,6 +57,8 @@ public abstract class BaseTest {
 
     private final String OS_NAME = System.getProperty("os.name");
 
+    private static String REPORT_PATH;
+
     /* Always run so don't get skipped over if using TestNG Groups
     Parameters set in the Intellij Run Configuration. Get injected into setUp method's parameters.
     Could also set in the XML file */
@@ -94,7 +96,10 @@ public abstract class BaseTest {
     protected void tearDown() {driver.quit();} // Nulls driver object
 
     @AfterSuite(alwaysRun = true)
-    protected void saveReport() {report.flush();}
+    protected void saveReport() {
+        report.flush();
+        System.out.println("Test results can be found here: " + REPORT_PATH);
+    }
 
     @DataProvider
     protected Object[] getTestData() throws IOException {
@@ -136,7 +141,8 @@ public abstract class BaseTest {
 
     protected void createReport(String browser, String headlessMode, String runName) {
         // directory where output is to be printed
-        ExtentSparkReporter reporter = new ExtentSparkReporter(USER_DIR + FS + "test-results" + FS + runName.replace(" ", "_") + ".html");
+        REPORT_PATH = USER_DIR + FS + "test-results" + FS + runName.replace(" ", "_") + ".html";
+        ExtentSparkReporter reporter = new ExtentSparkReporter(REPORT_PATH);
         reporter.config().setReportName("Test Run Results");
         reporter.config().setDocumentTitle("DJD Automation");
         reporter.config().setTheme(Theme.DARK);

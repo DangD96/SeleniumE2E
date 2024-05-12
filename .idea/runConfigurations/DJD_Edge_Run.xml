@@ -13,6 +13,7 @@
             <list>
               <option value="clean" />
               <option value="test" />
+              <option value="-PDJDSuiteParallel" />
               <option value="-Dbrowser=edge" />
               <option value="-Dheadless=true" />
               <option value="-DrunName=DJD Edge Run" />
@@ -21,9 +22,7 @@
           <option name="multimoduleDir" />
           <option name="pomFileName" />
           <option name="profilesMap">
-            <map>
-              <entry key="DJD-Suite-Parallel" value="true" />
-            </map>
+            <map />
           </option>
           <option name="projectsCmdOptionValues">
             <list />

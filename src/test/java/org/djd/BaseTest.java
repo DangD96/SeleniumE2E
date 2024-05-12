@@ -63,7 +63,8 @@ public abstract class BaseTest {
     Could also set in the XML file */
     @BeforeSuite(alwaysRun = true)
     protected void setUp() {
-        // These system props come from the maven run config
+        // These system props can come from the maven command line arguments or the POM file
+        // I'm setting these from the maven command line arguments via intellij run configs
         browser = System.getProperty("browser").toUpperCase();
         headless = System.getProperty("headless");
         String runName = System.getProperty("runName");

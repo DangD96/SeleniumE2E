@@ -67,13 +67,20 @@
 
   <profiles>
     <profile>
-      <id>DJD-Suite-Parallel</id>
+      <id>DJDSuiteParallel</id>
       <build>
         <plugins>
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-surefire-plugin</artifactId>
             <configuration>
+              <!-- Can do system properties by using below syntax if don't want to define in maven run configurations
+              <systemPropertyVariables>
+                <browser>firefox</browser>
+                <headless>false</headless>
+                <runName>DJD Testing</runName>
+              </systemPropertyVariables>
+              -->
               <suiteXmlFiles>
                 <suiteXmlFile>test-suites/DJDSuiteParallel.xml</suiteXmlFile> <!-- I'm on windows. Maven still understands the forward slash -->
               </suiteXmlFiles>

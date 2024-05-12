@@ -50,9 +50,8 @@
       <artifactId>extentreports</artifactId>
       <version>5.1.1</version>
     </dependency>
-
-
   </dependencies>
+
   <build>
     <plugins>
       <plugin>
@@ -65,4 +64,23 @@
       </plugin>
     </plugins>
   </build>
+
+  <profiles>
+    <profile>
+      <id>DJD-Suite-Parallel</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <configuration>
+              <suiteXmlFiles>
+                <suiteXmlFile>test-suites/DJDSuiteParallel.xml</suiteXmlFile> <!-- I'm on windows. Maven still understands the forward slash -->
+              </suiteXmlFiles>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>

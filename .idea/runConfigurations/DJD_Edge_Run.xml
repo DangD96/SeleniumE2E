@@ -1,26 +1,38 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="DJD Edge Run" type="TestNG">
-    <module name="SeleniumE2E" />
-    <shortenClasspath name="NONE" />
-    <useClassPathOnly />
-    <option name="SUITE_NAME" value="$PROJECT_DIR$/test-suites/DJDSuite.xml" />
-    <option name="PACKAGE_NAME" value="" />
-    <option name="MAIN_CLASS_NAME" value="" />
-    <option name="METHOD_NAME" value="" />
-    <option name="GROUP_NAME" value="" />
-    <option name="TEST_OBJECT" value="SUITE" />
-    <option name="PARAMETERS" value="" />
-    <option name="OUTPUT_DIRECTORY" value="" />
-    <option name="PROPERTIES_FILE" value="" />
-    <properties>
-      <property name="headless" value="true" />
-      <property name="runName" value="DJD Edge Run" />
-      <property name="testURL" value="https://www.rahulshettyacademy.com/loginpagePractise/" />
-      <property name="testBrowser" value="edge" />
-    </properties>
-    <listeners />
-    <method v="2">
-      <option name="Make" enabled="true" />
-    </method>
+  <configuration default="false" name="DJD Edge Run" type="MavenRunConfiguration" factoryName="Maven">
+    <MavenSettings>
+      <option name="myGeneralSettings" />
+      <option name="myRunnerSettings" />
+      <option name="myRunnerParameters">
+        <MavenRunnerParameters>
+          <option name="cmdOptions" />
+          <option name="profiles">
+            <set />
+          </option>
+          <option name="goals">
+            <list>
+              <option value="clean" />
+              <option value="test" />
+              <option value="-Dbrowser=edge" />
+              <option value="-Dheadless=true" />
+              <option value="-DrunName=DJD Edge Run" />
+            </list>
+          </option>
+          <option name="multimoduleDir" />
+          <option name="pomFileName" />
+          <option name="profilesMap">
+            <map>
+              <entry key="DJD-Suite-Parallel" value="true" />
+            </map>
+          </option>
+          <option name="projectsCmdOptionValues">
+            <list />
+          </option>
+          <option name="resolveToWorkspace" value="false" />
+          <option name="workingDirPath" value="$PROJECT_DIR$" />
+        </MavenRunnerParameters>
+      </option>
+    </MavenSettings>
+    <method v="2" />
   </configuration>
 </component>

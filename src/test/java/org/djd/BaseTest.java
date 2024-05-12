@@ -32,8 +32,7 @@ public abstract class BaseTest {
     https://stackoverflow.com/questions/69721031/lateinit-variable-is-not-initialized-in-testngs-beforesuite */
     private static ExtentReports report;
     private static String browser;
-    private static String baseURL;
-    private static Boolean isHeadless;
+    private static String headless;
 
     private ExtentTest testMethod;
 
@@ -63,18 +62,18 @@ public abstract class BaseTest {
     Parameters set in the Intellij Run Configuration. Get injected into setUp method's parameters.
     Could also set in the XML file */
     @BeforeSuite(alwaysRun = true)
-    @Parameters({"testURL", "testBrowser", "headless", "runName"})
-    protected void setUp(String testURL, String testBrowser, String headless, String runName) {
-        baseURL = testURL;
-        browser = testBrowser.toUpperCase();
-        isHeadless = Boolean.parseBoolean(headless);
+    protected void setUp() {
+        // These system props come from the maven run config
+        browser = System.getProperty("browser").toUpperCase();
+        headless = System.getProperty("headless");
+        String runName = System.getProperty("runName");
         createReport(browser, headless, runName);
     }
 
     // Using native dependency injection https://testng.org/#_native_dependency_injection
     // "Test" = <Test/> tag defined in XML
     @BeforeTest(alwaysRun = true)
-    protected void launchApp() {setUpDriver(baseURL, browser, isHeadless);}
+    protected void launchApp() {setUpDriver(browser, headless);}
 
     // "Method" = Method with @Test annotation
     @BeforeMethod(alwaysRun = true)
@@ -111,7 +110,8 @@ public abstract class BaseTest {
         return objAry;
     }
 
-    private void setUpDriver(String url, String browser, boolean isHeadless) {
+    private void setUpDriver(String browser, String headless) {
+        boolean isHeadless = Boolean.parseBoolean(headless);
         switch (browser) {
             case "EDGE":
                 // https://peter.sh/experiments/chromium-command-line-switches/
@@ -136,7 +136,7 @@ public abstract class BaseTest {
                 break;
         }
         driver.manage().window().maximize();
-        driver.get(url);
+        driver.get("https://www.rahulshettyacademy.com/loginpagePractise/");
     }
 
     protected void createReport(String browser, String headlessMode, String runName) {

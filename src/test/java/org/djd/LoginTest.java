@@ -18,7 +18,7 @@ public class LoginTest extends BaseTest {
         Assert.assertTrue(loginPage.waitForElementToBeVisible(loginPage.loginErrorMessage)); // Make sure you get error
     }
 
-    @Test(description = "fail")
+    @Test(description = "fail", enabled = false)
     protected void intentionalFail() throws InterruptedException {
         Thread.sleep(2000);
         loginPage.loginButton.click();

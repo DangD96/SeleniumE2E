@@ -11,7 +11,7 @@ import java.time.Duration;
 import java.util.List;
 
 abstract class BasePage {
-    protected WebDriver driver;
+    protected final WebDriver driver;
     private final Duration TIMEOUT = Duration.ofSeconds(15);
 
     public BasePage(WebDriver driver) {

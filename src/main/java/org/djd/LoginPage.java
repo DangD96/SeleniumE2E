@@ -5,8 +5,9 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.Select;
 
+@SuppressWarnings("unused")
 public class LoginPage extends BasePage {
-    JavascriptExecutor js = (JavascriptExecutor) driver;
+    final JavascriptExecutor js = (JavascriptExecutor) driver;
 
     /*
     With PageFactory, even if the element doesn't actually exist, selenium won't
@@ -20,7 +21,7 @@ public class LoginPage extends BasePage {
     @FindBy(id = "terms") WebElement termsAndServicesCheckbox;
     @FindBy(id = "signInBtn") public WebElement loginButton;
     @FindBy(css = ".alert.alert-danger") public WebElement loginErrorMessage;
-    public By loginButtonBy = By.id("signInBtn"); // Map using By to showcase other location methods
+    public final By loginButtonBy = By.id("signInBtn"); // Map using By to showcase other location methods
 
     public LoginPage(WebDriver driver) {
         super(driver); // Pass the driver to the parent class so the methods in there work

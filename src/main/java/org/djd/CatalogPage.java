@@ -9,10 +9,11 @@ import org.openqa.selenium.support.PageFactory;
 import java.math.BigDecimal;
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class CatalogPage extends BasePage{
     @FindBy(css = "app-card-list app-card") public List<WebElement> productList;
     @FindBy(partialLinkText = "Checkout") public WebElement checkoutBtn;
-    public By checkoutBtnBy = By.partialLinkText("Checkout"); // Map using By to showcase other location methods
+    public final By checkoutBtnBy = By.partialLinkText("Checkout"); // Map using By to showcase other location methods
 
     public CatalogPage(WebDriver driver) {
         super(driver);

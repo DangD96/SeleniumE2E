@@ -19,19 +19,20 @@ abstract class BasePage {
         PageFactory.initElements(driver, this);
     }
 
-    public boolean waitForElementToBeVisible(WebElement element) {
-        new WebDriverWait(driver, TIMEOUT).until(ExpectedConditions.visibilityOf(element));
-        return true; // If we get down here then the above line didn't fail
+    public Boolean waitForElementToBeVisible(WebElement element) {
+        return new WebDriverWait(driver, TIMEOUT).until(ExpectedConditions.visibilityOf(element)) != null;
     }
 
-    public boolean waitForElementToBeVisible(By locator) {
-        new WebDriverWait(driver, TIMEOUT).until(ExpectedConditions.visibilityOfElementLocated(locator));
-        return true;
+    public Boolean waitForElementToBeVisible(By locator) {
+        return new WebDriverWait(driver, TIMEOUT).until(ExpectedConditions.visibilityOfElementLocated(locator)) != null;
     }
 
-    public boolean waitForElementToBeInvisible(WebElement element) {
-        new WebDriverWait(driver, TIMEOUT).until(ExpectedConditions.invisibilityOf(element));
-        return true;
+    public Boolean waitForElementsToBeVisible(List<WebElement> elements) {
+        return new WebDriverWait(driver, TIMEOUT).until(ExpectedConditions.visibilityOfAllElements(elements)) != null;
+    }
+
+    public Boolean waitForElementToBeInvisible(WebElement element) {
+        return new WebDriverWait(driver, TIMEOUT).until(ExpectedConditions.invisibilityOf(element));
     }
 
     public Boolean waitForElementToBeInvisible(By locator) {
@@ -40,10 +41,5 @@ abstract class BasePage {
 
     public String getURL() {
         return driver.getCurrentUrl();
-    }
-
-    public boolean waitForElementsToBeVisible(List<WebElement> elements) {
-        new WebDriverWait(driver, TIMEOUT).until(ExpectedConditions.visibilityOfAllElements(elements));
-        return true;
     }
 }

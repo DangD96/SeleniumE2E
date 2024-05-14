@@ -6,8 +6,8 @@
             <class name="org.djd.LoginTest">
                 <methods>
                     <include name="loginInvalid"/>
-                    <include name="loginValid"/>
                     <include name="intentionalFail"/>
+                    <include name="loginValid"/>
                 </methods>
             </class>
         </classes>

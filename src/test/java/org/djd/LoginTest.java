@@ -21,7 +21,8 @@ public class LoginTest extends BaseTest {
     @Test(description = "fail", enabled = false)
     protected void intentionalFail() throws InterruptedException {
         Thread.sleep(2000);
-        loginPage.loginButton.click();
+        CatalogPage catalog = new CatalogPage(driver);
+        Assert.assertTrue(catalog.waitForElementToBeVisible(catalog.checkoutBtn));
     }
 
     @Test(description = "Successful Login")

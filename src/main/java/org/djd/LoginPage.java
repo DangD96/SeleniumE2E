@@ -55,7 +55,6 @@ public class LoginPage extends BasePage {
         js.executeScript("arguments[0].value = ''", usernameField);
     }
     public void clearPassword() {
-        // the element.clear() method doesn't work on the password field for some reason so using JS
         js.executeScript("arguments[0].value = ''", passwordField);
     }
     public void toggleTermsAndServices() {

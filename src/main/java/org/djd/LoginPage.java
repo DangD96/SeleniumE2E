@@ -19,7 +19,6 @@ public class LoginPage extends BasePage {
     @FindBy(id = "terms") WebElement termsAndServicesCheckbox;
     @FindBy(id = "signInBtn") public WebElement loginButton;
     @FindBy(css = ".alert.alert-danger") public WebElement loginErrorMessage;
-    public final By loginButtonBy = By.id("signInBtn"); // Map using By to showcase other location methods
 
     public LoginPage(WebDriver driver) {
         super(driver); // Pass the driver to the parent class so the methods in there work
@@ -39,7 +38,6 @@ public class LoginPage extends BasePage {
         if (toggleTermsBox) toggleTermsAndServices();
 
         waitForElementToBeVisible(loginButton);
-        waitForElementToBeVisible(loginButtonBy); // Test out the overloaded version because why not
         loginButton.click();
 
         return new CatalogPage(driver);

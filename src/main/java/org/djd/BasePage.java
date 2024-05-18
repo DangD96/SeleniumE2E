@@ -26,6 +26,7 @@ abstract class BasePage {
         return new WebDriverWait(driver, TIMEOUT).until(ExpectedConditions.visibilityOf(element)) != null;
     }
 
+    @SuppressWarnings("unused")
     public Boolean waitForElementToBeVisible(By locator) {
         return new WebDriverWait(driver, TIMEOUT).until(ExpectedConditions.visibilityOfElementLocated(locator)) != null;
     }
@@ -38,6 +39,7 @@ abstract class BasePage {
         return new WebDriverWait(driver, TIMEOUT).until(ExpectedConditions.invisibilityOf(element));
     }
 
+    @SuppressWarnings("unused")
     public Boolean waitForElementToBeInvisible(By locator) {
         return new WebDriverWait(driver, TIMEOUT).until(ExpectedConditions.invisibilityOfElementLocated(locator));
     }

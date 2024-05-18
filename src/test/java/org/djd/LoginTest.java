@@ -32,9 +32,7 @@ public class LoginTest extends BaseTest {
         loginPage.clearPassword();
         CatalogPage catalogPage = loginPage.logIn("rahulshettyacademy", "learning", "", "", false);
         Assert.assertTrue(catalogPage.waitForElementsToBeVisible(catalogPage.productList));
-        Assert.assertTrue(catalogPage.waitForElementToBeVisible(catalogPage.checkoutBtnBy)); // Try out the overloaded version because why not
         Assert.assertTrue(loginPage.waitForElementToBeInvisible(loginPage.loginButton));
-        Assert.assertTrue(loginPage.waitForElementToBeInvisible(loginPage.loginButtonBy)); // Try out the overloaded version because why not
         Assert.assertEquals(catalogPage.getURL(), "https://rahulshettyacademy.com/angularpractice/shop");
     }
 }

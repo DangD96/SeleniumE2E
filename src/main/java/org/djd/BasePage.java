@@ -1,6 +1,7 @@
 package org.djd;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
@@ -12,10 +13,12 @@ import java.util.List;
 
 abstract class BasePage {
     protected final WebDriver driver;
+    protected final JavascriptExecutor js;
     private final Duration TIMEOUT = Duration.ofSeconds(15);
 
     public BasePage(WebDriver driver) {
         this.driver = driver;
+        this.js = (JavascriptExecutor) driver;
         PageFactory.initElements(driver, this);
     }
 

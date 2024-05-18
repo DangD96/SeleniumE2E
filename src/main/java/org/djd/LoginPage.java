@@ -29,7 +29,6 @@ public class LoginPage extends BasePage {
         // Just using JS to fill them out because why not
         waitForElementToBeVisible(usernameField);
         js.executeScript("arguments[0].value = arguments[1]", usernameField, username);
-
         waitForElementToBeVisible(passwordField);
         js.executeScript("arguments[0].value = arguments[1]", passwordField, password);
 
@@ -39,7 +38,6 @@ public class LoginPage extends BasePage {
 
         waitForElementToBeVisible(loginButton);
         loginButton.click();
-
         return new CatalogPage(driver);
     }
 
@@ -50,11 +48,8 @@ public class LoginPage extends BasePage {
     }
     public void selectUserType(String userType) {
         waitForElementToBeVisible(userRadioBtn);
-        if (userType.equalsIgnoreCase("Admin")) {
-            adminRadioBtn.click();
-            return;
-        }
-        userRadioBtn.click();
+        if (userType.equalsIgnoreCase("Admin")) {adminRadioBtn.click();}
+        else {userRadioBtn.click();}
     }
     public void clearUsername() {
         js.executeScript("arguments[0].value = ''", usernameField);

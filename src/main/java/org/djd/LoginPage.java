@@ -7,10 +7,8 @@ import org.openqa.selenium.support.ui.Select;
 
 @SuppressWarnings("unused")
 public class LoginPage extends BasePage {
-    /*
-    With PageFactory, even if the element doesn't actually exist, selenium won't
-    throw an error until you try to interact with it
-     */
+    /* With PageFactory, even if the element doesn't actually exist, selenium won't
+    throw an error until you try to interact with it */
     @FindBy(id = "username") WebElement usernameField;
     @FindBy(id = "password") WebElement passwordField;
     @FindBy(css = "input[value='admin']") WebElement adminRadioBtn;

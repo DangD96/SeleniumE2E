@@ -9,7 +9,6 @@ import org.openqa.selenium.support.PageFactory;
 import java.math.BigDecimal;
 import java.util.List;
 
-@SuppressWarnings("unused")
 public class CatalogPage extends BasePage{
     @FindBy(css = "app-card-list app-card") public List<WebElement> productList;
     @FindBy(partialLinkText = "Checkout") public WebElement checkoutBtn;

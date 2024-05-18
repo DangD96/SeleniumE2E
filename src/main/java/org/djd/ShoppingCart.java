@@ -8,7 +8,6 @@ import org.openqa.selenium.support.PageFactory;
 
 import java.util.List;
 
-@SuppressWarnings("unused")
 public class ShoppingCart extends BasePage {
     @FindBy(tagName = "table") public WebElement shoppingCart;
     @FindBy(css = "tr:has(td[class*='col-sm'])") List<WebElement> productsInCart;

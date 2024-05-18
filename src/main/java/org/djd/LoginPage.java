@@ -5,7 +5,6 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.Select;
 
-@SuppressWarnings("unused")
 public class LoginPage extends BasePage {
     /* With PageFactory, even if the element doesn't actually exist, selenium won't
     throw an error until you try to interact with it */

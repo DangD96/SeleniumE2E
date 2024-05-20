@@ -22,23 +22,23 @@ abstract class BasePage {
         PageFactory.initElements(driver, this);
     }
 
-    public Boolean waitForElementToBeVisible(WebElement element) {
+    public boolean waitForElementToBeVisible(WebElement element) {
         return new WebDriverWait(driver, TIMEOUT).until(ExpectedConditions.visibilityOf(element)) != null;
     }
 
-    public Boolean waitForElementToBeVisible(By locator) {
+    public boolean waitForElementToBeVisible(By locator) {
         return new WebDriverWait(driver, TIMEOUT).until(ExpectedConditions.visibilityOfElementLocated(locator)) != null;
     }
 
-    public Boolean waitForElementsToBeVisible(List<WebElement> elements) {
+    public boolean waitForElementsToBeVisible(List<WebElement> elements) {
         return new WebDriverWait(driver, TIMEOUT).until(ExpectedConditions.visibilityOfAllElements(elements)) != null;
     }
 
-    public Boolean waitForElementToBeInvisible(WebElement element) {
+    public boolean waitForElementToBeInvisible(WebElement element) {
         return new WebDriverWait(driver, TIMEOUT).until(ExpectedConditions.invisibilityOf(element));
     }
 
-    public Boolean waitForElementToBeInvisible(By locator) {
+    public boolean waitForElementToBeInvisible(By locator) {
         return new WebDriverWait(driver, TIMEOUT).until(ExpectedConditions.invisibilityOfElementLocated(locator));
     }
 

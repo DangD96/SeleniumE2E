@@ -8,14 +8,14 @@ import org.openqa.selenium.support.ui.Select;
 public class LoginPage extends BasePage {
     /* With PageFactory, even if the element doesn't actually exist, selenium won't
     throw an error until you try to interact with it */
-    @FindBy(id = "username") WebElement usernameField;
-    @FindBy(id = "password") WebElement passwordField;
-    @FindBy(css = "input[value='admin']") WebElement adminRadioBtn;
-    @FindBy(css = "input[value='user']") WebElement userRadioBtn;
-    @FindBy(css = "select.form-control") WebElement roleDropdown;
-    @FindBy(id = "terms") WebElement termsAndServicesCheckbox;
-    @FindBy(id = "signInBtn") public WebElement loginButton;
-    @FindBy(css = ".alert.alert-danger") public WebElement loginErrorMessage;
+    @FindBy(id = "username") private WebElement usernameField;
+    @FindBy(id = "password") private WebElement passwordField;
+    @FindBy(css = "input[value='admin']") private WebElement adminRadioBtn;
+    @FindBy(css = "input[value='user']") private WebElement userRadioBtn;
+    @FindBy(css = "select.form-control") private WebElement roleDropdown;
+    @FindBy(id = "terms") private WebElement termsAndServicesCheckbox;
+    @FindBy(id = "signInBtn") private WebElement loginButton;
+    @FindBy(css = ".alert.alert-danger") private WebElement loginErrorMessage;
 
     public LoginPage(WebDriver driver) {
         super(driver); // Pass the driver to the parent class so the methods in there work
@@ -43,19 +43,27 @@ public class LoginPage extends BasePage {
         Select roles = new Select(roleDropdown);
         roles.selectByVisibleText(option);
     }
+
     public void selectUserType(String userType) {
         waitForElementToBeVisible(userRadioBtn);
         if (userType.equalsIgnoreCase("Admin")) {adminRadioBtn.click();}
         else {userRadioBtn.click();}
     }
+
     public void clearUsername() {
         js.executeScript("arguments[0].value = ''", usernameField);
     }
+
     public void clearPassword() {
         js.executeScript("arguments[0].value = ''", passwordField);
     }
+
     public void toggleTermsAndServices() {
         waitForElementToBeVisible(termsAndServicesCheckbox);
         termsAndServicesCheckbox.click();
+    }
+
+    public boolean isLoginErrorPresent() {
+        return waitForElementToBeVisible(loginErrorMessage);
     }
 }

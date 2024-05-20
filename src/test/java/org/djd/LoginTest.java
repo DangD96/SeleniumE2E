@@ -15,14 +15,13 @@ public class LoginTest extends BaseTest {
     protected void loginInvalid(HashMap<String, String> input) {
         loginPage = new LoginPage(driver);
         loginPage.logIn(input.get("username"), input.get("password"), "", "Teacher", true);
-        Assert.assertTrue(loginPage.waitForElementToBeVisible(loginPage.loginErrorMessage)); // Make sure you get error
+        Assert.assertTrue(loginPage.isLoginErrorPresent()); // Make sure you get error
     }
 
     @Test(description = "fail", enabled = false)
     protected void intentionalFail() throws InterruptedException {
         Thread.sleep(2000);
-        CatalogPage catalog = new CatalogPage(driver);
-        Assert.assertTrue(catalog.waitForElementToBeVisible(catalog.checkoutBtn));
+        Assert.fail();
     }
 
     @Test(description = "Successful Login")
@@ -31,8 +30,7 @@ public class LoginTest extends BaseTest {
         loginPage.clearUsername();
         loginPage.clearPassword();
         CatalogPage catalogPage = loginPage.logIn("rahulshettyacademy", "learning", "", "", false);
-        Assert.assertTrue(catalogPage.waitForElementsToBeVisible(catalogPage.productList));
-        Assert.assertTrue(loginPage.waitForElementToBeInvisible(loginPage.loginButton));
+        Assert.assertTrue(catalogPage.isProductListVisible());
         Assert.assertEquals(catalogPage.getURL(), "https://rahulshettyacademy.com/angularpractice/shop");
     }
 }

@@ -12,19 +12,18 @@ public class ProductTest extends BaseTest {
     protected void addProductTest() {
         loginPage = new LoginPage(driver);
         catalogPage = loginPage.logIn("rahulshettyacademy", "learning", "", "Teacher", true);
-        catalogPage.waitForElementsToBeVisible(catalogPage.productList);
+        Assert.assertTrue(catalogPage.isProductListVisible());
         Assert.assertEquals(catalogPage.getNumberOfProducts(),4);
 
         // Add to cart
         WebElement e = catalogPage.addProductToCart("Nokia Edge");
         Assert.assertEquals(catalogPage.getProductPrice(e).toString(), "24.99");
         Assert.assertEquals(catalogPage.getProductPrice("Nokia Edge").toString(), "24.99"); // Test out overloaded version
-
-        Assert.assertTrue(catalogPage.checkoutBtn.getText().contains("Checkout ( 1 )"));
+        Assert.assertTrue(catalogPage.getCheckoutBtnContents().contains("Checkout ( 1 )"));
 
         // Verify in cart
         cart = catalogPage.goToShoppingCart();
-        cart.waitForElementToBeVisible(cart.shoppingCart);
+        Assert.assertTrue(cart.isShoppingCartVisible());
         Assert.assertEquals(cart.getNumberOfProductsInCart(), 1);
         Assert.assertEquals(cart.getProductName(1), "Nokia Edge");
 

@@ -10,8 +10,8 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public class CatalogPage extends BasePage{
-    @FindBy(css = "app-card-list app-card") public List<WebElement> productList;
-    @FindBy(partialLinkText = "Checkout") public WebElement checkoutBtn;
+    @FindBy(css = "app-card-list app-card") private List<WebElement> productList;
+    @FindBy(partialLinkText = "Checkout") private WebElement checkoutBtn;
 
     public CatalogPage(WebDriver driver) {
         super(driver);
@@ -45,6 +45,16 @@ public class CatalogPage extends BasePage{
     public ShoppingCart goToShoppingCart() {
         waitForElementToBeVisible(checkoutBtn);
         checkoutBtn.click();
-        return new ShoppingCart(driver);
+        ShoppingCart cart = new ShoppingCart(driver);
+        cart.isShoppingCartVisible();
+        return cart;
+    }
+
+    public boolean isProductListVisible() {
+        return waitForElementsToBeVisible(productList);
+    }
+
+    public String getCheckoutBtnContents() {
+        return checkoutBtn.getText();
     }
 }

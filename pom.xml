@@ -84,7 +84,7 @@
   <!-- Don't have to provide plugin version down here since defined above -->
   <profiles>
     <profile>
-      <id>DJDSuiteParallel</id>
+      <id>DJDSuite</id>
       <build>
         <plugins>
           <plugin>
@@ -99,7 +99,7 @@
               </systemPropertyVariables>
               -->
               <suiteXmlFiles>
-                <suiteXmlFile>test-suites/DJDSuiteParallel.xml</suiteXmlFile> <!-- I'm on windows. Maven still understands the forward slash -->
+                <suiteXmlFile>test-suites/DJDSuite.xml</suiteXmlFile> <!-- I'm on windows. Maven still understands the forward slash -->
               </suiteXmlFiles>
             </configuration>
           </plugin>

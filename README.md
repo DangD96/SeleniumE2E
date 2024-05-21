@@ -1,6 +1,7 @@
-# Background
+# SeleniumE2E
 Selenium Java Framework for End to End (E2E) testing of an [e-commerce website](https://www.rahulshettyacademy.com/loginpagePractise/). 
 
+# Background
 This framework has the following features:
 1. Uses Maven for dependency management and run configurations.
 2. Implements the Page Object Model (POM) design pattern for ease of code maintenance and clear separation of page object responsibilities.

@@ -1,4 +1,4 @@
-# Background
+# Intro
 Selenium Java Framework for End to End (E2E) testing of an [e-commerce website](https://www.rahulshettyacademy.com/loginpagePractise/). 
 
 This framework has the following features:

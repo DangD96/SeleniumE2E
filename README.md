@@ -9,6 +9,11 @@ This framework has the following features:
 5. Runs tests in parallel by default and can be configured to run on Google Chrome, Microsoft Edge, or Mozilla Firefox.
 6. Generates an HTML report summarizing test results. Test failures have screenshots attached to them.
 
+# Considered but not done
+This framework does not use TestNG's IRetryAnalyzer interface for re-running flaky tests. 
+
+If your tests are flaky to begin with, then you need to update them to be more robust.
+
 # Rules and Guidance
 1. Page object methods wait for elements to be visible before interacting with them. 
 2. If you need to check for the visibility or invisibility of elements in the test itself, use the wait methods on the page objects.

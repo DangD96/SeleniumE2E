@@ -16,6 +16,7 @@ PersonalAccessToken.txt
 target/
 out/
 screenshots/
+TODO.txt
 
 ### Eclipse ###
 .apt_generated

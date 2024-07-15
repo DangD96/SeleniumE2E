@@ -1,7 +1,6 @@
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-PersonalAccessToken.txt
 
 ### IntelliJ IDEA ###
 .idea/modules.xml
@@ -15,8 +14,7 @@ PersonalAccessToken.txt
 *.ipr
 target/
 out/
-screenshots/
-TODO.txt
+
 
 ### Eclipse ###
 .apt_generated

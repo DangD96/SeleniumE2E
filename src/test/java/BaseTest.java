@@ -1,8 +1,7 @@
-package org.djd;
-
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.Status;
+import com.aventstack.extentreports.model.ReportStats;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import com.aventstack.extentreports.reporter.configuration.Theme;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -71,7 +70,6 @@ public abstract class BaseTest {
         createReport(browser, headless, runName);
     }
 
-    // Using native dependency injection https://testng.org/#_native_dependency_injection
     // "Test" = <Test/> tag defined in XML
     @BeforeTest(alwaysRun = true)
     protected void launchApp() {setUpDriver(browser, headless);}
@@ -80,6 +78,7 @@ public abstract class BaseTest {
     @BeforeMethod(alwaysRun = true)
     protected void createTest (ITestResult result) {
         testMethod = report.createTest(result.getMethod().getMethodName());
+
     }
 
     @AfterMethod(alwaysRun = true)

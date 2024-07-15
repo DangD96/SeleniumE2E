@@ -1,5 +1,3 @@
-package org.djd;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -9,7 +7,7 @@ import org.openqa.selenium.support.PageFactory;
 import java.math.BigDecimal;
 import java.util.List;
 
-public class CatalogPage extends BasePage{
+public class CatalogPage extends BasePage {
     @FindBy(css = "app-card-list app-card") private List<WebElement> productList;
     @FindBy(partialLinkText = "Checkout") private WebElement checkoutBtn;
 

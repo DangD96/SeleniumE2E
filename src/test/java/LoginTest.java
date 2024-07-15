@@ -1,5 +1,3 @@
-package org.djd;
-
 import org.testng.Assert;
 import org.testng.annotations.Test;
 

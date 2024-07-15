@@ -1,5 +1,3 @@
-package org.djd;
-
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;

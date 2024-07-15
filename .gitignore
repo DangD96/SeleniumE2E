@@ -14,7 +14,7 @@
 *.ipr
 target/
 out/
-
+test-results/
 
 ### Eclipse ###
 .apt_generated

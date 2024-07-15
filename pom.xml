@@ -12,6 +12,12 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <!-- The properties below here come from maven command line arguments
+     Can take advantage of this to pass the properties as system property variables in the surefire plugin below-->
+    <testSuite/>
+    <browser/>
+    <headless/>
+    <runName/>
   </properties>
 
   <dependencies>
@@ -60,67 +66,32 @@
     </dependency>
   </dependencies>
 
-  <!-- Setup plugins with pluginManagement up here -->
   <build>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <configuration>
-            <source>20</source>
-            <target>20</target>
-          </configuration>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-surefire-plugin</artifactId>
-          <version>3.2.5</version>
-        </plugin>
-      </plugins>
-    </pluginManagement>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>20</source>
+          <target>20</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.3.1</version>
+        <configuration>
+          <systemPropertyVariables>
+            <!-- The system property variables come from maven properties at the top of the POM and get read by BaseTest -->
+            <browser>${browser}</browser>
+            <headless>${headless}</headless>
+            <runName>${runName}</runName>
+          </systemPropertyVariables>
+          <suiteXmlFiles>
+            <suiteXmlFile>test-suites/${testSuite}</suiteXmlFile>
+          </suiteXmlFiles>
+        </configuration>
+      </plugin>
+    </plugins>
   </build>
-
-  <!-- Don't have to provide plugin version down here since defined above -->
-  <profiles>
-    <profile>
-      <id>DJDSuite</id>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-surefire-plugin</artifactId>
-            <configuration>
-              <!-- Can do system properties by using below syntax if you don't want to define in maven run configs
-              <systemPropertyVariables>
-                <browser>firefox</browser>
-                <headless>false</headless>
-                <runName>DJD Testing</runName>
-              </systemPropertyVariables>
-              -->
-              <suiteXmlFiles>
-                <suiteXmlFile>test-suites/DJDSuite.xml</suiteXmlFile> <!-- I'm on windows. Maven still understands the forward slash -->
-              </suiteXmlFiles>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    <profile>
-      <id>DJDSuiteGroup</id>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-surefire-plugin</artifactId>
-            <configuration>
-              <suiteXmlFiles>
-                <suiteXmlFile>test-suites/DJDSuiteWithGroups.xml</suiteXmlFile>
-              </suiteXmlFiles>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
 </project>

@@ -12,13 +12,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <testSuite/> <!-- This system property needs to be used by the Surefire plugin below -->
-
-    <!-- The system properties below are populated from the mvn command line arguments
-    These are read in BaseTest.java -->
-    <browser/>
-    <headless/>
-    <runName/>
+    <testSuite/> <!-- This system property needs to be used by the Surefire plugin below so define it up here first -->
   </properties>
 
   <dependencies>

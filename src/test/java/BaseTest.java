@@ -31,6 +31,7 @@ public abstract class BaseTest {
     private static ExtentReports report;
     private static String browser;
     private static String headless;
+    private static String url;
 
     private ExtentTest testMethod;
 
@@ -66,12 +67,13 @@ public abstract class BaseTest {
         browser = System.getProperty("browser").toUpperCase();
         headless = System.getProperty("headless");
         String runName = System.getProperty("runName");
+        url = System.getProperty("url");
         createReport(browser, headless, runName);
     }
 
     // "Test" = <Test/> tag defined in XML
     @BeforeTest(alwaysRun = true)
-    protected void launchApp() {setUpDriver(browser, headless);}
+    protected void launchApp() {setUpDriver(browser, headless, url);}
 
     // "Method" = Method with @Test annotation
     @BeforeMethod(alwaysRun = true)
@@ -109,7 +111,7 @@ public abstract class BaseTest {
         return objAry;
     }
 
-    private void setUpDriver(String browser, String headless) {
+    private void setUpDriver(String browser, String headless, String url) {
         boolean isHeadless = Boolean.parseBoolean(headless);
         switch (browser) {
             case "EDGE":
@@ -135,7 +137,7 @@ public abstract class BaseTest {
                 break;
         }
         driver.manage().window().maximize();
-        driver.get("https://www.rahulshettyacademy.com/loginpagePractise/");
+        driver.get(url);
     }
 
     protected void createReport(String browser, String headlessMode, String runName) {

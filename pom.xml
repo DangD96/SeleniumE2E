@@ -12,9 +12,10 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <!-- The properties below here come from maven command line arguments
-     Can take advantage of this to pass the properties as system property variables in the surefire plugin below-->
-    <testSuite/>
+    <testSuite/> <!-- This system property needs to be used by the Surefire plugin below -->
+
+    <!-- The system properties below are populated from the mvn command line arguments
+    These are read in BaseTest.java -->
     <browser/>
     <headless/>
     <runName/>
@@ -81,14 +82,8 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <version>3.3.1</version>
         <configuration>
-          <systemPropertyVariables>
-            <!-- The system property variables come from maven properties at the top of the POM and get read by BaseTest -->
-            <browser>${browser}</browser>
-            <headless>${headless}</headless>
-            <runName>${runName}</runName>
-          </systemPropertyVariables>
           <suiteXmlFiles>
-            <suiteXmlFile>test-suites/${testSuite}</suiteXmlFile>
+            <suiteXmlFile>test-suites/${testSuite}</suiteXmlFile> <!-- Using testSuite system property with Surefire -->
           </suiteXmlFiles>
         </configuration>
       </plugin>

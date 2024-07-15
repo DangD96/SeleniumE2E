@@ -15,6 +15,7 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
+import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 
@@ -142,14 +143,13 @@ public abstract class BaseTest {
         // directory where output is to be printed
         REPORT_PATH = USER_DIR + FS + "test-results" + FS + runName.replace(" ", "_") + ".html";
         ExtentSparkReporter reporter = new ExtentSparkReporter(REPORT_PATH);
-        reporter.config().setReportName("Test Run Results");
+        reporter.config().setReportName(runName);
         reporter.config().setDocumentTitle("DJD Automation");
         reporter.config().setTheme(Theme.DARK);
         reporter.config().setTimelineEnabled(true);
 
         report = new ExtentReports();
         report.setSystemInfo("OS Used During Runtime", OS_NAME);
-        report.setSystemInfo("Test Run", runName);
         report.setSystemInfo("Browser", browser);
         report.setSystemInfo("Headless?", headlessMode);
         report.attachReporter(reporter);

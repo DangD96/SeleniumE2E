@@ -23,7 +23,8 @@ import java.io.IOException;
 import java.util.*;
 
 public abstract class BaseTest {
-    private static final ThreadLocal<WebDriver> driver = new ThreadLocal<>(); // Threadsafe driver variable
+    private static ThreadLocal<WebDriver> driver = new ThreadLocal<>(); // Threadsafe driver variable
+    private static ThreadLocal<ExtentTest> testMethod = new ThreadLocal<>();
 
     /* TestNG will create a new instance of the test class for you per each test.
     If you want to share your variables - make them static (addresses the "this.<variable> is null" error)
@@ -33,7 +34,6 @@ public abstract class BaseTest {
     private static String headless;
     private static String url;
 
-    private ExtentTest testMethod;
 
     // C:\Users\david\coding\java\Udemy_Practice\SeleniumE2E
     private final String USER_DIR = System.getProperty("user.dir");
@@ -57,12 +57,15 @@ public abstract class BaseTest {
 
     private static String REPORT_PATH;
 
-    // Provide method for each thread to get their thread specific driver instance
-    public WebDriver getDriver() {return BaseTest.driver.get();}
+    // Provide method for each thread to get their thread specific driver variable
+    public WebDriver getDriver() {return driver.get();}
+
+    public ExtentTest getTestMethod() {return testMethod.get();}
 
     /* Always run so don't get skipped over if using TestNG Groups
     Parameters set in the Intellij Run Configuration. Get injected into setUp method's parameters.
     Could also set in the XML file */
+    // ONE TIME SET UP
     @BeforeSuite(alwaysRun = true)
     protected void setUp() {
         // These system props can come from the maven command line arguments or the POM file
@@ -75,14 +78,13 @@ public abstract class BaseTest {
     }
 
     // "Test" = <Test/> tag defined in XML
-    @BeforeTest(alwaysRun = true)
+    @BeforeMethod(alwaysRun = true)
     protected void launchApp() {setUpDriver(browser, headless, url);}
 
     // "Method" = Method with @Test annotation
-    @BeforeMethod(alwaysRun = true)
+    @BeforeMethod(alwaysRun = true, dependsOnMethods = {"launchApp"})
     protected void createTest (ITestResult result) {
-        testMethod = report.createTest(result.getMethod().getMethodName());
-
+        testMethod.set(report.createTest(result.getMethod().getMethodName()));
     }
 
     @AfterMethod(alwaysRun = true)
@@ -91,12 +93,12 @@ public abstract class BaseTest {
         if (result.getStatus() == ITestResult.FAILURE) {
             String path = getScreenshot();
             // Won't work with absolute path for some reason. Needs relative path from project directory
-            testMethod.fail(result.getThrowable()).addScreenCaptureFromPath(path);
-        } else {testMethod.log(Status.PASS, "Success");}
+            getTestMethod().fail(result.getThrowable()).addScreenCaptureFromPath(path);
+        } else {getTestMethod().log(Status.PASS, "Success");}
     }
 
-    @AfterTest(alwaysRun = true)
-    protected void tearDown() {getDriver().quit();} // Nulls driver object
+    @AfterMethod(alwaysRun = true, dependsOnMethods = {"listenForResult"})
+    protected void tearDown() {getDriver().quit();} // Nulls thread specific driver object
 
     @AfterSuite(alwaysRun = true)
     protected void saveReport() {
@@ -104,7 +106,7 @@ public abstract class BaseTest {
         System.out.println("Test results can be found here: " + REPORT_PATH);
     }
 
-    @DataProvider
+    @DataProvider(parallel = true)
     protected Object[] getTestData() throws IOException {
         String pathToDataFile = PATH_TO_PACKAGE + FS + CLASS_NAME + ".json";
         ArrayList<HashMap<String, String>> data = deserializeJSON(pathToDataFile);
@@ -136,7 +138,7 @@ public abstract class BaseTest {
                 ChromeOptions chromeOptions = new ChromeOptions();
                 chromeOptions.addArguments("--guest");
                 if (isHeadless) {chromeOptions.addArguments("--headless=new");}
-                driver.set(new ChromeDriver(chromeOptions));
+                driver.set(new ChromeDriver(chromeOptions)); // set driver variable in current thread
                 break;
         }
         getDriver().manage().window().maximize();
@@ -168,7 +170,7 @@ public abstract class BaseTest {
     }
 
     private String getScreenshot() throws IOException {
-        TakesScreenshot screenshotMode = (TakesScreenshot) driver;
+        TakesScreenshot screenshotMode = (TakesScreenshot) getDriver();
         File tempFile = screenshotMode.getScreenshotAs(OutputType.FILE);
         File destFile = new File(USER_DIR + FS + "screenshots" + FS + "screenshot.png");
         FileUtils.copyFile(tempFile, destFile);

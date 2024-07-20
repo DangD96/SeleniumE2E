@@ -3,13 +3,11 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public class ProductTest extends BaseTest {
-    LoginPage loginPage;
-    CatalogPage catalogPage;
-    ShoppingCart cart;
+
     @Test(description = "Add correct product to shopping cart", groups = {"DJDGroup"})
     protected void addProductTest() {
-        loginPage = new LoginPage(getDriver());
-        catalogPage = loginPage.logIn("rahulshettyacademy", "learning", "", "Teacher", true);
+        LoginPage loginPage = new LoginPage(getDriver());
+        CatalogPage catalogPage = loginPage.logIn("rahulshettyacademy", "learning", "", "Teacher", true);
         Assert.assertTrue(catalogPage.isProductListVisible());
         Assert.assertEquals(catalogPage.getNumberOfProducts(),4);
 
@@ -20,7 +18,7 @@ public class ProductTest extends BaseTest {
         Assert.assertTrue(catalogPage.getCheckoutBtnContents().contains("Checkout ( 1 )"));
 
         // Verify in cart
-        cart = catalogPage.goToShoppingCart();
+        ShoppingCart cart = catalogPage.goToShoppingCart();
         Assert.assertTrue(cart.isShoppingCartVisible());
         Assert.assertEquals(cart.getNumberOfProductsInCart(), 1);
         Assert.assertEquals(cart.getProductName(1), "Nokia Edge");

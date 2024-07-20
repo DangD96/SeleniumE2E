@@ -1,15 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="DJD Test Suite with Parallelization" parallel="tests" thread-count="10">
+<suite name="DJD Test Suite - Parallel Methods" parallel="methods" thread-count="10">
     <test verbose="2" name="Logging In">
         <classes>
-            <class name="LoginTest">
-                <methods>
-                    <include name="loginInvalid"/>
-                    <include name="intentionalFail"/>
-                    <include name="loginValid"/>
-                </methods>
-            </class>
+            <class name="LoginTest"/>
         </classes>
     </test>
     <test verbose="2" name="Adding Product to Cart">

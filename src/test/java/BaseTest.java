@@ -24,14 +24,13 @@ import java.util.*;
 
 public abstract class BaseTest {
     // Create threadsafe variables
-    private static ThreadLocal<WebDriver> driver = new ThreadLocal<>();
-    private static ThreadLocal<ExtentTest> testMethod = new ThreadLocal<>();
+    private static final ThreadLocal<WebDriver> driver = new ThreadLocal<>();
+    private static final ThreadLocal<ExtentTest> testMethod = new ThreadLocal<>();
 
     private static ExtentReports report;
     private static String browser;
     private static Boolean headless;
     private static String url;
-
 
     // Returns something like C:\Users\david\coding\java\SeleniumE2E
     private final String USER_DIR = System.getProperty("user.dir");
@@ -55,9 +54,9 @@ public abstract class BaseTest {
 
     // Provide methods for each thread to get their thread specific variables
     public WebDriver getDriver() {return driver.get();}
+
     public ExtentTest getTestMethod() {return testMethod.get();}
 
-    // ONE TIME SET UP
     @BeforeSuite(alwaysRun = true)
     protected void setUp() {
         // System props can come from the maven command line arguments or the POM file
@@ -75,8 +74,10 @@ public abstract class BaseTest {
     }
 
     @BeforeMethod(alwaysRun = true, dependsOnMethods = {"launchApp"})
-    protected void createTest (ITestResult result) {
-        testMethod.set(report.createTest(result.getMethod().getMethodName())); // Each thread gets its own ExtentTest
+    protected void createTestEntry(ITestResult result) {
+        // This implementation considers each test a method a "Test"
+        // Each thread gets its own Test
+        testMethod.set(report.createTest(result.getMethod().getMethodName()));
     }
 
     @AfterMethod(alwaysRun = true)

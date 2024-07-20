@@ -9,7 +9,7 @@ public class LoginTest extends BaseTest {
     /* Method below runs n times, where n is the number of objects in the array returned by dataProvider in superclass.
     The Object returned by dataProvider during each iteration gets passed as argument to the input parameter I defined.
     The dataProvider lives in the super class, so all subclasses can access it */
-    protected void loginInvalid(HashMap<String, String> input) throws InterruptedException {
+    protected void loginInvalid(HashMap<String, String> input) {
         LoginPage loginPage = new LoginPage(getDriver()); // Test METHODS run on parallel threads so each method needs its own page object
         loginPage.logIn(input.get("username"), input.get("password"), "", "Teacher", true);
         Assert.assertTrue(loginPage.isLoginErrorPresent()); // Make sure you get error

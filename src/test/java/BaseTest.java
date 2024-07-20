@@ -163,6 +163,7 @@ public abstract class BaseTest {
         TakesScreenshot screenshotMode = (TakesScreenshot) getDriver();
         File tempFile = screenshotMode.getScreenshotAs(OutputType.FILE);
         File destFile = new File(USER_DIR + FS + "screenshots" + FS + "screenshot.png");
+        File screenshotFile = new File(USER_DIR + FS + "screenshots" + FS + "screenshot.png");
         FileUtils.copyFile(tempFile, destFile);
         String absolutePath = destFile.getAbsolutePath();
         return getRelativePathFromUserDir(absolutePath);
@@ -171,7 +172,7 @@ public abstract class BaseTest {
     private String getRelativePathFromUserDir(String absolutePath) {
         // Need to double escape for regex
         String[] results = USER_DIR.split("\\\\"); // Split on "\"
-        String projectName = results[results.length-1];
-        return absolutePath.split(projectName)[1]; // Get everything that comes after the projectName
+        String userDirAKAProjectName = results[results.length-1];
+        return absolutePath.split(userDirAKAProjectName)[1]; // Get everything that comes after the project name
     }
 }

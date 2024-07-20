@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.util.*;
 
 public abstract class BaseTest {
-    protected WebDriver driver;
+    private static final ThreadLocal<WebDriver> driver = new ThreadLocal<>(); // Threadsafe driver variable
 
     /* TestNG will create a new instance of the test class for you per each test.
     If you want to share your variables - make them static (addresses the "this.<variable> is null" error)
@@ -56,6 +56,9 @@ public abstract class BaseTest {
     private final String OS_NAME = System.getProperty("os.name");
 
     private static String REPORT_PATH;
+
+    // Provide method for each thread to get their thread specific driver instance
+    public WebDriver getDriver() {return BaseTest.driver.get();}
 
     /* Always run so don't get skipped over if using TestNG Groups
     Parameters set in the Intellij Run Configuration. Get injected into setUp method's parameters.
@@ -93,7 +96,7 @@ public abstract class BaseTest {
     }
 
     @AfterTest(alwaysRun = true)
-    protected void tearDown() {driver.quit();} // Nulls driver object
+    protected void tearDown() {getDriver().quit();} // Nulls driver object
 
     @AfterSuite(alwaysRun = true)
     protected void saveReport() {
@@ -119,25 +122,25 @@ public abstract class BaseTest {
                 EdgeOptions edgeOptions = new EdgeOptions();
                 edgeOptions.addArguments("--guest"); // Need to add this so Edge doesn't show random popups
                 if (isHeadless) {edgeOptions.addArguments("--headless=new");}
-                driver = new EdgeDriver(edgeOptions);
+                driver.set(new EdgeDriver(edgeOptions));
                 break;
             case "FIREFOX":
                 // https://wiki.mozilla.org/Firefox/CommandLineOptions
                 FirefoxOptions firefoxOptions = new FirefoxOptions();
                 firefoxOptions.addArguments("-private");
                 if (isHeadless) {firefoxOptions.addArguments("-headless");}
-                driver = new FirefoxDriver(firefoxOptions);
+                driver.set(new FirefoxDriver(firefoxOptions));
                 break;
             default:
                 // https://peter.sh/experiments/chromium-command-line-switches/
                 ChromeOptions chromeOptions = new ChromeOptions();
                 chromeOptions.addArguments("--guest");
                 if (isHeadless) {chromeOptions.addArguments("--headless=new");}
-                driver = new ChromeDriver(chromeOptions);
+                driver.set(new ChromeDriver(chromeOptions));
                 break;
         }
-        driver.manage().window().maximize();
-        driver.get(url);
+        getDriver().manage().window().maximize();
+        getDriver().get(url);
     }
 
     protected void createReport(String browser, String headlessMode, String runName) {

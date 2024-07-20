@@ -8,7 +8,7 @@ public class ProductTest extends BaseTest {
     ShoppingCart cart;
     @Test(description = "Add correct product to shopping cart", groups = {"DJDGroup"})
     protected void addProductTest() {
-        loginPage = new LoginPage(driver);
+        loginPage = new LoginPage(getDriver());
         catalogPage = loginPage.logIn("rahulshettyacademy", "learning", "", "Teacher", true);
         Assert.assertTrue(catalogPage.isProductListVisible());
         Assert.assertEquals(catalogPage.getNumberOfProducts(),4);

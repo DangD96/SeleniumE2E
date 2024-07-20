@@ -23,19 +23,17 @@ import java.io.IOException;
 import java.util.*;
 
 public abstract class BaseTest {
-    private static ThreadLocal<WebDriver> driver = new ThreadLocal<>(); // Threadsafe driver variable
+    // Create threadsafe variables
+    private static ThreadLocal<WebDriver> driver = new ThreadLocal<>();
     private static ThreadLocal<ExtentTest> testMethod = new ThreadLocal<>();
 
-    /* TestNG will create a new instance of the test class for you per each test.
-    If you want to share your variables - make them static (addresses the "this.<variable> is null" error)
-    https://stackoverflow.com/questions/69721031/lateinit-variable-is-not-initialized-in-testngs-beforesuite */
     private static ExtentReports report;
     private static String browser;
-    private static String headless;
+    private static Boolean headless;
     private static String url;
 
 
-    // C:\Users\david\coding\java\Udemy_Practice\SeleniumE2E
+    // Returns something like C:\Users\david\coding\java\SeleniumE2E
     private final String USER_DIR = System.getProperty("user.dir");
 
     // System dependent file separator (so tests can run on windows or unix)
@@ -53,52 +51,49 @@ public abstract class BaseTest {
     // Convert to file path
     private final String PATH_TO_PACKAGE = PATH_TO_TEST_SOURCES_ROOT + PACKAGE_NAME.replace(".", FS);
 
-    private final String OS_NAME = System.getProperty("os.name");
-
     private static String REPORT_PATH;
 
-    // Provide method for each thread to get their thread specific driver variable
+    // Provide methods for each thread to get their thread specific variables
     public WebDriver getDriver() {return driver.get();}
-
     public ExtentTest getTestMethod() {return testMethod.get();}
 
-    /* Always run so don't get skipped over if using TestNG Groups
-    Parameters set in the Intellij Run Configuration. Get injected into setUp method's parameters.
-    Could also set in the XML file */
     // ONE TIME SET UP
     @BeforeSuite(alwaysRun = true)
     protected void setUp() {
-        // These system props can come from the maven command line arguments or the POM file
-        // I'm setting these from the maven command line arguments via intellij run configs
+        // System props can come from the maven command line arguments or the POM file
+        // I'm setting these from the maven command line arguments
         browser = System.getProperty("browser").toUpperCase();
-        headless = System.getProperty("headless");
+        headless = Boolean.valueOf(System.getProperty("headless"));
         String runName = System.getProperty("runName");
         url = System.getProperty("url");
-        createReport(browser, headless, runName);
+        createReport(runName);
     }
 
-    // "Test" = <Test/> tag defined in XML
     @BeforeMethod(alwaysRun = true)
-    protected void launchApp() {setUpDriver(browser, headless, url);}
+    protected void launchApp() {
+        setUpDriver(browser, headless, url);
+    }
 
-    // "Method" = Method with @Test annotation
     @BeforeMethod(alwaysRun = true, dependsOnMethods = {"launchApp"})
     protected void createTest (ITestResult result) {
-        testMethod.set(report.createTest(result.getMethod().getMethodName()));
+        testMethod.set(report.createTest(result.getMethod().getMethodName())); // Each thread gets its own ExtentTest
     }
 
     @AfterMethod(alwaysRun = true)
     protected void listenForResult(ITestResult result) throws IOException {
-        // Doing this because ITestResult's onTestFailure listener keeps logging twice
         if (result.getStatus() == ITestResult.FAILURE) {
-            String path = getScreenshot();
-            // Won't work with absolute path for some reason. Needs relative path from project directory
-            getTestMethod().fail(result.getThrowable()).addScreenCaptureFromPath(path);
-        } else {getTestMethod().log(Status.PASS, "Success");}
+            String relativePathToScreenshot = saveErrorScreenshot(); // Needs relative path from project directory
+            getTestMethod().fail(result.getThrowable()).addScreenCaptureFromPath(relativePathToScreenshot);
+        }
+        else {
+            getTestMethod().log(Status.PASS, "Success");
+        }
     }
 
     @AfterMethod(alwaysRun = true, dependsOnMethods = {"listenForResult"})
-    protected void tearDown() {getDriver().quit();} // Nulls thread specific driver object
+    protected void tearDown() {
+        getDriver().quit(); // Nulls thread specific driver object
+    }
 
     @AfterSuite(alwaysRun = true)
     protected void saveReport() {
@@ -116,8 +111,7 @@ public abstract class BaseTest {
         return objAry;
     }
 
-    private void setUpDriver(String browser, String headless, String url) {
-        boolean isHeadless = Boolean.parseBoolean(headless);
+    private void setUpDriver(String browser, Boolean isHeadless, String url) {
         switch (browser) {
             case "EDGE":
                 // https://peter.sh/experiments/chromium-command-line-switches/
@@ -145,19 +139,15 @@ public abstract class BaseTest {
         getDriver().get(url);
     }
 
-    protected void createReport(String browser, String headlessMode, String runName) {
+    protected void createReport(String runName) {
         // directory where output is to be printed
         REPORT_PATH = USER_DIR + FS + "test-results" + FS + runName.replace(" ", "_") + ".html";
         ExtentSparkReporter reporter = new ExtentSparkReporter(REPORT_PATH);
         reporter.config().setReportName(runName);
-        reporter.config().setDocumentTitle("DJD Automation");
+        reporter.config().setDocumentTitle("DJD Automation Report");
         reporter.config().setTheme(Theme.DARK);
         reporter.config().setTimelineEnabled(true);
-
         report = new ExtentReports();
-        report.setSystemInfo("OS Used During Runtime", OS_NAME);
-        report.setSystemInfo("Browser", browser);
-        report.setSystemInfo("Headless?", headlessMode);
         report.attachReporter(reporter);
     }
 
@@ -169,19 +159,19 @@ public abstract class BaseTest {
         return mapper.readValue(new File(path), new TypeReference<>(){});
     }
 
-    private String getScreenshot() throws IOException {
+    private String saveErrorScreenshot() throws IOException {
         TakesScreenshot screenshotMode = (TakesScreenshot) getDriver();
         File tempFile = screenshotMode.getScreenshotAs(OutputType.FILE);
         File destFile = new File(USER_DIR + FS + "screenshots" + FS + "screenshot.png");
         FileUtils.copyFile(tempFile, destFile);
         String absolutePath = destFile.getAbsolutePath();
-        return getRelativePath(absolutePath);
+        return getRelativePathFromUserDir(absolutePath);
     }
 
-    private String getRelativePath(String absolutePath) {
+    private String getRelativePathFromUserDir(String absolutePath) {
         // Need to double escape for regex
         String[] results = USER_DIR.split("\\\\"); // Split on "\"
         String projectName = results[results.length-1];
-        return absolutePath.split(projectName)[1]; // In my case, get everything that comes after "SeleniumE2E"
+        return absolutePath.split(projectName)[1]; // Get everything that comes after the projectName
     }
 }

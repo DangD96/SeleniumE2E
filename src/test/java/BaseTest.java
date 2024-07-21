@@ -77,51 +77,20 @@ public abstract class BaseTest {
         suiteStartInstant = LocalDateTime.now().toInstant(ZoneOffset.ofHours(0));
     }
 
+    private void createReport() {
+        // directory where output is to be printed
+        REPORT_PATH = USER_DIR + FS + "test-results" + FS + runName.replace(" ", "_") + ".html";
+        ExtentSparkReporter reporter = new ExtentSparkReporter(REPORT_PATH);
+        reporter.config().setReportName(runName);
+        reporter.config().setDocumentTitle("DJD Automation Report");
+        reporter.config().setTheme(Theme.DARK);
+        reporter.config().setTimelineEnabled(true);
+        report = new ExtentReports();
+        report.attachReporter(reporter);
+    }
+
     @BeforeMethod(alwaysRun = true)
     protected void launchApp() {setUpDriver();}
-
-    @BeforeMethod(alwaysRun = true, dependsOnMethods = {"launchApp"})
-    protected void createTestEntry(ITestResult result) {
-        // This implementation considers each test a method a "Test"
-        // Each thread gets its own Test
-        testMethod.set(report.createTest(result.getMethod().getMethodName()));
-    }
-
-    @AfterMethod(alwaysRun = true)
-    protected void listenForResult(ITestResult result) throws IOException {
-        if (result.getStatus() == ITestResult.FAILURE) {
-            String relativePathToScreenshot = saveErrorScreenshot(); // Needs relative path from project directory
-            getTestMethod().fail(result.getThrowable()).addScreenCaptureFromPath(relativePathToScreenshot);
-        }
-        else {
-            getTestMethod().log(Status.PASS, "Success");
-        }
-    }
-
-    @AfterMethod(alwaysRun = true, dependsOnMethods = {"listenForResult"})
-    protected void tearDown() {
-        getDriver().quit(); // Nulls thread specific driver object
-    }
-
-    @AfterSuite(alwaysRun = true)
-    protected void saveReport() {
-        ReportStats stats = report.getStats();
-        System.out.println("Stats: " + stats);
-        suiteEndInstant = LocalDateTime.now().toInstant(ZoneOffset.ofHours(0));
-        report.setSystemInfo("Total run time", getDurationOfTestSuite());
-        report.flush();
-        System.out.println("Test results can be found here: " + REPORT_PATH);
-    }
-
-    @DataProvider(parallel = true)
-    protected Object[] getTestData() throws IOException {
-        String pathToDataFile = PATH_TO_PACKAGE + FS + CLASS_NAME + ".json";
-        ArrayList<HashMap<String, String>> data = deserializeJSON(pathToDataFile);
-        int size = data.size();
-        Object[] objAry = new Object[size]; // Object array to store the hashmaps
-        for (int i = 0; i < size; i++) {objAry[i] = data.get(i);}
-        return objAry;
-    }
 
     private void setUpDriver() {
         switch (browser) {
@@ -152,24 +121,22 @@ public abstract class BaseTest {
         d.get(url);
     }
 
-    private void createReport() {
-        // directory where output is to be printed
-        REPORT_PATH = USER_DIR + FS + "test-results" + FS + runName.replace(" ", "_") + ".html";
-        ExtentSparkReporter reporter = new ExtentSparkReporter(REPORT_PATH);
-        reporter.config().setReportName(runName);
-        reporter.config().setDocumentTitle("DJD Automation Report");
-        reporter.config().setTheme(Theme.DARK);
-        reporter.config().setTimelineEnabled(true);
-        report = new ExtentReports();
-        report.attachReporter(reporter);
+    @BeforeMethod(alwaysRun = true, dependsOnMethods = {"launchApp"})
+    protected void createTestEntry(ITestResult result) {
+        // This implementation considers each test a method a "Test"
+        // Each thread gets its own Test
+        testMethod.set(report.createTest(result.getMethod().getMethodName()));
     }
 
-    private ArrayList<HashMap<String, String>> deserializeJSON(String path) throws IOException {
-        /* Use Jackson API to convert JSON objects to HashMaps.
-        Return as ArrayList because getTestData will need to retrieve data from it
-        and that is faster compared to LinkedList */
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(new File(path), new TypeReference<>(){});
+    @AfterMethod(alwaysRun = true)
+    protected void listenForResult(ITestResult result) throws IOException {
+        if (result.getStatus() == ITestResult.FAILURE) {
+            String relativePathToScreenshot = saveErrorScreenshot(); // Needs relative path from project directory
+            getTestMethod().fail(result.getThrowable()).addScreenCaptureFromPath(relativePathToScreenshot);
+        }
+        else {
+            getTestMethod().log(Status.PASS, "Success");
+        }
     }
 
     private String saveErrorScreenshot() throws IOException {
@@ -188,6 +155,21 @@ public abstract class BaseTest {
         return absolutePath.split(userDirAKAProjectName)[1]; // Get everything that comes after the project name
     }
 
+    @AfterMethod(alwaysRun = true, dependsOnMethods = {"listenForResult"})
+    protected void tearDown() {
+        getDriver().quit(); // Nulls thread specific driver object
+    }
+
+    @AfterSuite(alwaysRun = true)
+    protected void saveReport() {
+        ReportStats stats = report.getStats();
+        System.out.println("Stats: " + stats);
+        suiteEndInstant = LocalDateTime.now().toInstant(ZoneOffset.ofHours(0));
+        report.setSystemInfo("Total run time", getDurationOfTestSuite());
+        report.flush();
+        System.out.println("Test results can be found here: " + REPORT_PATH);
+    }
+
     private String getDurationOfTestSuite() {
         Duration duration = Duration.between(suiteStartInstant, suiteEndInstant);
         int minutes = duration.toMinutesPart();
@@ -196,5 +178,23 @@ public abstract class BaseTest {
         int runTime = (int) Math.round(Double.parseDouble(runTimeStr));
         if (runTime < 1) {return "1 min";}
         return runTime + " mins";
+    }
+
+    @DataProvider(parallel = true)
+    protected Object[] getTestData() throws IOException {
+        String pathToDataFile = PATH_TO_PACKAGE + FS + CLASS_NAME + ".json";
+        ArrayList<HashMap<String, String>> data = deserializeJSON(pathToDataFile);
+        int size = data.size();
+        Object[] objAry = new Object[size]; // Object array to store the hashmaps
+        for (int i = 0; i < size; i++) {objAry[i] = data.get(i);}
+        return objAry;
+    }
+
+    private ArrayList<HashMap<String, String>> deserializeJSON(String path) throws IOException {
+        /* Use Jackson API to convert JSON objects to HashMaps.
+        Return as ArrayList because getTestData will need to retrieve data from it
+        and that is faster compared to LinkedList */
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.readValue(new File(path), new TypeReference<>(){});
     }
 }

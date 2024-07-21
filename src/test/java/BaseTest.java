@@ -1,6 +1,7 @@
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.Status;
+import com.aventstack.extentreports.model.ReportStats;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import com.aventstack.extentreports.reporter.configuration.Theme;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -20,6 +21,10 @@ import org.testng.annotations.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.*;
 
 public abstract class BaseTest {
@@ -32,6 +37,8 @@ public abstract class BaseTest {
     private static Boolean isHeadless;
     private static String url;
     private static String runName;
+    private static Instant suiteStartInstant;
+    private static Instant suiteEndInstant;
 
     // Returns something like C:\Users\david\coding\java\SeleniumE2E
     private final String USER_DIR = System.getProperty("user.dir");
@@ -67,6 +74,7 @@ public abstract class BaseTest {
         runName = System.getProperty("runName");
         url = System.getProperty("url");
         createReport();
+        suiteStartInstant = LocalDateTime.now().toInstant(ZoneOffset.ofHours(0));
     }
 
     @BeforeMethod(alwaysRun = true)
@@ -97,6 +105,10 @@ public abstract class BaseTest {
 
     @AfterSuite(alwaysRun = true)
     protected void saveReport() {
+        ReportStats stats = report.getStats();
+        System.out.println("Stats: " + stats);
+        suiteEndInstant = LocalDateTime.now().toInstant(ZoneOffset.ofHours(0));
+        report.setSystemInfo("Total run time", getDurationOfTestSuite());
         report.flush();
         System.out.println("Test results can be found here: " + REPORT_PATH);
     }
@@ -174,5 +186,15 @@ public abstract class BaseTest {
         String[] results = USER_DIR.split("\\\\"); // Split on "\"
         String userDirAKAProjectName = results[results.length-1];
         return absolutePath.split(userDirAKAProjectName)[1]; // Get everything that comes after the project name
+    }
+
+    private String getDurationOfTestSuite() {
+        Duration duration = Duration.between(suiteStartInstant, suiteEndInstant);
+        int minutes = duration.toMinutesPart();
+        double minutesFraction = (double) duration.toSecondsPart() / 60;
+        String runTimeStr = String.valueOf(minutes + minutesFraction);
+        int runTime = (int) Math.round(Double.parseDouble(runTimeStr));
+        if (runTime < 1) {return "1 min";}
+        return runTime + " mins";
     }
 }

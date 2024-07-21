@@ -22,7 +22,7 @@ public class LoginTest extends BaseTest {
     }
 
     @Test(description = "Successful Login", groups = {"DJDGroup"})
-    protected void loginValid()  {
+    protected void loginValid() {
         LoginPage loginPage = new LoginPage(getDriver());
         loginPage.clearUsername();
         loginPage.clearPassword();

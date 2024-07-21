@@ -29,8 +29,9 @@ public abstract class BaseTest {
 
     private static ExtentReports report;
     private static String browser;
-    private static Boolean headless;
+    private static Boolean isHeadless;
     private static String url;
+    private static String runName;
 
     // Returns something like C:\Users\david\coding\java\SeleniumE2E
     private final String USER_DIR = System.getProperty("user.dir");
@@ -62,16 +63,14 @@ public abstract class BaseTest {
         // System props can come from the maven command line arguments or the POM file
         // I'm setting these from the maven command line arguments
         browser = System.getProperty("browser").toUpperCase();
-        headless = Boolean.valueOf(System.getProperty("headless"));
-        String runName = System.getProperty("runName");
+        isHeadless = Boolean.valueOf(System.getProperty("headless"));
+        runName = System.getProperty("runName");
         url = System.getProperty("url");
-        createReport(runName);
+        createReport();
     }
 
     @BeforeMethod(alwaysRun = true)
-    protected void launchApp() {
-        setUpDriver(browser, headless, url);
-    }
+    protected void launchApp() {setUpDriver();}
 
     @BeforeMethod(alwaysRun = true, dependsOnMethods = {"launchApp"})
     protected void createTestEntry(ITestResult result) {
@@ -112,7 +111,7 @@ public abstract class BaseTest {
         return objAry;
     }
 
-    private void setUpDriver(String browser, Boolean isHeadless, String url) {
+    private void setUpDriver() {
         switch (browser) {
             case "EDGE":
                 // https://peter.sh/experiments/chromium-command-line-switches/
@@ -140,7 +139,7 @@ public abstract class BaseTest {
         getDriver().get(url);
     }
 
-    protected void createReport(String runName) {
+    protected void createReport() {
         // directory where output is to be printed
         REPORT_PATH = USER_DIR + FS + "test-results" + FS + runName.replace(" ", "_") + ".html";
         ExtentSparkReporter reporter = new ExtentSparkReporter(REPORT_PATH);

@@ -135,8 +135,9 @@ public abstract class BaseTest {
                 driver.set(new ChromeDriver(chromeOptions)); // set driver variable in current thread
                 break;
         }
-        getDriver().manage().window().maximize();
-        getDriver().get(url);
+        WebDriver d = getDriver();
+        d.manage().window().maximize();
+        d.get(url);
     }
 
     protected void createReport() {

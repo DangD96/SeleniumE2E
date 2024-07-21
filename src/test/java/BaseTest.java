@@ -140,7 +140,7 @@ public abstract class BaseTest {
         d.get(url);
     }
 
-    protected void createReport() {
+    private void createReport() {
         // directory where output is to be printed
         REPORT_PATH = USER_DIR + FS + "test-results" + FS + runName.replace(" ", "_") + ".html";
         ExtentSparkReporter reporter = new ExtentSparkReporter(REPORT_PATH);

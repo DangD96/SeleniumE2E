@@ -72,7 +72,7 @@ public abstract class BaseTest {
         try {
             getBrowser();
         } catch (PropertyNotSpecifiedException e) {
-            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
         }
 
         try {

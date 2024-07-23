@@ -4,7 +4,7 @@ import org.testng.annotations.Test;
 
 public class ProductTest extends BaseTest {
 
-    @Test(description = "Add correct product to shopping cart", groups = {"DJDGroup"})
+    @Test(description = "Add correct product to shopping cart")
     protected void addProductTest() {
         LoginPage loginPage = new LoginPage(getDriver());
         CatalogPage catalogPage = loginPage.logIn("rahulshettyacademy", "learning", "", "Teacher", true);

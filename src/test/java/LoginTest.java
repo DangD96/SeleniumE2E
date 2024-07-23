@@ -21,7 +21,7 @@ public class LoginTest extends BaseTest {
         Assert.fail();
     }
 
-    @Test(description = "Successful Login", groups = {"DJDGroup"})
+    @Test(description = "Successful Login")
     protected void loginValid() {
         LoginPage loginPage = new LoginPage(getDriver());
         loginPage.clearUsername();

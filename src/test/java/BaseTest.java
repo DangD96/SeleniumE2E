@@ -116,9 +116,9 @@ public abstract class BaseTest {
                 driver.set(new ChromeDriver(chromeOptions)); // set driver variable in current thread
                 break;
         }
-        WebDriver d = getDriver();
-        d.manage().window().maximize();
-        d.get(url);
+        WebDriver driver = getDriver();
+        driver.manage().window().maximize();
+        driver.get(url);
     }
 
     @BeforeMethod(alwaysRun = true, dependsOnMethods = {"launchApp"})

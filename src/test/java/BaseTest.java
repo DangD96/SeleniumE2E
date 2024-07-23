@@ -66,15 +66,49 @@ public abstract class BaseTest {
     public ExtentTest getTestMethod() {return testMethod.get();}
 
     @BeforeSuite(alwaysRun = true)
-    protected void setUp() {
+    protected void getProperties() {
         // System props can come from the maven command line arguments or the POM file
         // I'm setting these from the maven command line arguments
-        browser = System.getProperty("browser").toUpperCase();
-        isHeadless = Boolean.valueOf(System.getProperty("headless"));
-        runName = System.getProperty("runName");
-        url = System.getProperty("url");
+        try {
+            getBrowser();
+        } catch (PropertyNotSpecifiedException e) {
+            System.out.println(e.getMessage());
+        }
+
+        try {
+            getRunName();
+        } catch (PropertyNotSpecifiedException e) {
+            throw new RuntimeException(e);
+        }
+
+        try {
+            getUrl();
+        } catch (PropertyNotSpecifiedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @BeforeSuite(dependsOnMethods = {"getProperties"})
+    protected void setUp() {
+        isHeadless = Boolean.valueOf(System.getProperty("headless")); // if null, defaults to false bc boolean
         createReport();
         suiteStartInstant = LocalDateTime.now().toInstant(ZoneOffset.ofHours(0));
+    }
+
+    private void getBrowser() {
+        browser = System.getProperty("browser");
+        if (browser == null) {throw new PropertyNotSpecifiedException("browser");}
+        browser = browser.toUpperCase();
+    }
+
+    private void getRunName() {
+        runName = System.getProperty("runName");
+        if (runName == null) {throw new PropertyNotSpecifiedException("runName");}
+    }
+
+    private void getUrl() {
+        url = System.getProperty("url");
+        if (url == null) {throw new PropertyNotSpecifiedException("url");}
     }
 
     private void createReport() {
@@ -89,7 +123,7 @@ public abstract class BaseTest {
         report.attachReporter(reporter);
     }
 
-    @BeforeMethod(alwaysRun = true)
+    @BeforeMethod()
     protected void launchApp() {setUpDriver();}
 
     private void setUpDriver() {
@@ -121,14 +155,14 @@ public abstract class BaseTest {
         driver.get(url);
     }
 
-    @BeforeMethod(alwaysRun = true, dependsOnMethods = {"launchApp"})
+    @BeforeMethod(dependsOnMethods = {"launchApp"})
     protected void createTestEntry(ITestResult result) {
         // This implementation considers each test a method a "Test"
         // Each thread gets its own Test
         testMethod.set(report.createTest(result.getMethod().getMethodName()));
     }
 
-    @AfterMethod(alwaysRun = true)
+    @AfterMethod()
     protected void listenForResult(ITestResult result) throws IOException {
         if (result.getStatus() == ITestResult.FAILURE) {
             String relativePathToScreenshot = saveErrorScreenshot(); // Needs relative path from project directory
@@ -155,12 +189,12 @@ public abstract class BaseTest {
         return absolutePath.split(userDirAKAProjectName)[1]; // Get everything that comes after the project name
     }
 
-    @AfterMethod(alwaysRun = true, dependsOnMethods = {"listenForResult"})
+    @AfterMethod(dependsOnMethods = {"listenForResult"})
     protected void tearDown() {
         getDriver().quit(); // Nulls thread specific driver object
     }
 
-    @AfterSuite(alwaysRun = true)
+    @AfterSuite()
     protected void saveReport() {
         ReportStats stats = report.getStats();
         System.out.println("Stats: " + stats);

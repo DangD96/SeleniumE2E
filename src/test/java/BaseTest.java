@@ -66,49 +66,46 @@ public abstract class BaseTest {
     public ExtentTest getTestMethod() {return testMethod.get();}
 
     @BeforeSuite(alwaysRun = true)
-    protected void getProperties() {
+    protected void setUp() {
         // System props can come from the maven command line arguments or the POM file
         // I'm setting these from the maven command line arguments
-        try {
-            getBrowser();
-        } catch (PropertyNotSpecifiedException e) {
-            throw new RuntimeException(e);
-        }
-
-        try {
-            getRunName();
-        } catch (PropertyNotSpecifiedException e) {
-            throw new RuntimeException(e);
-        }
-
-        try {
-            getUrl();
-        } catch (PropertyNotSpecifiedException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @BeforeSuite(dependsOnMethods = {"getProperties"})
-    protected void setUp() {
-        isHeadless = Boolean.valueOf(System.getProperty("headless")); // if null, defaults to false bc boolean
+        getRunName();
+        getBrowser();
+        getUrl();
+        isHeadless = Boolean.valueOf(System.getProperty("headless"));
         createReport();
         suiteStartInstant = LocalDateTime.now().toInstant(ZoneOffset.ofHours(0));
     }
 
-    private void getBrowser() {
-        browser = System.getProperty("browser");
-        if (browser == null) {throw new PropertyNotSpecifiedException("browser");}
-        browser = browser.toUpperCase();
-    }
-
     private void getRunName() {
         runName = System.getProperty("runName");
-        if (runName == null) {throw new PropertyNotSpecifiedException("runName");}
+        if (runName == null) {
+            earlyFlush("runName");
+            throw new PropertyNotSpecifiedException("runName");
+        }
+    }
+
+    private void getBrowser() {
+        browser = System.getProperty("browser");
+        if (browser == null) {
+            earlyFlush("browser");
+            throw new PropertyNotSpecifiedException("browser");
+        }
     }
 
     private void getUrl() {
         url = System.getProperty("url");
-        if (url == null) {throw new PropertyNotSpecifiedException("url");}
+        if (url == null) {
+            earlyFlush("url");
+            throw new PropertyNotSpecifiedException("url");
+        }
+    }
+
+    private void earlyFlush(String property) {
+        createReport();
+        testMethod.set(report.createTest("Test Setup"));
+        getTestMethod().fail(new PropertyNotSpecifiedException(property));
+        report.flush();
     }
 
     private void createReport() {
@@ -127,6 +124,7 @@ public abstract class BaseTest {
     protected void launchApp() {setUpDriver();}
 
     private void setUpDriver() {
+        browser = browser.toUpperCase();
         switch (browser) {
             case "EDGE":
                 // https://peter.sh/experiments/chromium-command-line-switches/

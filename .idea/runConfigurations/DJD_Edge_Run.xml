@@ -13,10 +13,11 @@
             <list>
               <option value="clean" />
               <option value="test" />
-              <option value="-PDJDSuite" />
               <option value="-Dbrowser=edge" />
               <option value="-Dheadless=true" />
               <option value="-DrunName=DJD Edge Run" />
+              <option value="-DtestSuite=DJDSuite.xml" />
+              <option value="-Durl=https://www.rahulshettyacademy.com/loginpagePractise/" />
             </list>
           </option>
           <option name="multimoduleDir" />

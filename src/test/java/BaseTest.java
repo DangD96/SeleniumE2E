@@ -16,6 +16,7 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
+import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 
@@ -27,18 +28,20 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.*;
 
+@Listeners({SuiteListener.class})
 public abstract class BaseTest {
     // Create threadsafe variables
     private static final ThreadLocal<WebDriver> driver = new ThreadLocal<>();
     private static final ThreadLocal<ExtentTest> testMethod = new ThreadLocal<>();
 
+    private static String suiteName;
     private static ExtentReports report;
     private static String browser;
     private static Boolean isHeadless;
     private static String url;
-    private static String runName;
     private static Instant suiteStartInstant;
     private static Instant suiteEndInstant;
+    private static String runName;
 
     // Returns something like C:\Users\david\coding\java\SeleniumE2E
     private final String USER_DIR = System.getProperty("user.dir");
@@ -65,24 +68,16 @@ public abstract class BaseTest {
 
     public ExtentTest getTestMethod() {return testMethod.get();}
 
-    @BeforeSuite(alwaysRun = true)
+    @BeforeSuite()
     protected void setUp() {
         // System props can come from the maven command line arguments or the POM file
         // I'm setting these from the maven command line arguments
-        getRunName();
+        suiteName = SuiteListener.suiteName;
         getBrowser();
         getUrl();
         isHeadless = Boolean.valueOf(System.getProperty("headless"));
         createReport();
         suiteStartInstant = LocalDateTime.now().toInstant(ZoneOffset.ofHours(0));
-    }
-
-    private void getRunName() {
-        runName = System.getProperty("runName");
-        if (runName == null) {
-            earlyFlush("runName");
-            throw new PropertyNotSpecifiedException("runName");
-        }
     }
 
     private void getBrowser() {
@@ -91,6 +86,7 @@ public abstract class BaseTest {
             earlyFlush("browser");
             throw new PropertyNotSpecifiedException("browser");
         }
+        browser = browser.toUpperCase();
     }
 
     private void getUrl() {
@@ -110,9 +106,12 @@ public abstract class BaseTest {
 
     private void createReport() {
         // directory where output is to be printed
-        REPORT_PATH = USER_DIR + FS + "test-results" + FS + runName.replace(" ", "_") + ".html";
+        String filename = suiteName + " " + browser;
+        String reportName = suiteName + " - " + browser;
+        REPORT_PATH = USER_DIR + FS + "test-results" + FS + filename.replace(" ", "_") + ".html";
+        System.out.println(REPORT_PATH);
         ExtentSparkReporter reporter = new ExtentSparkReporter(REPORT_PATH);
-        reporter.config().setReportName(runName);
+        reporter.config().setReportName(reportName);
         reporter.config().setDocumentTitle("DJD Automation Report");
         reporter.config().setTheme(Theme.DARK);
         reporter.config().setTimelineEnabled(true);
@@ -124,7 +123,6 @@ public abstract class BaseTest {
     protected void launchApp() {setUpDriver();}
 
     private void setUpDriver() {
-        browser = browser.toUpperCase();
         switch (browser) {
             case "EDGE":
                 // https://peter.sh/experiments/chromium-command-line-switches/

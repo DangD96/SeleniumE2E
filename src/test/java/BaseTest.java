@@ -61,11 +61,6 @@ public abstract class BaseTest {
 
     private static String REPORT_PATH;
 
-    // Provide methods for each thread to get their thread specific variables
-    public WebDriver getDriver() {return driver.get();}
-
-    public ExtentTest getTestMethod() {return testMethod.get();}
-
     @BeforeSuite()
     protected void setUp() {
         // System props can come from the maven command line arguments or the POM file
@@ -77,6 +72,56 @@ public abstract class BaseTest {
         createReport();
         suiteStartInstant = LocalDateTime.now().toInstant(ZoneOffset.ofHours(0));
     }
+
+    @BeforeMethod()
+    protected void launchApp() {setUpDriver();}
+
+    @BeforeMethod(dependsOnMethods = {"launchApp"})
+    protected void createTestEntry(ITestResult result) {
+        // This implementation considers each test a method a "Test"
+        // Each thread gets its own Test
+        testMethod.set(report.createTest(result.getMethod().getMethodName()));
+    }
+
+    @AfterMethod()
+    protected void listenForResult(ITestResult result) throws IOException {
+        if (result.getStatus() == ITestResult.FAILURE) {
+            String relativePathToScreenshot = saveErrorScreenshot(); // Needs relative path from project directory
+            getTestMethod().fail(result.getThrowable()).addScreenCaptureFromPath(relativePathToScreenshot);
+        }
+        else {
+            getTestMethod().log(Status.PASS, "Success");
+        }
+    }
+
+    @AfterMethod(dependsOnMethods = {"listenForResult"})
+    protected void tearDown() {
+        getDriver().quit(); // Nulls thread specific driver object
+    }
+
+    @AfterSuite()
+    protected void saveReport() {
+        ReportStats stats = report.getStats();
+        System.out.println("Stats: " + stats);
+        suiteEndInstant = LocalDateTime.now().toInstant(ZoneOffset.ofHours(0));
+        report.setSystemInfo("Total run time", getDurationOfTestSuite());
+        report.flush();
+        System.out.println("Test results can be found here: " + REPORT_PATH);
+    }
+
+    @DataProvider(parallel = true)
+    protected Object[] getTestData() throws IOException {
+        String pathToDataFile = PATH_TO_PACKAGE + FS + CLASS_NAME + ".json";
+        ArrayList<HashMap<String, String>> data = deserializeJSON(pathToDataFile);
+        int size = data.size();
+        Object[] objAry = new Object[size]; // Object array to store the hashmaps
+        for (int i = 0; i < size; i++) {objAry[i] = data.get(i);}
+        return objAry;
+    }
+
+    // Provide methods for each thread to get their thread specific variables
+    public WebDriver getDriver() {return driver.get();}
+    public ExtentTest getTestMethod() {return testMethod.get();}
 
     private void getBrowser() {
         browser = System.getProperty("browser");
@@ -124,9 +169,6 @@ public abstract class BaseTest {
         report.attachReporter(reporter);
     }
 
-    @BeforeMethod()
-    protected void launchApp() {setUpDriver();}
-
     private void setUpDriver() {
         switch (browser) {
             case "EDGE":
@@ -156,24 +198,6 @@ public abstract class BaseTest {
         driver.get(url);
     }
 
-    @BeforeMethod(dependsOnMethods = {"launchApp"})
-    protected void createTestEntry(ITestResult result) {
-        // This implementation considers each test a method a "Test"
-        // Each thread gets its own Test
-        testMethod.set(report.createTest(result.getMethod().getMethodName()));
-    }
-
-    @AfterMethod()
-    protected void listenForResult(ITestResult result) throws IOException {
-        if (result.getStatus() == ITestResult.FAILURE) {
-            String relativePathToScreenshot = saveErrorScreenshot(); // Needs relative path from project directory
-            getTestMethod().fail(result.getThrowable()).addScreenCaptureFromPath(relativePathToScreenshot);
-        }
-        else {
-            getTestMethod().log(Status.PASS, "Success");
-        }
-    }
-
     private String saveErrorScreenshot() throws IOException {
         TakesScreenshot screenshotMode = (TakesScreenshot) getDriver();
         File tempFile = screenshotMode.getScreenshotAs(OutputType.FILE);
@@ -190,21 +214,6 @@ public abstract class BaseTest {
         return absolutePath.split(userDirAKAProjectName)[1]; // Get everything that comes after the project name
     }
 
-    @AfterMethod(dependsOnMethods = {"listenForResult"})
-    protected void tearDown() {
-        getDriver().quit(); // Nulls thread specific driver object
-    }
-
-    @AfterSuite()
-    protected void saveReport() {
-        ReportStats stats = report.getStats();
-        System.out.println("Stats: " + stats);
-        suiteEndInstant = LocalDateTime.now().toInstant(ZoneOffset.ofHours(0));
-        report.setSystemInfo("Total run time", getDurationOfTestSuite());
-        report.flush();
-        System.out.println("Test results can be found here: " + REPORT_PATH);
-    }
-
     private String getDurationOfTestSuite() {
         Duration duration = Duration.between(suiteStartInstant, suiteEndInstant);
         int minutes = duration.toMinutesPart();
@@ -213,16 +222,6 @@ public abstract class BaseTest {
         int runTime = (int) Math.round(Double.parseDouble(runTimeStr));
         if (runTime < 1) {return "1 min";}
         return runTime + " mins";
-    }
-
-    @DataProvider(parallel = true)
-    protected Object[] getTestData() throws IOException {
-        String pathToDataFile = PATH_TO_PACKAGE + FS + CLASS_NAME + ".json";
-        ArrayList<HashMap<String, String>> data = deserializeJSON(pathToDataFile);
-        int size = data.size();
-        Object[] objAry = new Object[size]; // Object array to store the hashmaps
-        for (int i = 0; i < size; i++) {objAry[i] = data.get(i);}
-        return objAry;
     }
 
     private ArrayList<HashMap<String, String>> deserializeJSON(String path) throws IOException {

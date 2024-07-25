@@ -70,7 +70,7 @@ public abstract class BaseTest {
     protected void setUp() {
         // System props can come from the maven command line arguments or the POM file
         // I'm setting these from the maven command line arguments
-        suiteName = SuiteListener.suiteName;
+        getSuiteName();
         getBrowser();
         getUrl();
         isHeadless = Boolean.valueOf(System.getProperty("headless"));
@@ -100,6 +100,13 @@ public abstract class BaseTest {
         testMethod.set(report.createTest("Test Setup"));
         getTestMethod().fail(new PropertyNotSpecifiedException(property));
         report.flush();
+    }
+
+    private void getSuiteName() {
+        suiteName = SuiteListener.suiteName;
+        if (suiteName.contains("/")) {
+            throw new InvalidXmlSuiteNameException("The / character is not allowed in the XML suite name");
+        }
     }
 
     private void createReport() {

@@ -195,7 +195,12 @@ public abstract class BaseTest {
         }
         WebDriver driver = getDriver();
         driver.manage().window().maximize();
-        driver.get(url);
+        try {
+            driver.get(url);
+        } catch (Exception e) {
+            driver.quit();
+            throw new RuntimeException(e);
+        }
     }
 
     private String saveErrorScreenshot() throws IOException {

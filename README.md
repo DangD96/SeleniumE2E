@@ -1,8 +1,9 @@
 # Background
-Selenium Framework written in Java for End to End (E2E) testing of an [e-commerce website](https://www.rahulshettyacademy.com/loginpagePractise/).
+Selenium Framework written in Java for End to End (E2E) testing of an [e-commerce website](https://www.rahulshettyacademy.com/loginpagePractise/). 
+
+Page objects and Tests are included to demonstrate the integration with the framework.
 
 # Features
-This framework:
 1. Uses Maven for dependency management.
 2. Utilizes TestNG for assertions and test annotations.
 3. Uses Maven's Surefire plugin to integrate with TestNG to run tests.

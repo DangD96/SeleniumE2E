@@ -1,33 +1,30 @@
-# Intro
-Selenium Java Framework for End to End (E2E) testing of an [e-commerce website](https://www.rahulshettyacademy.com/loginpagePractise/). 
+# Background
+Selenium Framework written in Java for End to End (E2E) testing of an [e-commerce website](https://www.rahulshettyacademy.com/loginpagePractise/).
 
-This framework has the following features:
-1. Uses Maven for dependency management and run configurations.
-2. Implements the Page Object Model (POM) design pattern for ease of code maintenance and clear separation of page object responsibilities.
-3. Uses PageFactory to handle element location.
-4. Utilizes TestNG for assertions and test suite setup.
-5. Runs tests in parallel by default and can be configured to run on Google Chrome, Microsoft Edge, or Mozilla Firefox.
-6. Generates an HTML report summarizing test results. Test failures have screenshots attached to them.
+# Features
+This framework:
+1. Uses Maven for dependency management.
+2. Utilizes TestNG for assertions and test annotations.
+3. Uses Maven's Surefire plugin to integrate with TestNG to run tests.
+4. Runs tests in parallel by default.
+5. Tests can be configured to run on Google Chrome, Microsoft Edge, or Mozilla Firefox.
+6. Tests can be configured to run in headless browser mode.
+7. Generates an HTML report summarizing test results and how long the tests took. Test failures have screenshots attached to them.
+8. Implements the Page Object Model (POM) design pattern for ease of code maintenance and clear separation of page object responsibilities.
+9. Uses PageFactory to handle element location.
+10. Waits for elements to be visible before interacting with them.
+11. Adds customization to tests by leveraging TestNG's DataProvider feature.
+
+# Run Parameters
+Maven run configurations follow this pattern: 
+
+mvn clean test -D _testSuite_ -D _browser_ -D _url_ -D _headless_
+
+Where:
+* testSuite (required): The name of your XML testing suite.
+* browser (requird): The name of the browser to test on. Supports Chrome, Edge, or Firefox.
+* url (required): The URL of the starting website for the tests.
+* headless (optional): Whether you want the tests to run in headless mode. Accepts True or False.
 
 # Considered but not done
-This framework does not use TestNG's IRetryAnalyzer interface for re-running flaky tests. 
-
-If your tests are flaky to begin with, then you need to update them to be more robust.
-
-# Rules and Guidance
-1. Page object methods wait for elements to be visible before interacting with them. 
-2. If you need to check for the visibility or invisibility of elements in the test itself, use the wait methods on the page objects.
-3. All Page classes live under **src.main.java**.
-4. All Test classes live under **src.test.java**.
-5. If your test requires data to be used in a TestNG @DataProvider, provide the data in a .json file of the same name.
-6. Every Page class must extend BasePage.
-7. Every Test class must extend BaseTest.
-8. The order that @Test methods are run in is determined by their order in the XML suite.
-
-# Configuration
-To properly run the tests with Maven, do the following:
-1. Create a corresponding Maven profile for your suite XML file.
-2. Create a Maven run configuration to run the XML suite.
-
-Maven run configurations follow this pattern: 
-_clean test -P<Name of test suite> -Dbrowser=<chrome/edge/firefox> -Dheadless=<true/false> -DrunName=<Name of this test run>_
+* This framework does not use TestNG's IRetryAnalyzer interface for re-running flaky tests. If tests are flaky to begin with, then they need to be updated to be more robust.

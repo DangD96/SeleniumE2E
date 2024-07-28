@@ -35,6 +35,6 @@ public class LoginTest extends BaseTest {
 
     @DataProvider(parallel = true)
     public Object[] loginInvalidDataProvider() throws IOException {
-        return getTestData("src/test/java/LoginTestLoginInvalidData.json");
+        return getTestData("LoginTestLoginInvalidData.json");
     }
 }

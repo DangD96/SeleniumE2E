@@ -47,17 +47,7 @@ public abstract class BaseTest {
     // System dependent file separator (so tests can run on windows or unix)
     private final String FS = File.separator;
 
-    private final String PATH_TO_TEST_SOURCES_ROOT = USER_DIR+FS+"src"+FS+"test"+FS+"java"+FS;
-
-    /* Will vary depending on which SUBCLASS is running the test (TestNG creates an object of the subclass)
-    PackageName uses the "." separator like "org.djd.Something"
-    Use Reflection API to get info about class name and package name */
-    private final String PACKAGE_NAME = this.getClass().getPackageName();
-
-    private final String CLASS_NAME = this.getClass().getSimpleName();
-
-    // Convert to file path
-    private final String PATH_TO_PACKAGE = PATH_TO_TEST_SOURCES_ROOT + PACKAGE_NAME.replace(".", FS);
+    private final String PATH_TO_TEST_SOURCES_ROOT = USER_DIR+FS+"src"+FS+"test"+FS+"java";
 
     private static String REPORT_PATH;
 
@@ -219,9 +209,9 @@ public abstract class BaseTest {
         return runTime + " mins";
     }
 
-    protected Object[] getTestData(String pathToDataFile) throws IOException {
-        //String pathToDataFile = PATH_TO_PACKAGE + FS + CLASS_NAME + ".json";
-        ArrayList<HashMap<String, String>> data = deserializeJSON(pathToDataFile);
+    protected Object[] getTestData(String filename) throws IOException {
+        String filePath = PATH_TO_TEST_SOURCES_ROOT + FS + filename;
+        ArrayList<HashMap<String, String>> data = deserializeJSON(filePath);
         int size = data.size();
         Object[] objAry = new Object[size]; // Object array to store the hashmaps
         for (int i = 0; i < size; i++) {objAry[i] = data.get(i);}

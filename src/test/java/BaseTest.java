@@ -109,16 +109,6 @@ public abstract class BaseTest {
         System.out.println("Test results can be found here: " + REPORT_PATH);
     }
 
-    @DataProvider(parallel = true)
-    protected Object[] getTestData() throws IOException {
-        String pathToDataFile = PATH_TO_PACKAGE + FS + CLASS_NAME + ".json";
-        ArrayList<HashMap<String, String>> data = deserializeJSON(pathToDataFile);
-        int size = data.size();
-        Object[] objAry = new Object[size]; // Object array to store the hashmaps
-        for (int i = 0; i < size; i++) {objAry[i] = data.get(i);}
-        return objAry;
-    }
-
     // Provide methods for each thread to get their thread specific variables
     public WebDriver getDriver() {return driver.get();}
     public ExtentTest getTestMethod() {return testMethod.get();}
@@ -227,6 +217,15 @@ public abstract class BaseTest {
         int runTime = (int) Math.round(Double.parseDouble(runTimeStr));
         if (runTime < 1) {return "1 min";}
         return runTime + " mins";
+    }
+
+    protected Object[] getTestData(String pathToDataFile) throws IOException {
+        //String pathToDataFile = PATH_TO_PACKAGE + FS + CLASS_NAME + ".json";
+        ArrayList<HashMap<String, String>> data = deserializeJSON(pathToDataFile);
+        int size = data.size();
+        Object[] objAry = new Object[size]; // Object array to store the hashmaps
+        for (int i = 0; i < size; i++) {objAry[i] = data.get(i);}
+        return objAry;
     }
 
     private ArrayList<HashMap<String, String>> deserializeJSON(String path) throws IOException {

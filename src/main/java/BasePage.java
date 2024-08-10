@@ -10,8 +10,8 @@ import java.time.Duration;
 import java.util.List;
 
 abstract class BasePage {
-    protected final WebDriver driver;
-    protected final JavascriptExecutor js;
+    protected WebDriver driver;
+    protected JavascriptExecutor js;
     private final Duration TIMEOUT = Duration.ofSeconds(15);
 
     public BasePage(WebDriver driver) {

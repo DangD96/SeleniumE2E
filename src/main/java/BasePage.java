@@ -23,6 +23,7 @@ abstract class BasePage {
 
     public WebElement waitForElementToBeVisible(By locator) {
         return WAIT.until(ExpectedConditions.visibilityOfElementLocated(locator));
+        // Could also use ExpectedConditions.elementToBeClickable it has visibilityOfElementLocated built into it :)
     }
 
     public List<WebElement> waitForElementsToBeVisible(By locator) {

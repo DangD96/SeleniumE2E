@@ -2,8 +2,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 public class ShoppingCart extends BasePage {
-    final By shoppingCartBy = By.tagName("table");
-    final By productsInCartBy = By.cssSelector("tr:has(td[class*='col-sm'])");
+    final By SHOPPING_CART = By.tagName("table");
+    final By PRODUCTS_IN_CART = By.cssSelector("tr:has(td[class*='col-sm'])");
 
     public ShoppingCart(WebDriver driver) {
         super(driver);
@@ -11,7 +11,7 @@ public class ShoppingCart extends BasePage {
 
     public int getNumberOfProductsInCart() {
         try {
-            return waitForElementsToBeVisible(productsInCartBy).size();
+            return waitForElementsToBeVisible(PRODUCTS_IN_CART).size();
         }
         catch (Exception e) {
             return 0;
@@ -19,13 +19,13 @@ public class ShoppingCart extends BasePage {
     }
 
     public String getProductName(int row) {
-        return waitForElementsToBeVisible(productsInCartBy).get(row-1)
+        return waitForElementsToBeVisible(PRODUCTS_IN_CART).get(row-1)
                 .findElement(By.cssSelector("td .media-body h4.media-heading"))
                 .getText();
     }
 
     public void removeProduct(int row) {
-        waitForElementsToBeVisible(productsInCartBy).get(row-1)
+        waitForElementsToBeVisible(PRODUCTS_IN_CART).get(row-1)
                 .findElement(By.cssSelector("td button")).click();
     }
 }

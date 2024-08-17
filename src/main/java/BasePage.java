@@ -33,10 +33,11 @@ abstract class BasePage {
         return WAIT.until(ExpectedConditions.invisibilityOfElementLocated(locator));
     }
 
+    @SuppressWarnings("Convert2Lambda")
     public void waitForAjax() {
         // wait for jQuery to load
         // anonymous inner class
-        ExpectedCondition<Boolean> isJQueryLoaded = new ExpectedCondition<Boolean>() {
+        ExpectedCondition<Boolean> isJQueryLoaded = new ExpectedCondition<>() {
             @Override
             public Boolean apply(WebDriver driver) {
                 try {
@@ -50,7 +51,7 @@ abstract class BasePage {
 
         // wait for Javascript to load
         // anonymous inner class
-        ExpectedCondition<Boolean> isJsLoaded = new ExpectedCondition<Boolean>() {
+        ExpectedCondition<Boolean> isJsLoaded = new ExpectedCondition<>() {
             @Override
             public Boolean apply(WebDriver driver) {
                 return js.executeScript("return document.readyState").toString().equals("complete");

@@ -17,9 +17,7 @@ public class LoginPage extends BasePage {
 
     public CatalogPage logIn(String username, String password, String userType, String userRole, Boolean toggleTermsBox) {
         // Just using JS to fill them out because why not
-        //WebElement usernameField = ;
         js.executeScript("arguments[0].value = arguments[1]", waitForElementToBeVisible(usernameFieldBy), username);
-        //;
         js.executeScript("arguments[0].value = arguments[1]", waitForElementToBeVisible(passwordFieldBy), password);
 
         if (!userType.isEmpty()) selectUserType(userType);

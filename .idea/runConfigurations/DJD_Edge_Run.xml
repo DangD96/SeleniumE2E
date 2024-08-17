@@ -14,7 +14,6 @@
               <option value="clean" />
               <option value="test" />
               <option value="-Dbrowser=edge" />
-              <option value="-Dheadless=true" />
               <option value="-DtestSuite=DJDSuite.xml" />
               <option value="-Durl=https://www.rahulshettyacademy.com/loginpagePractise/" />
             </list>

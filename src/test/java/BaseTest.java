@@ -36,7 +36,6 @@ public abstract class BaseTest {
     private static String suiteName;
     private static ExtentReports report;
     private static String browser;
-    private static Boolean isHeadless;
     private static String url;
     private static Instant suiteStartInstant;
     private static Instant suiteEndInstant;
@@ -58,7 +57,6 @@ public abstract class BaseTest {
         getSuiteName();
         getBrowser();
         getUrl();
-        isHeadless = Boolean.valueOf(System.getProperty("headless"));
         createReport();
         suiteStartInstant = LocalDateTime.now().toInstant(ZoneOffset.ofHours(0));
     }
@@ -155,21 +153,18 @@ public abstract class BaseTest {
                 // https://peter.sh/experiments/chromium-command-line-switches/
                 EdgeOptions edgeOptions = new EdgeOptions();
                 edgeOptions.addArguments("--guest"); // Need to add this so Edge doesn't show random popups
-                if (isHeadless) {edgeOptions.addArguments("--headless=new");}
                 driver.set(new EdgeDriver(edgeOptions));
                 break;
             case "FIREFOX":
                 // https://wiki.mozilla.org/Firefox/CommandLineOptions
                 FirefoxOptions firefoxOptions = new FirefoxOptions();
                 firefoxOptions.addArguments("-private");
-                if (isHeadless) {firefoxOptions.addArguments("-headless");}
                 driver.set(new FirefoxDriver(firefoxOptions));
                 break;
             default:
                 // https://peter.sh/experiments/chromium-command-line-switches/
                 ChromeOptions chromeOptions = new ChromeOptions();
                 chromeOptions.addArguments("--guest");
-                if (isHeadless) {chromeOptions.addArguments("--headless=new");}
                 driver.set(new ChromeDriver(chromeOptions)); // set driver variable in current thread
                 break;
         }
@@ -209,6 +204,7 @@ public abstract class BaseTest {
         return runTime + " mins";
     }
 
+    @SuppressWarnings("SameParameterValue")
     protected Object[] getTestData(String filename) throws IOException {
         String filePath = PATH_TO_TEST_SOURCES_ROOT + FS + filename;
         ArrayList<HashMap<String, String>> data = deserializeJSON(filePath);

@@ -10,7 +10,12 @@ public class ShoppingCart extends BasePage {
     }
 
     public int getNumberOfProductsInCart() {
-        return waitForElementsToBeVisible(productsInCartBy).size();
+        try {
+            return waitForElementsToBeVisible(productsInCartBy).size();
+        }
+        catch (Exception e) {
+            return 0;
+        }
     }
 
     public String getProductName(int row) {

@@ -5,7 +5,7 @@ import org.testng.annotations.Test;
 public class ProductTest extends BaseTest {
 
     @Test(description = "Add correct product to shopping cart")
-    protected void addProductTest() throws InterruptedException {
+    protected void addProductTest() {
         LoginPage loginPage = new LoginPage(getDriver());
         CatalogPage catalogPage = loginPage.logIn("rahulshettyacademy", "learning", "", "Teacher", true);
         Assert.assertNotNull(catalogPage.waitForElementToBeVisible(catalogPage.listOfProductsBy));

@@ -3,6 +3,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public class CatalogPage extends BasePage {
     final By listOfProductsBy = By.cssSelector("app-card-list app-card");
@@ -20,7 +21,6 @@ public class CatalogPage extends BasePage {
         WebElement product = waitForElementsToBeVisible(listOfProductsBy).stream()
                 .filter(p -> p.getText().contains(productName))
                 .toList().get(0);
-        System.out.println("PRODUCT: " + product);
         product.findElement(By.cssSelector(".card-footer button")).click();
         return product;
     }

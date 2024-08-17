@@ -2,7 +2,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -17,27 +17,42 @@ abstract class BasePage {
     public BasePage(WebDriver driver) {
         this.driver = driver;
         this.js = (JavascriptExecutor) driver;
-        PageFactory.initElements(driver, this);
+        waitForJSandJQueryToLoad();
     }
 
-    public boolean waitForElementToBeVisible(WebElement element) {
-        return new WebDriverWait(driver, TIMEOUT).until(ExpectedConditions.visibilityOf(element)) != null;
+    public WebElement waitForElementToBeVisible(By locator) {
+        return new WebDriverWait(driver, TIMEOUT).until(ExpectedConditions.visibilityOfElementLocated(locator));
     }
 
-    public boolean waitForElementToBeVisible(By locator) {
-        return new WebDriverWait(driver, TIMEOUT).until(ExpectedConditions.visibilityOfElementLocated(locator)) != null;
-    }
-
-    public boolean waitForElementsToBeVisible(List<WebElement> elements) {
-        return new WebDriverWait(driver, TIMEOUT).until(ExpectedConditions.visibilityOfAllElements(elements)) != null;
-    }
-
-    public boolean waitForElementToBeInvisible(WebElement element) {
-        return new WebDriverWait(driver, TIMEOUT).until(ExpectedConditions.invisibilityOf(element));
+    public List<WebElement> waitForElementsToBeVisible(By locator) {
+        return new WebDriverWait(driver, TIMEOUT).until(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator));
     }
 
     public boolean waitForElementToBeInvisible(By locator) {
         return new WebDriverWait(driver, TIMEOUT).until(ExpectedConditions.invisibilityOfElementLocated(locator));
+    }
+
+    public void waitForJSandJQueryToLoad() {
+
+        WebDriverWait wait = new WebDriverWait(driver, TIMEOUT);
+
+        // wait for jQuery to load
+        ExpectedCondition<Boolean> isJQueryLoaded = driver -> {
+            try {
+                return ((int)js.executeScript("return jQuery.active") == 0);
+            }
+            catch (Exception e) {
+                // no jQuery present
+                return true;
+            }
+        };
+
+        // wait for Javascript to load
+        ExpectedCondition<Boolean> isJsLoaded = driver -> js.executeScript("return document.readyState")
+                .toString().equals("complete");
+
+        wait.until(isJQueryLoaded);
+        wait.until(isJsLoaded);
     }
 
     public String getURL() {

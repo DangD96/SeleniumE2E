@@ -1,27 +1,26 @@
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 public class CatalogPage extends BasePage {
-    @FindBy(css = "app-card-list app-card") private List<WebElement> productList;
-    @FindBy(partialLinkText = "Checkout") private WebElement checkoutBtn;
+    final By listOfProductsBy = By.cssSelector("app-card-list app-card");
+    final By checkoutBtnBy = By.partialLinkText("Checkout");
 
     public CatalogPage(WebDriver driver) {
         super(driver);
-        PageFactory.initElements(driver, this);
     }
 
     public int getNumberOfProducts() {
-        return productList.size();
+        return waitForElementsToBeVisible(listOfProductsBy).size();
     }
 
     public WebElement addProductToCart(String productName) {
-        WebElement product = productList.stream().filter(p -> p.getText().contains(productName)).toList().get(0);
+        WebElement product = waitForElementsToBeVisible(listOfProductsBy).stream()
+                .filter(p -> p.getText().contains(productName))
+                .toList().get(0);
+        System.out.println("PRODUCT: " + product);
         product.findElement(By.cssSelector(".card-footer button")).click();
         return product;
     }
@@ -33,7 +32,7 @@ public class CatalogPage extends BasePage {
     }
 
     public BigDecimal getProductPrice(String productName) {
-        String price = productList.stream()
+        String price = waitForElementsToBeVisible(listOfProductsBy).stream()
                 .filter(p -> p.getText().contains(productName))
                 .toList().get(0).findElement(By.cssSelector(".card-body h5"))
                 .getText().replace("$","");
@@ -41,18 +40,13 @@ public class CatalogPage extends BasePage {
     }
 
     public ShoppingCart goToShoppingCart() {
-        waitForElementToBeVisible(checkoutBtn);
-        checkoutBtn.click();
+        waitForElementToBeVisible(checkoutBtnBy).click();
         ShoppingCart cart = new ShoppingCart(driver);
-        cart.isShoppingCartVisible();
+        waitForElementToBeVisible(cart.shoppingCartBy);
         return cart;
     }
 
-    public boolean isProductListVisible() {
-        return waitForElementsToBeVisible(productList);
-    }
-
     public String getCheckoutBtnContents() {
-        return checkoutBtn.getText();
+        return waitForElementToBeVisible(checkoutBtnBy).getText();
     }
 }

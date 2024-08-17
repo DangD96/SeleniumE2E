@@ -3,7 +3,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 public class CatalogPage extends BasePage {
     final By listOfProductsBy = By.cssSelector("app-card-list app-card");

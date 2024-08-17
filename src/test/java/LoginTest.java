@@ -31,6 +31,7 @@ public class LoginTest extends BaseTest {
         CatalogPage catalogPage = loginPage.logIn("rahulshettyacademy", "learning", "", "", false);
         Assert.assertNotNull(catalogPage.waitForElementToBeVisible(catalogPage.listOfProductsBy));
         Assert.assertEquals(catalogPage.getURL(), "https://rahulshettyacademy.com/angularpractice/shop");
+        Assert.assertTrue(loginPage.waitForElementToBeInvisible(loginPage.loginButtonBy));
     }
 
     @DataProvider(parallel = true)

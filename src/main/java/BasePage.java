@@ -12,30 +12,28 @@ import java.util.List;
 abstract class BasePage {
     protected WebDriver driver;
     protected JavascriptExecutor js;
-    private final Duration TIMEOUT = Duration.ofSeconds(10);
+    private final WebDriverWait WAIT;
 
     public BasePage(WebDriver driver) {
         this.driver = driver;
         this.js = (JavascriptExecutor) driver;
-        waitForJSandJQueryToLoad();
+        this.WAIT = new WebDriverWait(driver, Duration.ofSeconds(10));
+        waitForAjax();
     }
 
     public WebElement waitForElementToBeVisible(By locator) {
-        return new WebDriverWait(driver, TIMEOUT).until(ExpectedConditions.visibilityOfElementLocated(locator));
+        return WAIT.until(ExpectedConditions.visibilityOfElementLocated(locator));
     }
 
     public List<WebElement> waitForElementsToBeVisible(By locator) {
-        return new WebDriverWait(driver, TIMEOUT).until(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator));
+        return WAIT.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator));
     }
 
     public boolean waitForElementToBeInvisible(By locator) {
-        return new WebDriverWait(driver, TIMEOUT).until(ExpectedConditions.invisibilityOfElementLocated(locator));
+        return WAIT.until(ExpectedConditions.invisibilityOfElementLocated(locator));
     }
 
-    public void waitForJSandJQueryToLoad() {
-
-        WebDriverWait wait = new WebDriverWait(driver, TIMEOUT);
-
+    public void waitForAjax() {
         // wait for jQuery to load
         // anonymous inner class
         ExpectedCondition<Boolean> isJQueryLoaded = new ExpectedCondition<Boolean>() {
@@ -59,8 +57,8 @@ abstract class BasePage {
             }
         };
 
-        wait.until(isJQueryLoaded);
-        wait.until(isJsLoaded);
+        WAIT.until(isJQueryLoaded);
+        WAIT.until(isJsLoaded);
     }
 
     public String getURL() {

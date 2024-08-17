@@ -37,19 +37,27 @@ abstract class BasePage {
         WebDriverWait wait = new WebDriverWait(driver, TIMEOUT);
 
         // wait for jQuery to load
-        ExpectedCondition<Boolean> isJQueryLoaded = driver -> {
-            try {
-                return ((int)js.executeScript("return jQuery.active") == 0);
-            }
-            catch (Exception e) {
-                // no jQuery present
-                return true;
+        // anonymous inner class
+        ExpectedCondition<Boolean> isJQueryLoaded = new ExpectedCondition<Boolean>() {
+            @Override
+            public Boolean apply(WebDriver driver) {
+                try {
+                    return ((int) js.executeScript("return jQuery.active") == 0);
+                } catch (Exception e) {
+                    // no jQuery present
+                    return true;
+                }
             }
         };
 
         // wait for Javascript to load
-        ExpectedCondition<Boolean> isJsLoaded = driver -> js.executeScript("return document.readyState")
-                .toString().equals("complete");
+        // anonymous inner class
+        ExpectedCondition<Boolean> isJsLoaded = new ExpectedCondition<Boolean>() {
+            @Override
+            public Boolean apply(WebDriver driver) {
+                return js.executeScript("return document.readyState").toString().equals("complete");
+            }
+        };
 
         wait.until(isJQueryLoaded);
         wait.until(isJsLoaded);

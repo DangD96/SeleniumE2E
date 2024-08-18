@@ -20,9 +20,9 @@ Maven run configurations follow this pattern:
 mvn clean test -D _testSuite_ -D _browser_ -D _url_
 
 Where:
-* testSuite (required): The name of your XML testing suite.
-* browser (requird): The name of the browser to test on. Supports Chrome, Edge, or Firefox.
-* url (required): The URL of the starting website for the tests.
+* testSuite: The name of your XML testing suite.
+* browser: The name of the browser to test on. Supports Chrome, Edge, or Firefox.
+* url: The URL of the starting website for the tests.
 
 # Considered but not done
 * This framework does not use TestNG's IRetryAnalyzer interface for re-running flaky tests. If tests are flaky to begin with, then they need to be updated to be more robust.

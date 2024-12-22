@@ -53,9 +53,8 @@ public abstract class BaseTest {
     protected void setUp() {
         // System props can come from the maven command line arguments or the POM file
         // I'm getting these from the maven command line arguments
-        getSuiteName();
-        getBrowser();
-        getUrl();
+        try {getSetupProperties();}
+        catch (Exception e) {throw new RuntimeException(e);}
         createReport();
         suiteStartInstant = LocalDateTime.now().toInstant(ZoneOffset.ofHours(0));
     }
@@ -97,36 +96,33 @@ public abstract class BaseTest {
     public WebDriver getDriver() {return driver.get();}
     public ExtentTest getTestMethod() {return testMethod.get();}
 
+    private void getSetupProperties() {
+        getSuiteName();
+        getBrowser();
+        getUrl();
+    }
+
     private void getBrowser() {
         browser = System.getProperty("browser");
-        if (browser == null) {earlyFlush("browser");}
+        if (browser == null) {throw new PropertyNotSpecifiedException("browser");}
         browser = browser.toUpperCase();
     }
 
     private void getUrl() {
         url = System.getProperty("url");
-        if (url == null) {earlyFlush("url");}
+        if (url == null) {throw new PropertyNotSpecifiedException("url");}
     }
 
-    private void earlyFlush(String property) {
-        createReport();
-        testMethod.set(report.createTest("Test Setup"));
-        getTestMethod().fail(new PropertyNotSpecifiedException(property));
-        report.flush();
-    }
-
+    /** Get the value in the XML file's <suite> tag name attribute. This does not refer to the XML filename. */
     private void getSuiteName() {
         suiteName = SuiteListener.suiteName;
-        if (suiteName.contains("/")) {
-            throw new InvalidXmlSuiteNameException("The / character is not allowed in the XML suite name");
-        }
+        if (suiteName.contains("/") || suiteName.isEmpty()) {throw new InvalidXmlSuiteNameException();}
     }
 
     private void createReport() {
         String filename = suiteName + " " + browser;
         String reportName = suiteName + " - " + browser;
         REPORT_SAVE_PATH = USER_DIR + FS + "test-results" + FS + filename.replace(" ", "_") + ".html"; // directory where output is to be printed
-        System.out.println(REPORT_SAVE_PATH);
         ExtentSparkReporter reporter = new ExtentSparkReporter(REPORT_SAVE_PATH);
         reporter.config().setReportName(reportName);
         reporter.config().setDocumentTitle("DJD Automation Report");

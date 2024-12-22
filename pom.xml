@@ -78,7 +78,8 @@
         <version>3.3.1</version>
         <configuration>
           <suiteXmlFiles>
-            <!-- Using testSuite system property with Surefire. Actual suite name is provided in maven run config. -->
+            <!-- Using testSuite system property with Surefire. Actual suite filename is provided in maven run config.
+                  Maven itself will throw error if not specified. -->
             <suiteXmlFile>test-suites/${testSuite}</suiteXmlFile>
           </suiteXmlFiles>
         </configuration>

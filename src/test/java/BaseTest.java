@@ -27,7 +27,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.*;
 
-@Listeners({SuiteListener.class})
+@Listeners({SuiteListener.class}) // Add listener to get name of the XML test suite
 public abstract class BaseTest {
     // Create threadsafe variables
     private static final ThreadLocal<WebDriver> driver = new ThreadLocal<>();

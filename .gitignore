@@ -16,6 +16,7 @@ target/
 out/
 test-results/
 screenshots/
+TODO.txt
 
 ### Eclipse ###
 .apt_generated

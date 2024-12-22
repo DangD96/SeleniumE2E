@@ -1,3 +1,5 @@
+package core;
+
 import org.testng.ISuite;
 import org.testng.ISuiteListener;
 

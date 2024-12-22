@@ -12,7 +12,10 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <testSuite/> <!-- This system property needs to be used by the Surefire plugin below so define it up here first -->
+
+    <!-- These system properties need to be used by the Surefire plugin below so define it up here first -->
+    <testSuite/>
+    <browser/>
   </properties>
 
   <dependencies>

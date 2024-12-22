@@ -20,7 +20,7 @@
     <dependency>
       <groupId>org.seleniumhq.selenium</groupId>
       <artifactId>selenium-java</artifactId>
-      <version>4.21.0</version>
+      <version>4.27.0</version>
     </dependency>
     <!-- https://mvnrepository.com/artifact/org.testng/testng -->
     <dependency>
@@ -66,6 +66,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.13.0</version>
         <configuration>
           <source>20</source>
           <target>20</target>
@@ -77,7 +78,8 @@
         <version>3.3.1</version>
         <configuration>
           <suiteXmlFiles>
-            <suiteXmlFile>test-suites/${testSuite}</suiteXmlFile> <!-- Using testSuite system property with Surefire -->
+            <!-- Using testSuite system property with Surefire. Actual suite name is provided in maven run config. -->
+            <suiteXmlFile>test-suites/${testSuite}</suiteXmlFile>
           </suiteXmlFiles>
         </configuration>
       </plugin>

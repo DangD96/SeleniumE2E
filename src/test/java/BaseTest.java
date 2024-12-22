@@ -40,20 +40,19 @@ public abstract class BaseTest {
     private static Instant suiteStartInstant;
     private static Instant suiteEndInstant;
 
-    // Returns something like C:\Users\david\coding\java\SeleniumE2E
-    private final String USER_DIR = System.getProperty("user.dir");
-
     // System dependent file separator (so tests can run on windows or unix)
     private final String FS = File.separator;
 
+    // Returns working/project directory. In my case, C:\Users\david\coding\java\SeleniumE2E
+    private final String USER_DIR = System.getProperty("user.dir");
     private final String PATH_TO_TEST_SOURCES_ROOT = USER_DIR+FS+"src"+FS+"test"+FS+"java";
+    private static String REPORT_SAVE_PATH;
 
-    private static String REPORT_PATH;
-
+    /** Load properties from maven run config and start up the results report */
     @BeforeSuite()
     protected void setUp() {
         // System props can come from the maven command line arguments or the POM file
-        // I'm setting these from the maven command line arguments
+        // I'm getting these from the maven command line arguments
         getSuiteName();
         getBrowser();
         getUrl();
@@ -66,7 +65,7 @@ public abstract class BaseTest {
 
     @BeforeMethod(dependsOnMethods = {"launchApp"})
     protected void createTestEntry(ITestResult result) {
-        // This implementation considers each test a method a "Test"
+        // I consider each test a method a "Test"
         // Each thread gets its own Test
         testMethod.set(report.createTest(result.getMethod().getMethodName()));
     }
@@ -77,15 +76,12 @@ public abstract class BaseTest {
             String relativePathToScreenshot = saveErrorScreenshot(); // Needs relative path from project directory
             getTestMethod().fail(result.getThrowable()).addScreenCaptureFromPath(relativePathToScreenshot);
         }
-        else {
-            getTestMethod().log(Status.PASS, "Success");
-        }
+        else {getTestMethod().log(Status.PASS, "Success");}
     }
 
+    /** Null the thread specific driver object */
     @AfterMethod(dependsOnMethods = {"listenForResult"})
-    protected void tearDown() {
-        getDriver().quit(); // Nulls thread specific driver object
-    }
+    protected void tearDown() {getDriver().quit();}
 
     @AfterSuite()
     protected void saveReport() {
@@ -94,7 +90,7 @@ public abstract class BaseTest {
         suiteEndInstant = LocalDateTime.now().toInstant(ZoneOffset.ofHours(0));
         report.setSystemInfo("Total run time", getDurationOfTestSuite());
         report.flush();
-        System.out.println("Test results can be found here: " + REPORT_PATH);
+        System.out.println("Test results can be found here: " + REPORT_SAVE_PATH);
     }
 
     // Provide methods for each thread to get their thread specific variables
@@ -103,19 +99,13 @@ public abstract class BaseTest {
 
     private void getBrowser() {
         browser = System.getProperty("browser");
-        if (browser == null) {
-            earlyFlush("browser");
-            throw new PropertyNotSpecifiedException("browser");
-        }
+        if (browser == null) {earlyFlush("browser");}
         browser = browser.toUpperCase();
     }
 
     private void getUrl() {
         url = System.getProperty("url");
-        if (url == null) {
-            earlyFlush("url");
-            throw new PropertyNotSpecifiedException("url");
-        }
+        if (url == null) {earlyFlush("url");}
     }
 
     private void earlyFlush(String property) {
@@ -133,12 +123,11 @@ public abstract class BaseTest {
     }
 
     private void createReport() {
-        // directory where output is to be printed
         String filename = suiteName + " " + browser;
         String reportName = suiteName + " - " + browser;
-        REPORT_PATH = USER_DIR + FS + "test-results" + FS + filename.replace(" ", "_") + ".html";
-        System.out.println(REPORT_PATH);
-        ExtentSparkReporter reporter = new ExtentSparkReporter(REPORT_PATH);
+        REPORT_SAVE_PATH = USER_DIR + FS + "test-results" + FS + filename.replace(" ", "_") + ".html"; // directory where output is to be printed
+        System.out.println(REPORT_SAVE_PATH);
+        ExtentSparkReporter reporter = new ExtentSparkReporter(REPORT_SAVE_PATH);
         reporter.config().setReportName(reportName);
         reporter.config().setDocumentTitle("DJD Automation Report");
         reporter.config().setTheme(Theme.DARK);
@@ -170,9 +159,8 @@ public abstract class BaseTest {
         }
         WebDriver driver = getDriver();
         driver.manage().window().maximize();
-        try {
-            driver.get(url);
-        } catch (Exception e) {
+        try {driver.get(url);}
+        catch (Exception e) {
             driver.quit();
             throw new RuntimeException(e);
         }

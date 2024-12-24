@@ -3,26 +3,41 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public class CatalogPage extends BasePage {
-    final By LIST_OF_PRODUCTS = By.cssSelector("app-card-list app-card");
+    public CatalogPage(WebDriver driver) {super(driver);}
+
+    // region Locators
+    final By PRODUCT_CARD = By.cssSelector("app-card-list app-card");
     final By CHECKOUT_BTN = By.partialLinkText("Checkout");
+    public List<WebElement> getAllProducts() {return waitForElementsToBeVisible(PRODUCT_CARD);}
+    public WebElement getCheckoutBtn() {return waitForElementToBeClickable(CHECKOUT_BTN);}
+    // endregion
 
-    public CatalogPage(WebDriver driver) {
-        super(driver);
-    }
 
-    public int getNumberOfProducts() {
-        return waitForElementsToBeVisible(LIST_OF_PRODUCTS).size();
+    // region Performers
+    public ShoppingCart goToShoppingCart() {
+        getCheckoutBtn().click();
+        return new ShoppingCart(driver);
     }
 
     public WebElement addProductToCart(String productName) {
-        WebElement product = waitForElementsToBeVisible(LIST_OF_PRODUCTS).stream()
+        WebElement product = getAllProducts().stream()
                 .filter(p -> p.getText().contains(productName))
                 .toList().get(0);
         product.findElement(By.cssSelector(".card-footer button")).click();
         return product;
     }
+    // endregion
+
+
+    // region Getters
+    public String getCheckoutBtnContents() {
+        return getCheckoutBtn().getText();
+    }
+
+    public int getNumberOfProducts() {return getAllProducts().size();}
 
     public BigDecimal getProductPrice(WebElement product) {
         String rawPriceStr = product.findElement(By.cssSelector(".card-body h5")).getText();
@@ -31,21 +46,11 @@ public class CatalogPage extends BasePage {
     }
 
     public BigDecimal getProductPrice(String productName) {
-        String price = waitForElementsToBeVisible(LIST_OF_PRODUCTS).stream()
+        String price = getAllProducts().stream()
                 .filter(p -> p.getText().contains(productName))
-                .toList().get(0).findElement(By.cssSelector(".card-body h5"))
-                .getText().replace("$","");
+                .toList().get(0)
+                .findElement(By.cssSelector(".card-body h5")).getText().replace("$","");
         return new BigDecimal(price);
     }
-
-    public ShoppingCart goToShoppingCart() {
-        waitForElementToBeVisible(CHECKOUT_BTN).click();
-        ShoppingCart cart = new ShoppingCart(driver);
-        waitForElementToBeVisible(cart.SHOPPING_CART);
-        return cart;
-    }
-
-    public String getCheckoutBtnContents() {
-        return waitForElementToBeVisible(CHECKOUT_BTN).getText();
-    }
+    // endregion
 }

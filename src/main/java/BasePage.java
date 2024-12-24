@@ -21,18 +21,26 @@ abstract class BasePage {
         waitForAjax();
     }
 
-    public WebElement waitForElementToBeVisible(By locator) {
-        return WAIT.until(ExpectedConditions.visibilityOfElementLocated(locator));
-        // Could also use ExpectedConditions.elementToBeClickable it has visibilityOfElementLocated built into it :)
+    // has visibilityOfElement built into it
+    public WebElement locateElement(By locator) {
+        return waitForElementToBeClickable(locator);
     }
 
-    public List<WebElement> waitForElementsToBeVisible(By locator) {
-        return WAIT.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator));
-    }
+    public WebElement waitForElementToBeClickable(By locator) {return WAIT.until(ExpectedConditions.elementToBeClickable(locator));}
 
-    public boolean waitForElementToBeInvisible(By locator) {
-        return WAIT.until(ExpectedConditions.invisibilityOfElementLocated(locator));
-    }
+    public WebElement waitForElementToBeClickable(WebElement element) {return WAIT.until(ExpectedConditions.elementToBeClickable(element));}
+
+    public WebElement waitForElementToBeVisible(By locator) {return WAIT.until(ExpectedConditions.visibilityOfElementLocated(locator));}
+
+    public WebElement waitForElementToBeVisible(WebElement element) {return WAIT.until(ExpectedConditions.visibilityOf(element));}
+
+    public List<WebElement> waitForElementsToBeVisible(By locator) {return WAIT.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator));}
+
+    public List<WebElement> waitForElementsToBeVisible(WebElement element) {return WAIT.until(ExpectedConditions.visibilityOfAllElements(element));}
+
+    public boolean waitForElementToBeInvisible(By locator) {return WAIT.until(ExpectedConditions.invisibilityOfElementLocated(locator));}
+
+    public boolean waitForElementToBeInvisible(WebElement element) {return WAIT.until(ExpectedConditions.invisibilityOf(element));}
 
     @SuppressWarnings("Convert2Lambda")
     public void waitForAjax() {

@@ -15,7 +15,7 @@ public class LoginTest extends BaseTest {
     protected void loginInvalid(HashMap<String, String> input) {
         LoginPage loginPage = new LoginPage(getDriver()); // Test METHODS run on parallel threads so each method needs its own page object
         loginPage.logIn(input.get("username"), input.get("password"), "", "Teacher", true);
-        Assert.assertNotNull(loginPage.waitForElementToBeVisible(loginPage.LOGIN_ERROR_MESSAGE)); // Make sure you get error
+        Assert.assertNotNull(loginPage.getLoginErrorMsg()); // Make sure you get error
     }
 
     @Test(description = "fail", enabled = false)
@@ -30,13 +30,11 @@ public class LoginTest extends BaseTest {
         loginPage.clearUsername();
         loginPage.clearPassword();
         CatalogPage catalogPage = loginPage.logIn("rahulshettyacademy", "learning", "", "", false);
-        Assert.assertNotNull(catalogPage.waitForElementToBeVisible(catalogPage.LIST_OF_PRODUCTS));
+        Assert.assertNotNull(catalogPage.getAllProducts());
         Assert.assertEquals(catalogPage.getURL(), "https://rahulshettyacademy.com/angularpractice/shop");
-        Assert.assertTrue(loginPage.waitForElementToBeInvisible(loginPage.LOGIN_BTN));
+        Assert.assertTrue(loginPage.waitForElementToBeInvisible(loginPage.getLoginBtn()));
     }
 
     @DataProvider(parallel = true)
-    public Object[] loginInvalidDataProvider() throws IOException {
-        return getTestData("LoginTestLoginInvalidData.json");
-    }
+    public Object[] loginInvalidDataProvider() throws IOException {return getTestData("LoginTestLoginInvalidData.json");}
 }

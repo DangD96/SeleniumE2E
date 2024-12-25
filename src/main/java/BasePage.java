@@ -5,11 +5,12 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.Assert;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Objects;
 
+@SuppressWarnings("unused")
 public abstract class BasePage {
     protected final WebDriver driver;
     protected final JavascriptExecutor js;
@@ -38,13 +39,15 @@ public abstract class BasePage {
 
     public boolean waitForElementToBeInvisible(WebElement element) {return WAIT.until(ExpectedConditions.invisibilityOf(element));}
 
-    public void clickElement(By locator) {waitForElementToBeClickable(locator).click();}
-
-    public void clickElement(WebElement element) {waitForElementToBeClickable(element).click();}
-
     public void typeText(WebElement element, String text) {waitForElementToBeVisible(element).sendKeys(text);}
 
     public void typeText(By locator, String text) {waitForElementToBeVisible(locator).sendKeys(text);}
+
+    public WebElement getElement(By locator) {
+        return waitForElementToBeClickable(locator);
+    }
+
+    public List<WebElement> getElements(By locator) {return waitForElementsToBeVisible(locator);}
 
     @SuppressWarnings("Convert2Lambda")
     public void waitForAjax() {
@@ -67,7 +70,7 @@ public abstract class BasePage {
         ExpectedCondition<Boolean> isJsLoaded = new ExpectedCondition<>() {
             @Override
             public Boolean apply(WebDriver driver) {
-                return js.executeScript("return document.readyState").toString().equals("complete");
+                return Objects.requireNonNull(js.executeScript("return document.readyState")).toString().equals("complete");
             }
         };
 

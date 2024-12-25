@@ -1,4 +1,4 @@
-import core.Assert;
+import core.Assertion;
 import core.BaseTest;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -15,13 +15,13 @@ public class LoginTest extends BaseTest {
     protected void loginInvalid(HashMap<String, String> input) {
         LoginPage loginPage = new LoginPage(getDriver()); // Test METHODS run on parallel threads so each method needs its own page object
         loginPage.logIn(input.get("username"), input.get("password"), "", "Teacher", true);
-        Assert.assertNotNull(loginPage.getLoginErrorMsg()); // Make sure you get error
+        Assertion.elementIsVisible(loginPage.getLoginErrorMsg());
     }
 
     @Test(description = "fail", enabled = false)
     protected void intentionalFail() throws InterruptedException {
         Thread.sleep(2000);
-        Assert.fail();
+        Assertion.fail();
     }
 
     @Test(description = "Successful Login")
@@ -30,9 +30,10 @@ public class LoginTest extends BaseTest {
         loginPage.clearUsername();
         loginPage.clearPassword();
         CatalogPage catalogPage = loginPage.logIn("rahulshettyacademy", "learning", "", "", false);
-        Assert.assertNotNull(catalogPage.getAllProducts());
-        Assert.assertEquals(catalogPage.getURL(), "https://rahulshettyacademy.com/angularpractice/shop");
-        Assert.elementIsInvisible(loginPage.getLoginBtn());
+        Assertion.elementIsVisible(catalogPage.getProductList());
+        Assertion.assertNotNull(catalogPage.getAllProducts());
+        Assertion.assertEquals(catalogPage.getURL(), "https://rahulshettyacademy.com/angularpractice/shop");
+        Assertion.elementIsInvisible(getDriver(), loginPage.LOGIN_BTN);
     }
 
     @DataProvider(parallel = true)

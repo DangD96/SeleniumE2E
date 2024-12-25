@@ -74,10 +74,20 @@ This is because this approach [is not recommended by Selenium contributors and c
 # Appendix
 
 ## Page Objects
-* (TODO)
+I split Page Object classes into 3 regions: Locators, Getters, and Performers:
+* The Locator region holds the `By` locators for the page elements.
+* The Getter region, among other things, contains wrapper methods for returning the actual `WebElement` objects. 
+  * This is done by calling the `getElement()` or `getElements()` APIs on the members of the Locator region.
+* The Performer region uses the `WebElement` objects returned from the Getter region to do things, like click.
 
+All Page Objects must extend the `BasePage` class. By doing this, all page objects will automatically wait for AJAX upon instantiation. 
+
+Additionally, by calling the superclass's constructor, Page Objects get access to JavascriptExecutor, Wait methods, and other convenience methods. 
 
 
 ## Tests
-* (TODO)
 * All test class names must end in "Test". This is a requirement for TestNG to work correctly.
+* All test classes must extend the `BaseTest` class.
+* Test methods must use the `@Test` annotation.
+* Use the custom `Assertion` class to make test assertions.
+* Test classes must be specified in an XML Test Suite file located in `test-suites` in order for the framework to pick up on them.

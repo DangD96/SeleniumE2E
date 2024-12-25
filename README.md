@@ -21,6 +21,7 @@ Example Test Suite is located in `test-suites`
 * Uses **TestNG** for assertions and test annotations.
 * Uses the **Maven Surefire plugin** to integrate with TestNG to run tests.
 * Generates a HTML Extent Report summarizing test results and how long the tests took. Test failures will have screenshots attached to them.
+  * When running tests locally, the report is saved to the `test-results` folder. 
   * I'm using the Extent Report Framework to generate a report instead of using Maven Surefire Plugin due to the former's higher level of customization.
 * Has support for TestNG's DataProvider feature to run test methods with multiple configurations.
 * All tests are run on parallel threads.
@@ -57,7 +58,7 @@ To run tests using this framework:
       * DJD Firefox Run
 
 
-# Considered but not done
+# Considered but Not Done
 
 ## IRetryAnalyzer
 This framework does not use TestNG's `IRetryAnalyzer` interface for re-running flaky tests. 

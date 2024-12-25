@@ -1,4 +1,4 @@
-package core;
+package framework;
 
 public class InvalidXmlSuiteNameException extends RuntimeException {
     public InvalidXmlSuiteNameException() {

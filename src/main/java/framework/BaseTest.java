@@ -1,4 +1,4 @@
-package core;
+package framework;
 
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;

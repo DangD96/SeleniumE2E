@@ -1,4 +1,4 @@
-package core;
+package framework;
 
 public class PropertyNotSpecifiedException extends RuntimeException {
     public PropertyNotSpecifiedException(String property) {

@@ -43,6 +43,7 @@ public abstract class BasePage {
 
     public void typeText(By locator, String text) {waitForElementToBeVisible(locator).sendKeys(text);}
 
+    /** i.e. Wait for element to be visible and interactable */
     public WebElement getElement(By locator) {
         return waitForElementToBeClickable(locator);
     }

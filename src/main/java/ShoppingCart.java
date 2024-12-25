@@ -17,6 +17,7 @@ public class ShoppingCart extends BasePage {
 
     // region Getters
     public WebElement getShoppingCart() {return getElement(SHOPPING_CART);}
+
     public List<WebElement> getAllProducts() {return getElements(PRODUCTS_IN_CART);}
 
     public int getNumberOfProductsInCart() {
@@ -31,7 +32,6 @@ public class ShoppingCart extends BasePage {
 
 
     // region Performers
-    public void removeProduct(int row) {
-        getAllProducts().get(row-1).findElement(REMOVE_PRODUCDT).click();}
+    public void removeProduct(int row) {getAllProducts().get(row-1).findElement(REMOVE_PRODUCDT).click();}
     // endregion
 }

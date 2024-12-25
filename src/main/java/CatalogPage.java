@@ -19,7 +19,9 @@ public class CatalogPage extends BasePage {
 
     // region Getters
     public WebElement getProductList() {return getElement(PRODUCT_LIST);}
+
     public List<WebElement> getAllProducts() {return getElements(PRODUCT_CARD);}
+
     public WebElement getCheckoutBtn() {return getElement(CHECKOUT_BTN);}
 
     public String getCheckoutBtnContents() {return getCheckoutBtn().getText();}

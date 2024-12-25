@@ -33,11 +33,9 @@ public class LoginPage extends BasePage {
     public CatalogPage logIn(String username, String password, String userType, String userRole, Boolean toggleTermsBox) {
         typeText(getUsernameField(), username);
         typeText(getPasswordField(), password);
-
         if (!userType.isEmpty()) selectUserType(userType);
         if (!userRole.isEmpty()) selectDropDownOption(userRole);
         if (toggleTermsBox) toggleTermsAndServices();
-
         getLoginBtn().click();
         return new CatalogPage(driver);
     }

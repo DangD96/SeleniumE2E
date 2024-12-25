@@ -3,7 +3,6 @@ package framework;
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.Status;
-import com.aventstack.extentreports.model.ReportStats;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import com.aventstack.extentreports.reporter.configuration.Theme;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -86,12 +85,10 @@ public abstract class BaseTest {
 
     @AfterSuite()
     protected void saveReport() {
-        ReportStats stats = report.getStats();
-        System.out.println("Stats: " + stats);
         suiteEndInstant = LocalDateTime.now().toInstant(ZoneOffset.ofHours(0));
         report.setSystemInfo("Total run time", getDurationOfTestSuite());
         report.flush();
-        System.out.println("Test results can be found here: " + REPORT_SAVE_PATH);
+        System.out.println("\n=====Test results can be found here: " + REPORT_SAVE_PATH + "======\n");
     }
 
     // Provide methods for each thread to get their thread specific variables

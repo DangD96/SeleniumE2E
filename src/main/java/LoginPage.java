@@ -5,7 +5,7 @@ public class LoginPage extends BasePage {
     // Pass the driver to the parent class so the methods in there work
     public LoginPage(WebDriver driver) {super(driver);}
 
-    // region Locators
+    // region Locators and Wrappers
     final By USERNAME_FIELD = By.id("username");
     final By PASSWORD_FIELD = By.id("password");
     final By ADMIN_RADIO_BTN = By.cssSelector("input[value='admin']");
@@ -14,6 +14,7 @@ public class LoginPage extends BasePage {
     final By TERMS_AND_SERVICES_CHECKBOX = By.id("terms");
     final By LOGIN_BTN = By.id("signInBtn");
     final By LOGIN_ERROR_MESSAGE = By.cssSelector(".alert.alert-danger");
+
     public WebElement getUsernameField() {return waitForElementToBeClickable(USERNAME_FIELD);}
     public WebElement getPasswordField() {return waitForElementToBeClickable(PASSWORD_FIELD);}
     public WebElement getLoginBtn() {return waitForElementToBeClickable(LOGIN_BTN);}

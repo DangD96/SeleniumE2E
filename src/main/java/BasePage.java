@@ -5,11 +5,12 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
 
 import java.time.Duration;
 import java.util.List;
 
-abstract class BasePage {
+public abstract class BasePage {
     protected final WebDriver driver;
     protected final JavascriptExecutor js;
     private final WebDriverWait WAIT;
@@ -19,11 +20,6 @@ abstract class BasePage {
         this.js = (JavascriptExecutor) driver;
         this.WAIT = new WebDriverWait(driver, Duration.ofSeconds(10));
         waitForAjax();
-    }
-
-    // has visibilityOfElement built into it
-    public WebElement locateElement(By locator) {
-        return waitForElementToBeClickable(locator);
     }
 
     public WebElement waitForElementToBeClickable(By locator) {return WAIT.until(ExpectedConditions.elementToBeClickable(locator));}
@@ -41,6 +37,14 @@ abstract class BasePage {
     public boolean waitForElementToBeInvisible(By locator) {return WAIT.until(ExpectedConditions.invisibilityOfElementLocated(locator));}
 
     public boolean waitForElementToBeInvisible(WebElement element) {return WAIT.until(ExpectedConditions.invisibilityOf(element));}
+
+    public void clickElement(By locator) {waitForElementToBeClickable(locator).click();}
+
+    public void clickElement(WebElement element) {waitForElementToBeClickable(element).click();}
+
+    public void typeText(WebElement element, String text) {waitForElementToBeVisible(element).sendKeys(text);}
+
+    public void typeText(By locator, String text) {waitForElementToBeVisible(locator).sendKeys(text);}
 
     @SuppressWarnings("Convert2Lambda")
     public void waitForAjax() {
@@ -71,7 +75,5 @@ abstract class BasePage {
         WAIT.until(isJsLoaded);
     }
 
-    public String getURL() {
-        return driver.getCurrentUrl();
-    }
+    public String getURL() {return driver.getCurrentUrl();}
 }

@@ -1,5 +1,5 @@
+import core.Assert;
 import core.BaseTest;
-import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -32,7 +32,7 @@ public class LoginTest extends BaseTest {
         CatalogPage catalogPage = loginPage.logIn("rahulshettyacademy", "learning", "", "", false);
         Assert.assertNotNull(catalogPage.getAllProducts());
         Assert.assertEquals(catalogPage.getURL(), "https://rahulshettyacademy.com/angularpractice/shop");
-        Assert.assertTrue(loginPage.waitForElementToBeInvisible(loginPage.getLoginBtn()));
+        Assert.elementIsInvisible(loginPage.getLoginBtn());
     }
 
     @DataProvider(parallel = true)

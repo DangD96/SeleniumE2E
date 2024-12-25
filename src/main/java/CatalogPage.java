@@ -12,6 +12,7 @@ public class CatalogPage extends BasePage {
     final By PRODUCT_CARD = By.cssSelector("app-card-list app-card");
     final By CHECKOUT_BTN = By.partialLinkText("Checkout");
     public List<WebElement> getAllProducts() {return waitForElementsToBeVisible(PRODUCT_CARD);}
+    public WebElement getProductCard() {return waitForElementToBeVisible(PRODUCT_CARD);}
     public WebElement getCheckoutBtn() {return waitForElementToBeClickable(CHECKOUT_BTN);}
     // endregion
 

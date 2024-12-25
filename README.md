@@ -58,9 +58,16 @@ To run tests using this framework:
 
 
 # Considered but not done
+
+## IRetryAnalyzer
 This framework does not use TestNG's `IRetryAnalyzer` interface for re-running flaky tests. 
 
-**This is bad practice**. If tests are flaky to begin with, they need to be updated to be more robust.
+**I consider this bad practice**. If tests are flaky to begin with, they need to be updated to be more robust.
+
+## PageFactory
+This framework does not use `PageFactory` to locate elements.
+
+This is because this approach [is not recommended by Selenium contributors and can lead to StaleElementExceptions](https://ultimateqa.com/pagefactory-vs-page-object/).
 
 
 # Appendix

@@ -1,7 +1,10 @@
-import core.Assertion;
-import core.BaseTest;
+import framework.Assertion;
+import framework.BaseTest;
 import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
+import page_objects.CatalogPage;
+import page_objects.LoginPage;
+import page_objects.ShoppingCart;
 
 public class ProductTest extends BaseTest {
 

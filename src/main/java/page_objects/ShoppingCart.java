@@ -1,3 +1,6 @@
+package page_objects;
+
+import framework.BasePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;

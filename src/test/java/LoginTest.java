@@ -1,7 +1,9 @@
-import core.Assertion;
-import core.BaseTest;
+import framework.Assertion;
+import framework.BaseTest;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import page_objects.CatalogPage;
+import page_objects.LoginPage;
 
 import java.io.IOException;
 import java.util.HashMap;

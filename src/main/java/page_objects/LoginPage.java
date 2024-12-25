@@ -1,3 +1,6 @@
+package page_objects;
+
+import framework.BasePage;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.Select;
 

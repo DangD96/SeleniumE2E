@@ -1,7 +1,9 @@
 # Background
 Selenium Framework written in Java for End to End (E2E) testing. Driven by an XML Test Suite.
 
-NOTE: Page objects and Tests are included to demonstrate the integration with the framework. Website under test located here: [e-commerce website](https://www.rahulshettyacademy.com/loginpagePractise/)
+Page objects and Tests are included to demonstrate the integration with the framework. 
+
+Website under test located here: [e-commerce website](https://www.rahulshettyacademy.com/loginpagePractise/)
 
 Core framework files are located in `src/main/java/framework`
 
@@ -13,7 +15,7 @@ Example Test Suite is located in `test-suites`
 
 
 # Framework Features
-* Implements Page Object Model (POM) design pattern for ease of code maintenance and clear separation of page object responsibilities.
+* Implements **Page Object Model** (POM) design pattern for ease of code maintenance and clear separation of page object responsibilities.
 * Provides the `getElement()` and `getElements()` APIs in `BasePage` to wait for elements to be visible before interacting with them.
 * Uses **Maven** for build and dependency management.
 * Uses **TestNG** for assertions and test annotations.
@@ -30,8 +32,7 @@ Example Test Suite is located in `test-suites`
 
 # Requirements
 * OS: Windows or MacOS or Linux
-* IDE: [IntelliJ Community Edition](https://www.jetbrains.com/idea/download/?section=windows)
-  * This works in Eclipse too, but I think IntelliJ is just so much smoother to use.
+* IDE: [IntelliJ Community Edition](https://www.jetbrains.com/idea/download/) (This works in Eclipse, but I think IntelliJ is much smoother to use)
 * JDK: [OpenJDK](https://openjdk.org/)
 * VCS: [Git](https://git-scm.com/downloads)
 
@@ -45,14 +46,15 @@ To run tests using this framework:
 * Create your Tests in `src/test/java`
   * The example `TestTemplate` class has been provided for reference.
   * For a more detailed explanation, see the [Tests](#Tests) section.
-* In IntelliJ, create Maven run configurations that follow this format: `mvn clean test -D<testSuite> -D<browser> -D<url>`
-  * testSuite: The name of your XML testing suite.
-  * browser: The name of the browser to test on. Takes "Chrome", "Edge", or "Firefox".
-  * url: The URL of the website for the tests.
-  * The following Maven run configurations have been provided for reference:
-    * DJD Chrome Run
-    * DJD Edge Run
-    * DJD Firefox Run
+* In IntelliJ, create Maven run configurations that follow this format: 
+  * `mvn clean test -D<testSuite> -D<browser> -D<url>`
+    * testSuite: The name of your XML testing suite.
+    * browser: The name of the browser to test on. Takes "Chrome", "Edge", or "Firefox".
+    * url: The URL of the website for the tests.
+    * The following Maven run configurations have been provided for reference:
+      * DJD Chrome Run
+      * DJD Edge Run
+      * DJD Firefox Run
 
 
 # Considered but not done

@@ -10,7 +10,7 @@ import java.util.List;
 public class ShoppingCart extends BasePage {
     public ShoppingCart(WebDriver driver) {super(driver);}
 
-    // region Locators and Wrappers
+    // region Locators
     public final By SHOPPING_CART = By.tagName("table");
     public final By PRODUCTS_IN_CART = By.cssSelector("tr:has(td[class*='col-sm'])");
     public final By PRODUCT_NAME = By.cssSelector("td .media-body h4.media-heading");

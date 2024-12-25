@@ -8,7 +8,7 @@ public class LoginPage extends BasePage {
     // Pass the driver to the parent class so the methods in there work
     public LoginPage(WebDriver driver) {super(driver);}
 
-    // region Locators and Wrappers
+    // region Locators
     public final By USERNAME_FIELD = By.id("username");
     public final By PASSWORD_FIELD = By.id("password");
     public final By ADMIN_RADIO_BTN = By.cssSelector("input[value='admin']");

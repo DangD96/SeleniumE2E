@@ -11,7 +11,7 @@ import java.util.List;
 public class CatalogPage extends BasePage {
     public CatalogPage(WebDriver driver) {super(driver);}
 
-    // region Locators and Wrappers
+    // region Locators
     public final By PRODUCT_LIST = By.cssSelector("app-card-list");
     public final By PRODUCT_CARD = By.cssSelector("app-card");
     public final By PRODUCT_PRICE = By.cssSelector(".card-body h5");

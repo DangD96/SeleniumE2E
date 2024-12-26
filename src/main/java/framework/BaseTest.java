@@ -70,7 +70,7 @@ public abstract class BaseTest {
         String methodName = result.getMethod().getMethodName();
 
         // Each thread gets its own Test
-        testMethod.set(report.createTest(className+"_"+methodName));
+        testMethod.set(report.createTest(className + "_" + methodName));
     }
 
     @AfterMethod()

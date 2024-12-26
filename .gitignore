@@ -15,7 +15,7 @@
 target/
 out/
 test-results/
-screenshots/
+error-screenshots/
 TODO.txt
 
 ### Eclipse ###

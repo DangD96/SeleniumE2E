@@ -72,11 +72,12 @@ public abstract class BaseTest {
 
     @AfterMethod()
     protected void listenForResult(ITestResult result) throws IOException {
+        ExtentTest testMethod = getTestMethod();
         if (result.getStatus() == ITestResult.FAILURE) {
-            String relativePathToScreenshot = saveErrorScreenshot(); // Needs relative path from project directory
-            getTestMethod().fail(result.getThrowable()).addScreenCaptureFromPath(relativePathToScreenshot);
+            String relativePathToScreenshot = saveErrorScreenshot(result); // Needs relative path from project directory
+            testMethod.fail(result.getThrowable()).addScreenCaptureFromPath(relativePathToScreenshot);
         }
-        else {getTestMethod().log(Status.PASS, "Success");}
+        else {testMethod.log(Status.PASS, "Success");}
     }
 
     /** Null the thread specific driver object */
@@ -161,10 +162,14 @@ public abstract class BaseTest {
         }
     }
 
-    private String saveErrorScreenshot() throws IOException {
+    private String saveErrorScreenshot(ITestResult result) throws IOException {
+        String className = result.getMethod().getRealClass().getName(); // The real class where the test method was declared
+        String methodName = result.getMethod().getMethodName();
+
         TakesScreenshot screenshotMode = (TakesScreenshot) getDriver();
         File tempFile = screenshotMode.getScreenshotAs(OutputType.FILE);
-        File destFile = new File(USER_DIR + FS + "screenshots" + FS + "screenshot.png");
+
+        File destFile = new File(USER_DIR + FS + "error-screenshots" + FS + className + "_" + methodName + ".png");
         FileUtils.copyFile(tempFile, destFile);
         String absolutePath = destFile.getAbsolutePath();
         return getPathRelativeToUserDir(absolutePath);

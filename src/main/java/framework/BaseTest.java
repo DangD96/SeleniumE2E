@@ -65,9 +65,12 @@ public abstract class BaseTest {
 
     @BeforeMethod(dependsOnMethods = {"launchApp"})
     protected void createTestEntry(ITestResult result) {
-        // I consider each test a method a "Test"
+        // I consider each test method a "Test"
+        String className = result.getMethod().getRealClass().getName(); // The real class where the test method was declared
+        String methodName = result.getMethod().getMethodName();
+
         // Each thread gets its own Test
-        testMethod.set(report.createTest(result.getMethod().getMethodName()));
+        testMethod.set(report.createTest(className+"_"+methodName));
     }
 
     @AfterMethod()

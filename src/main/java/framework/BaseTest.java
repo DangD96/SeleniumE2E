@@ -176,8 +176,16 @@ public abstract class BaseTest {
     }
 
     private String getPathRelativeToUserDir(String absolutePath) {
-        // Need to double escape for regex
-        String[] results = USER_DIR.split("\\\\"); // Split on "\"
+        String OS = System.getProperty("os.name");
+        String[] results;
+
+        if (OS.contains("Windows")) {
+            // Need to double escape for backslash in regex
+            results = USER_DIR.split("\\\\"); // Split on "\"
+        } else {
+            results = USER_DIR.split("//");   // Split on "/"
+        }
+
         String userDirAKAProjectName = results[results.length-1];
         return absolutePath.split(userDirAKAProjectName)[1]; // Get everything that comes after the project name
     }

@@ -31,4 +31,12 @@ public class ProductTest extends BaseTest {
         cart.removeProduct(1);
         Assertion.assertEquals(cart.getNumberOfProductsInCart(), 0);
     }
+
+    @Test(description = "fail", enabled = false)
+    protected void intentionalFail() throws InterruptedException {
+        LoginPage loginPage = new LoginPage(getDriver());
+        CatalogPage catalogPage = loginPage.logIn("rahulshettyacademy", "learning", "", "Teacher", true);
+        Thread.sleep(2000);
+        Assertion.fail();
+    }
 }

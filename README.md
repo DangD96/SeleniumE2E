@@ -16,7 +16,7 @@ Example Test Suite is located in `test-suites`
 
 # Framework Features
 * Implements **Page Object Model** (POM) design pattern for ease of code maintenance and clear separation of page object responsibilities.
-* Provides the `getElement()` and `getElements()` APIs in `BasePage` to wait for elements to be visible before interacting with them.
+* Provides wait methods in `BasePage` to wait for elements to be visible/clickable before interacting with them.
 * Uses **Maven** for build and dependency management.
 * Uses **TestNG** for assertions and test annotations.
 * Uses the **Maven Surefire plugin** to integrate with TestNG to run tests.
@@ -76,9 +76,8 @@ This is because this approach [is not recommended by Selenium contributors and c
 ## Page Objects
 I split Page Object classes into 3 regions: Locators, Getters, and Performers:
 * The Locator region holds the `By` locators for the page elements.
-* The Getter region, among other things, contains wrapper methods for returning the actual `WebElement` objects. 
-  * This is done by calling the `getElement()` or `getElements()` APIs on the members of the Locator region.
-* The Performer region uses the `WebElement` objects returned from the Getter region to do things, like click.
+* The Getter region can return things to be used for test assertions.
+* The Performer region contains methods that act on WebElements found by using the values in the Locator region.
 
 All Page Objects must extend the `BasePage` class. By doing this, all page objects will automatically wait for AJAX upon instantiation. 
 

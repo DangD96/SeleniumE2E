@@ -20,46 +20,35 @@ public class LoginPage extends BasePage {
     // endregion
 
 
-    // region Getters
-    public WebElement getUsernameField() {return getElement(USERNAME_FIELD);}
-    public WebElement getPasswordField() {return getElement(PASSWORD_FIELD);}
-    public WebElement getLoginBtn() {return getElement(LOGIN_BTN);}
-    public WebElement getRoleDropdown() {return getElement(ROLE_DROPDOWN);}
-    public WebElement getAdminRadioBtn() {return getElement(ADMIN_RADIO_BTN);}
-    public WebElement getUserRadioBtn() {return getElement(USER_RADIO_BTN);}
-    public WebElement getTOSCheckbox() {return getElement(TERMS_AND_SERVICES_CHECKBOX);}
-    public WebElement getLoginErrorMsg() {return getElement(LOGIN_ERROR_MESSAGE);}
-    // endregion
-
-
     // region Performers
     public CatalogPage logIn(String username, String password, String userType, String userRole, Boolean toggleTermsBox) {
-        typeText(getUsernameField(), username);
-        typeText(getPasswordField(), password);
+        typeText(waitForElementToBeVisible(USERNAME_FIELD), username);
+        typeText(waitForElementToBeVisible(PASSWORD_FIELD), password);
         if (!userType.isEmpty()) selectUserType(userType);
         if (!userRole.isEmpty()) selectDropDownOption(userRole);
         if (toggleTermsBox) toggleTermsAndServices();
-        getLoginBtn().click();
+        waitForElementToBeClickable(LOGIN_BTN).click();
         return new CatalogPage(driver);
     }
 
     public void selectDropDownOption(String option) {
-        Select roles = new Select(getRoleDropdown());
+        Select roles = new Select(waitForElementToBeVisible(ROLE_DROPDOWN));
         roles.selectByVisibleText(option);
     }
 
     public void selectUserType(String userType) {
         if (userType.equalsIgnoreCase("Admin")) {
-            getAdminRadioBtn().click();}
+            waitForElementToBeClickable(ADMIN_RADIO_BTN).click();}
         else {
-            getUserRadioBtn().click();}
+            waitForElementToBeClickable(USER_RADIO_BTN).click();}
     }
 
-    public void clearUsername() {js.executeScript("arguments[0].value = ''", getUsernameField());}
+    public void clearUsername() {js.executeScript("arguments[0].value = ''", waitForElementToBeVisible(USERNAME_FIELD));}
 
-    public void clearPassword() {js.executeScript("arguments[0].value = ''", getPasswordField());}
+    public void clearPassword() {js.executeScript("arguments[0].value = ''", waitForElementToBeVisible(PASSWORD_FIELD));}
 
     public void toggleTermsAndServices() {
-        getTOSCheckbox().click();}
+        waitForElementToBeClickable(TERMS_AND_SERVICES_CHECKBOX).click();
+    }
     // endregion
 }

@@ -17,7 +17,7 @@ public class LoginTest extends BaseTest {
     protected void loginInvalid(HashMap<String, String> input) {
         LoginPage loginPage = new LoginPage(getDriver()); // Test METHODS run on parallel threads so each method needs its own page object
         loginPage.logIn(input.get("username"), input.get("password"), "", "Teacher", true);
-        Assertion.elementIsVisible(loginPage.getLoginErrorMsg());
+        Assertion.elementIsVisible(getDriver(), loginPage.LOGIN_ERROR_MESSAGE);
     }
 
     @Test(description = "fail", enabled = false)
@@ -32,8 +32,7 @@ public class LoginTest extends BaseTest {
         loginPage.clearUsername();
         loginPage.clearPassword();
         CatalogPage catalogPage = loginPage.logIn("rahulshettyacademy", "learning", "", "", false);
-        Assertion.elementIsVisible(catalogPage.getProductList());
-        Assertion.assertNotNull(catalogPage.getAllProducts());
+        Assertion.elementIsVisible(getDriver(), catalogPage.PRODUCT_LIST);
         Assertion.assertEquals(catalogPage.getURL(), "https://rahulshettyacademy.com/angularpractice/shop");
         Assertion.elementIsInvisible(getDriver(), loginPage.LOGIN_BTN);
     }

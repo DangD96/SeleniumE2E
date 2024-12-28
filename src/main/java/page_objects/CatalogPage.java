@@ -21,15 +21,9 @@ public class CatalogPage extends BasePage {
 
 
     // region Getters
-    public WebElement getProductList() {return getElement(PRODUCT_LIST);}
+    public String getCheckoutBtnContents() {return waitForElementToBeVisible(CHECKOUT_BTN).getText();}
 
-    public List<WebElement> getAllProducts() {return getElements(PRODUCT_CARD);}
-
-    public WebElement getCheckoutBtn() {return getElement(CHECKOUT_BTN);}
-
-    public String getCheckoutBtnContents() {return getCheckoutBtn().getText();}
-
-    public int getNumberOfProducts() {return getAllProducts().size();}
+    public int getNumberOfProducts() {return waitForElementsToBeVisible(PRODUCT_CARD).size();}
 
     public BigDecimal getProductPrice(WebElement product) {
         String price = product.findElement(PRODUCT_PRICE).getText().replace("$","");
@@ -37,7 +31,7 @@ public class CatalogPage extends BasePage {
     }
 
     public BigDecimal getProductPrice(String productName) {
-        String price = getAllProducts().stream().filter(p -> p.getText().contains(productName))
+        String price = waitForElementsToBeVisible(PRODUCT_CARD).stream().filter(p -> p.getText().contains(productName))
                 .toList().get(0)
                 .findElement(PRODUCT_PRICE).getText().replace("$","");
         return new BigDecimal(price);
@@ -47,12 +41,12 @@ public class CatalogPage extends BasePage {
 
     // region Performers
     public ShoppingCart goToShoppingCart() {
-        getCheckoutBtn().click();
+        waitForElementToBeClickable(CHECKOUT_BTN).click();
         return new ShoppingCart(driver);
     }
 
     public WebElement addProductToCart(String productName) {
-        WebElement product = getAllProducts().stream()
+        WebElement product = waitForElementsToBeVisible(PRODUCT_CARD).stream()
                 .filter(p -> p.getText().contains(productName))
                 .toList().get(0);
         product.findElement(ADD_PRODUCT_BTN).click();

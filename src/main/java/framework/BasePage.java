@@ -41,16 +41,9 @@ public abstract class BasePage {
 
     public boolean waitForElementToBeInvisible(WebElement element) {return WAIT.until(ExpectedConditions.invisibilityOf(element));}
 
-    public void typeText(WebElement element, String text) {waitForElementToBeVisible(element).sendKeys(text);}
+    public void typeText(WebElement element, String text) {element.sendKeys(text);}
 
-    public void typeText(By locator, String text) {waitForElementToBeVisible(locator).sendKeys(text);}
-
-    /** i.e. Wait for element to be visible and interactable */
-    public WebElement getElement(By locator) {
-        return waitForElementToBeClickable(locator);
-    }
-
-    public List<WebElement> getElements(By locator) {return waitForElementsToBeVisible(locator);}
+    public void typeText(By locator, String text) {driver.findElement(locator).sendKeys(text);}
 
     @SuppressWarnings("Convert2Lambda")
     public void waitForAjax() {

@@ -54,7 +54,7 @@ public abstract class BasePage {
             public Boolean apply(WebDriver driver) {
                 try {
                     return ((int) js.executeScript("return jQuery.active") == 0);
-                } catch (Exception e) {
+                } catch (Exception ignored) {
                     // no jQuery present
                     return true;
                 }

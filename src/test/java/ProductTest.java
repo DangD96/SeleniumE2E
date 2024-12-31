@@ -12,7 +12,7 @@ public class ProductTest extends BaseTest {
     protected void addProductTest() {
         LoginPage loginPage = new LoginPage(getDriver());
         CatalogPage catalogPage = loginPage.logIn("rahulshettyacademy", "learning", "", "Teacher", true);
-        Assertion.assertNotNull(catalogPage.getAllProducts());
+        Assertion.assertNotNull(catalogPage.PRODUCT_LIST);
         Assertion.assertEquals(catalogPage.getNumberOfProducts(),4);
 
         // Add to cart
@@ -23,7 +23,7 @@ public class ProductTest extends BaseTest {
 
         // Verify in cart
         ShoppingCart cart = catalogPage.goToShoppingCart();
-        Assertion.elementIsVisible(cart.getShoppingCart());
+        Assertion.elementIsVisible(getDriver(), cart.SHOPPING_CART);
         Assertion.assertEquals(cart.getNumberOfProductsInCart(), 1);
         Assertion.assertEquals(cart.getProductName(1), "Nokia Edge");
 

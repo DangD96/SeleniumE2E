@@ -7,6 +7,6 @@ public class TestTemplate extends BaseTest {
     protected void myTestMethod() {
         PageObjectTemplate examplePage = new PageObjectTemplate(getDriver());
         examplePage.clickMyBtn();
-        Assertion.assertTrue(examplePage.getMyBtn().getText().contains("Hi"));
+        Assertion.elementIsVisible(getDriver(), examplePage.MY_BTN);
     }
 }

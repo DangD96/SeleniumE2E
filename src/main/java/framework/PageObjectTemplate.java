@@ -2,7 +2,6 @@ package framework;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
 public class PageObjectTemplate extends BasePage {
     /** Call superclass constructor to get access to JavascriptExecutor, Wait methods, and other convenience methods.
@@ -17,11 +16,11 @@ public class PageObjectTemplate extends BasePage {
 
 
     // region Getters
-    public WebElement getMyBtn() {return getElement(MY_BTN);}
+    public String getMyBtnText() {return waitForElementToBeVisible(MY_BTN).getText();}
     // endregion
 
 
     // region Performers
-    public void clickMyBtn() {getMyBtn().click();}
+    public void clickMyBtn() {waitForElementToBeClickable(MY_BTN).click();}
     // endregion
 }

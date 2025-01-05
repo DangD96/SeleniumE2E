@@ -183,7 +183,9 @@ public abstract class BaseTest {
         String[] results;
 
         if (OS.contains("Windows")) {
-            // Need to double escape for backslash in regex
+            // Because backslash is a special character in both regex AND string literals,
+            // need to double escape so the resulting string evalutates as "\\"
+            // i.e. match on a literal single backslash
             results = USER_DIR.split("\\\\"); // Split on "\"
         } else {
             results = USER_DIR.split("/");   // Split on "/"

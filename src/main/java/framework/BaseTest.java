@@ -186,7 +186,7 @@ public abstract class BaseTest {
             // Need to double escape for backslash in regex
             results = USER_DIR.split("\\\\"); // Split on "\"
         } else {
-            results = USER_DIR.split("//");   // Split on "/"
+            results = USER_DIR.split("/");   // Split on "/"
         }
 
         String userDirAKAProjectName = results[results.length-1];

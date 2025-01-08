@@ -9,6 +9,8 @@
 name: Java CI with Maven
 
 on:
+  schedule:
+    - cron: "0 15 * * MON-FRI"
   push:
     branches: [ "master", "github-actions" ]
   pull_request:

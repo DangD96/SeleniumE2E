@@ -104,7 +104,7 @@ public abstract class BaseTest {
         getSuiteName();
         getBrowser();
         getUrl();
-
+        getEnv();
     }
 
     private void getBrowser() {
@@ -124,7 +124,9 @@ public abstract class BaseTest {
         if (suiteName.contains("/") || suiteName.isEmpty()) {throw new InvalidXmlSuiteNameException();}
     }
 
-    private void getEnv() {env = System.getProperty("env");}
+    private void getEnv() {
+        env = System.getProperty("env");
+    }
 
     private void createReport() {
         String filename = suiteName + " " + browser;

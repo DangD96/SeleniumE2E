@@ -93,7 +93,9 @@ public abstract class BaseTest {
         suiteEndInstant = LocalDateTime.now().toInstant(ZoneOffset.ofHours(0));
         report.setSystemInfo("Total run time", getDurationOfTestSuite());
         report.flush();
-        System.out.println("\n=====Test results can be found here: " + REPORT_SAVE_PATH + "======\n");
+        if (!"PRD".equals(env)) {
+            System.out.println("\n=====Test results can be found here: " + REPORT_SAVE_PATH + "======\n");
+        }
     }
 
     // Provide methods for each thread to get their thread specific variables

@@ -25,3 +25,9 @@ jobs:
 
       - name: Run tests with Maven
         run: mvn clean test -Denv=PRD -Dbrowser=chrome -DtestSuite=DJDSuite.xml -Durl=https://www.rahulshettyacademy.com/loginpagePractise/
+
+      - name: Upload HTML Results Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: Test Results
+          path: test-results/*.html # Match any HTML file under the test-results directory

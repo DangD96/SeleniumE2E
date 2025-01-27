@@ -1,0 +1,27 @@
+name: Selenium Tests in GitHub Runner
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      # Only trigger workflow when pushing to master branch with changes to files under these directories
+      - 'src/**'
+      - '.github/workflows/**'
+      - 'test-suites/**'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    # This image comes with multiple things pre-installed so don't have to install them in this yaml file
+    # -Maven
+    # -Java 17
+    # -Chrome, Edge, and Firefox browsers
+    # https://github.com/actions/runner-images?tab=readme-ov-file#available-images
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run tests with Maven
+        run: mvn clean test -Denv=PRD -Dbrowser=chrome -DtestSuite=DJDSuite.xml -Durl=https://www.rahulshettyacademy.com/loginpagePractise/

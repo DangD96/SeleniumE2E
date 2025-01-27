@@ -38,6 +38,7 @@ public abstract class BaseTest {
     private static ExtentReports report;
     private static String browser;
     private static String url;
+    private static String env;
     private static Instant suiteStartInstant;
     private static Instant suiteEndInstant;
 
@@ -103,6 +104,7 @@ public abstract class BaseTest {
         getSuiteName();
         getBrowser();
         getUrl();
+
     }
 
     private void getBrowser() {
@@ -122,6 +124,8 @@ public abstract class BaseTest {
         if (suiteName.contains("/") || suiteName.isEmpty()) {throw new InvalidXmlSuiteNameException();}
     }
 
+    private void getEnv() {env = System.getProperty("env");}
+
     private void createReport() {
         String filename = suiteName + " " + browser;
         String reportName = suiteName + " - " + browser;
@@ -140,25 +144,40 @@ public abstract class BaseTest {
             case "EDGE":
                 // https://peter.sh/experiments/chromium-command-line-switches/
                 EdgeOptions edgeOptions = new EdgeOptions();
+                if ("PRD".equals(env)) {
+                    edgeOptions.addArguments("--no-sandbox"); // sandboxing has potential to cause issues in automated testing envs
+                    edgeOptions.addArguments("--disable-dev-shm-usage");
+                    edgeOptions.addArguments("--headless"); // PRD tests will run in GitHub Runner environment, which is headless
+                }
                 edgeOptions.addArguments("--guest"); // Need to add this so Edge doesn't show random popups
                 driver.set(new EdgeDriver(edgeOptions));
                 break;
             case "FIREFOX":
                 // https://wiki.mozilla.org/Firefox/CommandLineOptions
                 FirefoxOptions firefoxOptions = new FirefoxOptions();
+                if ("PRD".equals(env)) {
+                    firefoxOptions.addArguments("-headless");
+                }
                 firefoxOptions.addArguments("-private");
                 driver.set(new FirefoxDriver(firefoxOptions));
                 break;
             default:
                 // https://peter.sh/experiments/chromium-command-line-switches/
                 ChromeOptions chromeOptions = new ChromeOptions();
+                if ("PRD".equals(env)) {
+                    chromeOptions.addArguments("--no-sandbox");
+                    chromeOptions.addArguments("--disable-dev-shm-usage");
+                    chromeOptions.addArguments("--headless");
+                }
                 chromeOptions.addArguments("--guest");
                 driver.set(new ChromeDriver(chromeOptions)); // set driver variable in current thread
                 break;
         }
         WebDriver driver = getDriver();
         driver.manage().window().maximize();
-        try {driver.get(url);}
+        try {
+            driver.get(url);
+        }
         catch (Exception e) {
             driver.quit();
             throw new RuntimeException(e);

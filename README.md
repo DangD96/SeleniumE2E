@@ -48,7 +48,10 @@ To run tests using this framework:
   * The example `TestTemplate` class has been provided for reference.
   * For a more detailed explanation, see the [Tests](#Tests) section.
 * In IntelliJ, create Maven run configurations that follow this format: 
-  * `mvn clean test -D<testSuite> -D<browser> -D<url>`
+  * `mvn clean test -D<env> -D<testSuite> -D<browser> -D<url>`\
+    * env: Where the tests run. 
+      * If set to "PRD", tests will run in a headless browser. This is a requirement for running with GitHub Actions because the Runner is headless.
+      * If set to anything else or empty, tests will run on the full browser. This is useful for local debugging.
     * testSuite: The name of your XML testing suite.
     * browser: The name of the browser to test on. Takes "Chrome", "Edge", or "Firefox".
     * url: The URL of the website for the tests.

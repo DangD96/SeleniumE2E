@@ -16,6 +16,7 @@ public class CatalogPage extends BasePage {
     public final By PRODUCT_PRICE = By.cssSelector(".card-body h5");
     public final By ADD_PRODUCT_BTN = By.cssSelector(".card-footer button");
     public final By CHECKOUT_BTN = By.partialLinkText("Checkout");
+    public final By ANNOYING_BLINKING_TEXT = By.className("blinkingText");
     // endregion
 
 
@@ -40,6 +41,7 @@ public class CatalogPage extends BasePage {
 
     // region Performers
     public ShoppingCart goToShoppingCart() {
+        js.executeScript("arguments[0].remove()", waitForElementToBeVisible(ANNOYING_BLINKING_TEXT));
         waitForElementToBeClickable(CHECKOUT_BTN).click();
         return new ShoppingCart(driver);
     }

@@ -1,3 +1,13 @@
+# Table of Contents
+- [Background](#background)
+- [Framework Features](#framework-features)
+- [Requirements](#requirements)
+- [How To Run Tests](#how-to-run-tests)
+- [Continuous Integration (CI) with GitHub Actions](#continuous-integration-ci-with-github-actions)
+- [Considered but Not Done](#considered-but-not-done)
+- [Appendix](#appendix)
+
+
 # Background
 Selenium Framework written in Java for End to End (E2E) testing. Driven by an XML Test Suite. Tests can be run locally or remotely (via GitHub Actions).
 
@@ -38,7 +48,7 @@ Example Test Suite is located in: `test-suites`
 * Java Version: 17
 
 
-# Running Tests
+# How To Run Tests
 To run tests locally using this framework:
 * Clone this repository.
 * Create your Page Objects in `src/main/java/page_objects`
@@ -59,7 +69,19 @@ To run tests locally using this framework:
     * DJD Firefox Run
 > **Note**: `BaseTest.getSetupProperties()` also retrieves an "env" property. If you run tests locally, this property does not need to be included in the Maven run configuration.
 > However, I also set up this repository to run remotely via GitHub Actions. When running remotely, the "env" property must be set to "PRD" to make the tests run on headless browsers.
-> This is because GitHub's Runners are headless environments. For more info about this, refer to the [Continuous Integration (CI) with GitHub Actions](#continuous-integration-ci-with-github-actions) section.
+> This is because GitHub's Runners are headless environments. For more info about this, refer to the **Continuous Integration (CI) with GitHub Actions** section below.
+
+
+# Continuous Integration (CI) with GitHub Actions
+I configured this repository to run via GitHub Actions as well so we can get some Continuous Integration. This is controlled by the [.github/workflows/actions.yml](https://github.com/DangD96/SeleniumE2E/blob/master/.github/workflows/actions.yml) file.
+
+With GitHub Actions CI:
+* Tests can be triggered to run upon pushing to the master branch with changes to files under specific directories.
+* Tests can be manually triggered to run by going to the [Actions tab and selecting the Selenium Tests in GitHub Runner workflow](https://github.com/DangD96/SeleniumE2E/actions/workflows/actions.yml).
+* Tests are configured to run on a schedule using Cron:
+  * On the 10th of every month, tests will run on Chrome.
+  * On the 20th of every month, tests will run on Edge.
+  * On the 30th of every month, tests will run on Firefox.
 
 
 # Considered but Not Done
@@ -92,15 +114,3 @@ All Page Objects extend the `BasePage` superclass. By doing this, all page objec
 * Test methods must use the `@Test` annotation.
 * Use the custom `Assertion` class to make test assertions.
 * Test classes must be specified in an XML Test Suite file located in `test-suites` in order for the framework to pick up on them.
-
-
-## Continuous Integration (CI) with GitHub Actions
-I configured this repository to run via GitHub Actions as well so we can get some Continuous Integration. This is controlled by the [.github/workflows/actions.yml](https://github.com/DangD96/SeleniumE2E/blob/master/.github/workflows/actions.yml) file.
-
-With GitHub Actions CI:
-* Tests can be triggered to run upon pushing to the master branch with changes to files under specific directories.
-* Tests can be manually triggered to run by going to the [Actions tab and selecting the Selenium Tests in GitHub Runner workflow](https://github.com/DangD96/SeleniumE2E/actions/workflows/actions.yml).
-* Tests are configured to run on a schedule using Cron:
-  * On the 10th of every month, tests will run on Chrome.
-  * On the 20th of every month, tests will run on Edge.
-  * On the 30th of every month, tests will run on Firefox.

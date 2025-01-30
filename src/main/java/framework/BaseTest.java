@@ -165,7 +165,7 @@ public abstract class BaseTest {
                 firefoxOptions.addArguments("-private");
                 driver.set(new FirefoxDriver(firefoxOptions));
                 break;
-            default:
+            case "CHROME":
                 // https://peter.sh/experiments/chromium-command-line-switches/
                 ChromeOptions chromeOptions = new ChromeOptions();
                 if ("PRD".equals(env)) {
@@ -176,6 +176,8 @@ public abstract class BaseTest {
                 chromeOptions.addArguments("--guest");
                 driver.set(new ChromeDriver(chromeOptions)); // set driver variable in current thread
                 break;
+            default:
+                throw new IllegalArgumentException("Browser not supported: " + browser);
         }
         WebDriver driver = getDriver();
         driver.manage().window().maximize();

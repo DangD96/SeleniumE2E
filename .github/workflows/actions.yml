@@ -11,7 +11,7 @@ on:
       - 'test-suites/**'
   workflow_dispatch:
     inputs:
-      browser:
+      run_browser:
         description: 'Pick browser to run tests on'
         required: true
         default: 'Chrome'
@@ -35,11 +35,12 @@ jobs:
 
       - name: Determine browser to run on
         # On push, run on Chrome. Otherwise (on workflow dispatch), run based on user input
+        # $GITHUB_ENV is a file used by GitHub Actions. Appending key-value pairs to the file allows you to define environment variables
         run: |
           if ["${{github.event_name}}" == "push"]; then
             echo "BROWSER=Chrome" >> $GITHUB_ENV
           else
-            echo "BROWSER=${{github.event.inputs.browser}}" >> $GITHUB_ENV
+            echo "BROWSER=${{github.event.inputs.run_browser}}" >> $GITHUB_ENV
           fi
 
       - name: Run tests with Maven

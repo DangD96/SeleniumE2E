@@ -1,14 +1,16 @@
 name: Selenium Tests in GitHub Runner
 
 on:
+  # Trigger workflow when pushing to specific branch with changes to files under specific directories
   push:
     branches:
       - master
-    # Trigger workflow when pushing to master branch with changes to files under these directories
     paths:
       - 'src/**'
       - '.github/workflows/**'
       - 'test-suites/**'
+
+  # Trigger workflow manually from GitHub website
   workflow_dispatch:
     inputs:
       run_browser:
@@ -20,7 +22,8 @@ on:
           - Chrome
           - Edge
           - Firefox
-  # Cron jobs run in UTC by default in GitHub Actions
+
+  # Configure workflow to run on a schedule. Cron jobs run in UTC by default in GitHub Actions
   schedule:
     - cron: '0 0 10 * *'  # Runs at midnight UTC on the 10th of every month (Chrome)
     - cron: '0 0 20 * *'  # Runs at midnight UTC on the 20th of every month (Edge)
@@ -31,8 +34,8 @@ jobs:
     # Manually skip tests by including "/djd skip tests" in commit message. Useful when making changes to comments
     if: "!contains(github.event.head_commit.message, '/djd skip tests')"
 
-    # The ubuntu-latest image comes with multiple things pre-installed so don't have to install them in this yaml file
-    # Maven, Java 17, Chrome, Edge, and Firefox browsers
+    # The ubuntu-latest image comes with multiple things pre-installed so don't have to install them as part of this yaml file
+    # Maven, Java 17, Chrome, Edge, and Firefox browsers come pre-installed
     # https://github.com/actions/runner-images?tab=readme-ov-file#available-images
     runs-on: ubuntu-latest
 
@@ -41,8 +44,8 @@ jobs:
         uses: actions/checkout@v4
 
       # $GITHUB_ENV is a file used by GitHub Actions. Key-value pairs are appended (>>) to it to define env variables
-      # 1st if statement executes if github.event.inputs.run_browser is NOT NULL (On manual input from GitHub website)
-      # $(date +%d) function in 2nd-4th if statements returns the day as a two digit number (Cron schedule)
+      # 1st if-statement executes if github.event.inputs.run_browser is NOT NULL (On manual input from GitHub website)
+      # $(date +%d) function in 2nd-4th if-statements returns the day as a two digit number (Cron schedule)
       # Default behavior is to run tests on Chrome (On code push)
       - name: Set browser
         run: |
@@ -61,7 +64,7 @@ jobs:
       - name: Run tests with Maven
         run: mvn clean test -Denv=PRD -Dbrowser=$BROWSER -DtestSuite=DJDSuite.xml -Durl=https://www.rahulshettyacademy.com/loginpagePractise/
 
-      - name: Upload HTML Results Report
+      - name: Upload HTML results report
         uses: actions/upload-artifact@v4
         with:
           name: Test Results

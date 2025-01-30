@@ -58,7 +58,7 @@ To run tests locally using this framework:
     * DJD Edge Run
     * DJD Firefox Run
 > **Note**: `BaseTest.getSetupProperties()` also retrieves an "env" property. If you run tests locally, this property does not need to be included in the Maven run configuration.
-> However, I also set up this repository to run via GitHub Actions, so when running via that method, the "env" property must be set to "PRD" to make the tests run on headless browsers.
+> However, I also set up this repository to run remotely via GitHub Actions. When running remotely, the "env" property must be set to "PRD" to make the tests run on headless browsers.
 > This is because GitHub's Runners are headless environments. For more info about this, refer to the [Continuous Integration (CI) with GitHub Actions](#continuous-integration-ci-with-github-actions) section.
 
 
@@ -92,6 +92,7 @@ All Page Objects extend the `BasePage` superclass. By doing this, all page objec
 * Test methods must use the `@Test` annotation.
 * Use the custom `Assertion` class to make test assertions.
 * Test classes must be specified in an XML Test Suite file located in `test-suites` in order for the framework to pick up on them.
+
 
 ## Continuous Integration (CI) with GitHub Actions
 I configured this repository to run via GitHub Actions as well so we can get some Continuous Integration. This is controlled by the [.github/workflows/actions.yml](https://github.com/DangD96/SeleniumE2E/blob/master/.github/workflows/actions.yml) file.

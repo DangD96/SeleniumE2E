@@ -12,9 +12,10 @@ on:
   workflow_dispatch:
     inputs:
       run_browser:
-        description: 'Pick browser to run tests on'
+        description: 'Pick a browser to run tests on'
         required: true
         default: 'Chrome'
+        type: choice
         options:
           - Chrome
           - Edge
@@ -33,18 +34,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Determine browser to run on
-        # On push, run on Chrome. Otherwise (on workflow dispatch), run based on user input
-        # $GITHUB_ENV is a file used by GitHub Actions. Appending key-value pairs to the file allows you to define environment variables
-        run: |
-          if ["${{github.event_name}}" == "push"]; then
-            echo "BROWSER=Chrome" >> $GITHUB_ENV
-          else
-            echo "BROWSER=${{github.event.inputs.run_browser}}" >> $GITHUB_ENV
-          fi
-
       - name: Run tests with Maven
-        run: mvn clean test -Denv=PRD -Dbrowser=$BROWSER -DtestSuite=DJDSuite.xml -Durl=https://www.rahulshettyacademy.com/loginpagePractise/
+        run: mvn clean test -Denv=PRD -Dbrowser=${{github.event.inputs.run_browser}} -DtestSuite=DJDSuite.xml -Durl=https://www.rahulshettyacademy.com/loginpagePractise/
 
       - name: Upload HTML Results Report
         uses: actions/upload-artifact@v4

@@ -34,8 +34,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # $GITHUB_ENV is a file used by GitHub Actions. Takes (>>) key-value pairs to define env variables
+      # BROWSER env variable will either be what you pick from GitHub (run_browser) or "Chrome" if run_browser is null (which happens on push)
+      - name: Set browser
+        run: echo "BROWSER=${{ github.event.inputs.run_browser || 'Chrome' }}" >> $GITHUB_ENV
+
       - name: Run tests with Maven
-        run: mvn clean test -Denv=PRD -Dbrowser=${{github.event.inputs.run_browser}} -DtestSuite=DJDSuite.xml -Durl=https://www.rahulshettyacademy.com/loginpagePractise/
+        run: mvn clean test -Denv=PRD -Dbrowser=$BROWSER -DtestSuite=DJDSuite.xml -Durl=https://www.rahulshettyacademy.com/loginpagePractise/
 
       - name: Upload HTML Results Report
         uses: actions/upload-artifact@v4

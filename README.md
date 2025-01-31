@@ -1,13 +1,3 @@
-# Table of Contents
-- [Background](#background)
-- [Framework Features](#framework-features)
-- [Requirements](#requirements)
-- [How To Run Tests](#how-to-run-tests)
-- [Continuous Integration (CI) with GitHub Actions](#continuous-integration-ci-with-github-actions)
-- [Considered but Not Done](#considered-but-not-done)
-- [Appendix](#appendix)
-
-
 # Background
 Selenium Framework written in Java for End to End (E2E) testing. Driven by an XML Test Suite. Tests can be run locally or remotely (via GitHub Actions).
 

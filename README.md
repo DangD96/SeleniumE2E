@@ -82,6 +82,7 @@ With GitHub Actions CI:
   * On the 10th of every month, tests will run on Chrome.
   * On the 20th of every month, tests will run on Edge.
   * On the 30th of every month, tests will run on Firefox.
+  * I receive an email upon completion of a scheduled test.
 
 
 # Considered but Not Done

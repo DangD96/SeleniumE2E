@@ -25,9 +25,9 @@ on:
 
   # Configure workflow to run on a schedule. Cron jobs run in UTC by default in GitHub Actions
   schedule:
-    - cron: '0 0 10 * *'  # Runs at midnight UTC on the 10th of every month (Chrome)
-    - cron: '0 0 20 * *'  # Runs at midnight UTC on the 20th of every month (Edge)
-    - cron: '0 0 30 * *'  # Runs at midnight UTC on the 30th of every month (Firefox)
+    - cron: '0 8 10 * *'  # Runs at 8 AM UTC (2 AM CST) on the 10th of every month (Chrome)
+    - cron: '0 8 20 * *'  # Runs at 8 AM UTC (2 AM CST) on the 20th of every month (Edge)
+    - cron: '0 8 30 * *'  # Runs at 8 AM UTC (2 AM CST) on the 30th of every month (Firefox)
 
 jobs:
   test:
@@ -69,3 +69,17 @@ jobs:
         with:
           name: Test Results
           path: test-results/*.html # Match and upload any HTML file under the test-results directory
+
+      - name: Send email after SCHEDULED runs
+        if: github.event_name == 'schedule'
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 587
+          username: ${{ secrets.SMTP_USERNAME }}
+          password: ${{ secrets.SMTP_PASSWORD }}
+          subject: "GitHub Actions: Test Run Results"
+          body: "Scheduled test run has completed. Download results at https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          to: "davidjdang81@gmail.com"
+          from: "GitHub Actions"
+          content_type: text/plain

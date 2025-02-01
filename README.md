@@ -1,3 +1,15 @@
+# For Fun
+Files:         25<br>
+Lines:         1186<br>
+Blanks:        157<br>
+Comments:      79<br>
+Lines of Code: 950<br>
+
+Source: https://codetabs.com/count-loc/count-loc-online.html
+
+_As of February 1, 2025_
+
+
 # Background
 Selenium Framework written in Java for End to End (E2E) testing. Driven by an XML Test Suite. Tests can be run locally or remotely (via GitHub Actions).
 

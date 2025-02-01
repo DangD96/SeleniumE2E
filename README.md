@@ -23,7 +23,7 @@ Example Test Suite is located in: `test-suites`
 * Generates a HTML report summarizing test results and how long the tests took. Test failures have screenshots attached to them.
   * When running tests locally, the report is saved to the `test-results` folder. 
   * > **Note**: I'm using the Extent Report Framework to generate the report instead of using Maven Surefire Plugin due to the former's higher level of customization.
-* Has support for TestNG's DataProvider feature to run test methods with multiple configurations.
+* Has support for TestNG's DataProvider feature to run test methods with multiple configurations. For more details, refer to the [Data Provider](#data-provider) section.
 * All tests are run on parallel threads.
 * Supports tests on the following browsers:
   * Google Chrome
@@ -105,3 +105,21 @@ All Page Objects extend the `BasePage` superclass. By doing this, all page objec
 * Test methods must use the `@Test` annotation.
 * Use the custom `Assertion` class to make test assertions.
 * Test classes must be specified in an XML Test Suite file located in `test-suites` in order for the framework to pick up on them.
+
+
+## Data Provider
+I included integration with TestNG's Data Provider feature so certain test methods can run with multiple sets of test data. For example, a test method that tests login credentials can take advantage of a Data Provider to efficiently test multiple combinations of usernames and passwords.
+
+_Guidelines for use:_
+
+**Create JSON File**
+* In `src/test/java/data` create a JSON file containing a single JSON array. Give the file a name that is easily distinguishable.
+* For each combination you want to test, add that many JSON objects to the array. In each JSON object, define a uniform set of keys and then enter the values you want to test with.
+>**Note:** See `src/test/java/data/LoginTestLoginInvalidData.json` for an example.
+
+**Create Data Provider Method To Get JSON Data and Link It To Test Method**
+* In your `*Test.java` class, define a method that returns `Object[]` and has the @DataProvider annotation. In the method body, return the result of the call to `getTestData(<filename of your JSON file>)`. This is your Data Provider method that retrieves the test data from the JSON file.
+* In your `*Test.java` class, find the @Test method you want to use the Data Provider on and link it to your Data Provider method by using the `dataProvider` parameter and specifying the name of your method from the step above.
+* Update your test method's parameters so it only takes a single parameter of type `HashMap<String, String>`. I called this parameter `input`.
+* Now, in your test method body, whenever you want to use your test data, call `input.get(<json key name of the data you want>)`.
+> **Note:** See `src/test/java/LoginTest.java` for an example.

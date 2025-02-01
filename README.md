@@ -1,9 +1,11 @@
 # For Fun
-Files:         25<br>
-Lines:         1186<br>
-Blanks:        157<br>
-Comments:      79<br>
-Lines of Code: 950<br>
+|     Metric      | Count |
+|:---------------:|:-----:|
+|      Files      |  25   |
+|      Lines      | 1186  |
+|     Blanks      |  157  |
+|    Comments     |  79   |
+|  Lines of Code  |  950  |
 
 Source: https://codetabs.com/count-loc/count-loc-online.html
 

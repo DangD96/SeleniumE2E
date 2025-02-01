@@ -68,8 +68,8 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.13.0</version>
         <configuration>
-          <source>17</source> <!-- Use compiler version 17 to match up with Java version 17 in use for project -->
-          <target>17</target>
+          <!-- Use compiler version 17 to match up with Java version 17 in use for project -->
+          <release>17</release>
         </configuration>
       </plugin>
       <plugin>

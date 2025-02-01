@@ -21,7 +21,7 @@
     <td align="right">959</td>
   </tr>
 </table>
-  <img src="images/squirtle_thumbs_up.png" alt="Project Logo" width="200" height="150">
+<img src="images/squirtle_thumbs_up.png" alt="Project Logo" width="200" height="150">
 
 Source: https://codetabs.com/count-loc/count-loc-online.html
 

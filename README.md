@@ -1,11 +1,27 @@
 # For Fun
-|     Metric      | Count |
-|:---------------:|:-----:|
-|      Files      |  25   |
-|      Lines      | 1186  |
-|     Blanks      |  157  |
-|    Comments     |  79   |
-|  Lines of Code  |  950  |
+<table>
+  <tr>
+    <td><strong>Files:</strong></td>
+    <td align="right">25</td>
+  </tr>
+  <tr>
+    <td><strong>Lines:</strong></td>
+    <td align="right">1186</td>
+  </tr>
+  <tr>
+    <td><strong>Blanks:</strong></td>
+    <td align="right">157</td>
+  </tr>
+  <tr>
+    <td><strong>Comments:</strong></td>
+    <td align="right">79</td>
+  </tr>
+  <tr>
+    <td><strong>Lines of Code:</strong></td>
+    <td align="right">950</td>
+  </tr>
+</table>
+  <img src="images/squirtle_thumbs_up.png" alt="Project Logo" width="200" height="150">
 
 Source: https://codetabs.com/count-loc/count-loc-online.html
 

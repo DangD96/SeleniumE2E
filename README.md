@@ -9,8 +9,6 @@
 
 Source: https://codetabs.com/count-loc/count-loc-online.html
 
-_As of February 1, 2025_
-
 
 # Background
 Selenium Framework written in Java for End to End (E2E) testing. Driven by an XML Test Suite. Tests can be run locally or remotely (via GitHub Actions).

@@ -232,7 +232,7 @@ public abstract class BaseTest {
 
     @SuppressWarnings("SameParameterValue")
     protected Object[] getTestData(String filename) throws IOException {
-        String filePath = PATH_TO_TEST_SOURCES_ROOT + FS + filename;
+        String filePath = PATH_TO_TEST_SOURCES_ROOT + FS + "data" + FS + filename;
         ArrayList<HashMap<String, String>> data = deserializeJSON(filePath);
         int size = data.size();
         Object[] objAry = new Object[size]; // Object array to store the hashmaps

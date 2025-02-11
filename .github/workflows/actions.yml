@@ -82,4 +82,3 @@ jobs:
           body: "Scheduled test run has completed. Download results at https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           to: "davidjdang81@gmail.com"
           from: "GitHub Actions"
-          content_type: text/plain

@@ -70,6 +70,8 @@ jobs:
           name: Test Results
           path: test-results/*.html # Match and upload any HTML file under the test-results directory
 
+      # Have to create and use app password instead of regular password to authenticate
+      # https://support.google.com/accounts/answer/185833?visit_id=638748503085955270-2173767296&p=InvalidSecondFactor&rd=1
       - name: Send email after SCHEDULED runs
         if: github.event_name == 'schedule'
         uses: dawidd6/action-send-mail@v3
@@ -77,7 +79,7 @@ jobs:
           server_address: smtp.gmail.com
           server_port: 587
           username: ${{ secrets.SMTP_USERNAME }}
-          password: ${{ secrets.SMTP_PASSWORD }}
+          password: ${{ secrets.SMTP_APP_PASSWORD }}
           subject: "GitHub Actions: Test Run Results"
           body: "Scheduled test run has completed. Download results at https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           to: "davidjdang81@gmail.com"

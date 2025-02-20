@@ -6,19 +6,19 @@
   </tr>
   <tr>
     <td><strong>Lines:</strong></td>
-    <td align="right">1198</td>
+    <td align="right">1217</td>
   </tr>
   <tr>
     <td><strong>Blanks:</strong></td>
-    <td align="right">160</td>
+    <td align="right">161</td>
   </tr>
   <tr>
     <td><strong>Comments:</strong></td>
-    <td align="right">79</td>
+    <td align="right">81</td>
   </tr>
   <tr>
     <td><strong>Lines of Code:</strong></td>
-    <td align="right">959</td>
+    <td align="right">975</td>
   </tr>
 </table>
 <img src="images/squirtle_thumbs_up.png" alt="Project Logo" width="200" height="150">

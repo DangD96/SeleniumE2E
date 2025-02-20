@@ -100,7 +100,9 @@ With GitHub Actions CI:
   * On the 10th of every month, tests will run on Chrome.
   * On the 20th of every month, tests will run on Edge.
   * On the 30th of every month, tests will run on Firefox.
-  * I receive an email upon completion of a scheduled test.
+
+I receive an email upon completion of a scheduled test:
+![scheduled_run_email_result](/images/result_email.png)
 
 
 # Considered but Not Done

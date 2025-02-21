@@ -60,6 +60,7 @@ jobs:
           else
             echo "BROWSER=Chrome" >> $GITHUB_ENV
           fi
+          echo "Starting tests on: $BROWSER"
 
       - name: Run tests with Maven
         run: mvn clean test -Denv=PRD -Dbrowser=$BROWSER -DtestSuite=DJDSuite.xml -Durl=https://www.rahulshettyacademy.com/loginpagePractise/
@@ -80,7 +81,7 @@ jobs:
           server_port: 587
           username: ${{ secrets.SMTP_USERNAME }}
           password: ${{ secrets.SMTP_APP_PASSWORD }}
-          subject: "GitHub Actions: Test Run Results"
-          body: "Scheduled test run has completed. Download results at https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          subject: "GitHub Actions: Test Run Results on $BROWSER"
+          body: "Scheduled test run on $BROWSER has completed. Download results at https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           to: "davidjdang81@gmail.com"
           from: "GitHub Actions"

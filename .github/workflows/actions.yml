@@ -61,12 +61,12 @@ jobs:
           else
             echo "BROWSER=Chrome" >> $GITHUB_ENV
           fi
-          echo "Starting tests on: ${{ env.BROWSER }}"
 
       # The "$?" part is a special shell variable that holds the exit code of the last executed command
       # Exit code is 0 when tests pass and non-zero otherwise
       - name: Run tests with Maven and store exit code
         run: |
+          echo "Starting tests on: $BROWSER"
           mvn clean test -Denv=PRD -Dbrowser=$BROWSER -DtestSuite=DJDSuite.xml -Durl=https://www.rahulshettyacademy.com/loginpagePractise/
           echo "MVN_EXIT_CODE=$?" >> $GITHUB_ENV
 

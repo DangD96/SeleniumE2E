@@ -44,6 +44,7 @@ jobs:
         uses: actions/checkout@v4
 
       # $GITHUB_ENV is a file used by GitHub Actions. Key-value pairs are appended (>>) to it to define env variables
+      # $GITHUB_ENV persists across all steps in a given job
       # 1st if-statement executes if github.event.inputs.run_browser is NOT NULL (On manual input from GitHub website)
       # $(date +%d) function in 2nd-4th if-statements returns the day as a two digit number (Cron schedule)
       # Default behavior is to run tests on Chrome (On code push)
@@ -62,8 +63,12 @@ jobs:
           fi
           echo "Starting tests on: $BROWSER"
 
-      - name: Run tests with Maven
-        run: mvn clean test -Denv=PRD -Dbrowser=$BROWSER -DtestSuite=DJDSuite.xml -Durl=https://www.rahulshettyacademy.com/loginpagePractise/
+      # The "$?" part is a special shell variable that holds the exit code of the last executed command
+      # Exit code is 0 when tests pass and non-zero otherwise
+      - name: Run tests with Maven and store exit code
+        run: |
+          mvn clean test -Denv=PRD -Dbrowser=$BROWSER -DtestSuite=DJDSuite.xml -Durl=https://www.rahulshettyacademy.com/loginpagePractise/
+          echo "MVN_EXIT_CODE=$?" >> $GITHUB_ENV
 
       - name: Upload HTML results report
         uses: actions/upload-artifact@v4
@@ -73,6 +78,8 @@ jobs:
 
       # Have to create and use app password instead of regular password to authenticate
       # https://support.google.com/accounts/answer/185833?visit_id=638748503085955270-2173767296&p=InvalidSecondFactor&rd=1
+      # Have to use env.MVN_EXIT_CODE with ${{ .. }} because shell varibles (like $MVN_TEST_CODE) only work inside run steps
+      # ${{ env.MVN_EXIT_CODE == '0' && 'PASSED' || 'FAILED' }} is like ternary operator. Evaluates to PASSED when exit code is 0 and FAILED otherwise
       - name: Send email after SCHEDULED runs
         if: github.event_name == 'schedule'
         uses: dawidd6/action-send-mail@v3
@@ -81,7 +88,12 @@ jobs:
           server_port: 587
           username: ${{ secrets.SMTP_USERNAME }}
           password: ${{ secrets.SMTP_APP_PASSWORD }}
-          subject: "GitHub Actions: Test Run Results on $BROWSER"
-          body: "Scheduled test run on $BROWSER has completed. Download results at https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          subject: "GitHub Actions: Test Run Results on $BROWSER (${{ env.MVN_EXIT_CODE == '0' && 'PASSED' || 'FAILED' }})"
+          body: | 
+            Scheduled test run on $BROWSER has completed. 
+          
+            Status: ${{ env.MVN_EXIT_CODE == '0' && 'PASSED' || 'FAILED' }}
+          
+            See results at https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           to: "davidjdang81@gmail.com"
           from: "GitHub Actions"

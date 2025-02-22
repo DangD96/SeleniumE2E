@@ -27,7 +27,7 @@ on:
   # Configure workflow to run on a schedule. Cron jobs run in UTC by default in GitHub Actions
   # Runs on repo's default branch (master)
   schedule:
-    - cron: '40 2 21 * *'  # Runs at 8 AM UTC (2 AM CST) on the 10th of every month (Chrome)
+    - cron: '0 8 10 * *'  # Runs at 8 AM UTC (2 AM CST) on the 10th of every month (Chrome)
     - cron: '0 8 20 * *'  # Runs at 8 AM UTC (2 AM CST) on the 20th of every month (Edge)
     - cron: '0 8 30 * *'  # Runs at 8 AM UTC (2 AM CST) on the 30th of every month (Firefox)
 
@@ -85,8 +85,8 @@ jobs:
 
       # Have to create and use app password instead of regular password to authenticate
       # https://support.google.com/accounts/answer/185833?visit_id=638748503085955270-2173767296&p=InvalidSecondFactor&rd=1
-      # Have to use env.MVN_EXIT_CODE with ${{ .. }} because shell varibles (like $MVN_TEST_CODE) only work inside run steps
       # ${{ env.MVN_EXIT_CODE == '0' && 'PASSED' || 'FAILED' }} is like ternary operator. Evaluates to PASSED when exit code is 0 and FAILED otherwise
+      # Have to use ${{ env.MVN_EXIT_CODE }} expression because shell varibles (like $MVN_TEST_CODE) ONLY WORK INSIDE RUN STEPS
       - name: Send email after runs
         #if: github.event_name == 'schedule'
         uses: dawidd6/action-send-mail@v3
@@ -95,9 +95,9 @@ jobs:
           server_port: 587
           username: ${{ secrets.SMTP_USERNAME }}
           password: ${{ secrets.SMTP_APP_PASSWORD }}
-          subject: "GitHub Actions: Test Run Results on $BROWSER (${{ env.MVN_EXIT_CODE == '0' && 'PASSED' || 'FAILED' }})"
+          subject: "GitHub Actions: Test Run Results on ${{ env.BROWSER }} (${{ env.MVN_EXIT_CODE == '0' && 'PASSED' || 'FAILED' }})"
           body: | 
-            Scheduled test run on $BROWSER has completed. 
+            Scheduled test run on ${{ env.BROWSER }} has completed. 
           
             Status: ${{ env.MVN_EXIT_CODE == '0' && 'PASSED' || 'FAILED' }}
           

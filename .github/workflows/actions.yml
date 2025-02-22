@@ -5,7 +5,6 @@ on:
   push:
     branches:
       - master
-      - attach-to-email
     paths:
       - 'src/**'
       - '.github/workflows/**'
@@ -101,7 +100,7 @@ jobs:
           
             Status: ${{ env.MVN_EXIT_CODE == '0' && 'PASSED' || 'FAILED' }}
           
-            See results at https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+            Download results from this email or view them at https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
           to: "davidjdang81@gmail.com"
           from: "GitHub Actions"
           attachments: test-results/*.html

@@ -78,7 +78,7 @@ jobs:
           path: test-results/*.html # Match and upload any HTML file under the test-results directory
 
       - name: Download HTML results report for later use
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: Test Results
 

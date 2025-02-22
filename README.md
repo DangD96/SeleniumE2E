@@ -94,14 +94,17 @@ To run tests locally using this framework:
 I configured this repository to run via GitHub Actions as well so we can get some Continuous Integration. This is controlled by the [.github/workflows/actions.yml](https://github.com/DangD96/SeleniumE2E/blob/master/.github/workflows/actions.yml) file.
 
 With GitHub Actions CI:
-* Tests can be triggered to run upon pushing to the master branch with changes to files under specific directories.
+* Tests can be triggered to run upon pushing to or merging to the master branch with changes to files under specific directories.
 * Tests can be manually triggered to run by going to the [Actions tab and selecting the Selenium Tests in GitHub Runner workflow](https://github.com/DangD96/SeleniumE2E/actions/workflows/actions.yml).
 * Tests are configured to run on a schedule using Cron:
   * On the 10th of every month, tests will run on Chrome.
   * On the 20th of every month, tests will run on Edge.
   * On the 30th of every month, tests will run on Firefox.
 
-I receive an email upon completion of a scheduled test:
+I receive an email upon completion of a scheduled test. 
+
+The email tells me what browser the test ran on, whether it passed or failed, and provides the HTML results report for download:
+
 ![scheduled_run_email_result](/images/result_email.png)
 
 

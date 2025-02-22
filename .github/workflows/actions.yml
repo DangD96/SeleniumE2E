@@ -101,8 +101,8 @@ jobs:
           
             Status: ${{ env.MVN_EXIT_CODE == '0' && 'PASSED' || 'FAILED' }}
           
-            See results at https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-          #html_body: file://test-results/*.html
+            See results at https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          html_body: file://test-results/*.html
           to: "davidjdang81@gmail.com"
           from: "GitHub Actions"
           attachments: test-results/*.html

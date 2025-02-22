@@ -86,7 +86,7 @@ jobs:
       # Have to create and use app password instead of regular password to authenticate
       # https://support.google.com/accounts/answer/185833?visit_id=638748503085955270-2173767296&p=InvalidSecondFactor&rd=1
       # ${{ env.MVN_EXIT_CODE == '0' && 'PASSED' || 'FAILED' }} is like ternary operator. Evaluates to PASSED when exit code is 0 and FAILED otherwise
-      # Have to use ${{ env.MVN_EXIT_CODE }} expression because shell varibles (like $MVN_TEST_CODE) ONLY WORK INSIDE RUN STEPS
+      # NOTE: Have to use ${{ env.MVN_EXIT_CODE }} expression because shell varibles (like $MVN_TEST_CODE) only work inside run steps
       - name: Send email after runs
         #if: github.event_name == 'schedule'
         uses: dawidd6/action-send-mail@v3
@@ -102,7 +102,6 @@ jobs:
             Status: ${{ env.MVN_EXIT_CODE == '0' && 'PASSED' || 'FAILED' }}
           
             See results at https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
-          html_body: file://test-results/*.html
           to: "davidjdang81@gmail.com"
           from: "GitHub Actions"
           attachments: test-results/*.html

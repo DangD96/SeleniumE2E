@@ -2,6 +2,7 @@ name: Selenium Tests in GitHub Runner
 
 on:
   # Trigger workflow when pushing to specific branch with changes to files under specific directories
+  # NOTE: Merges to master also count as pushes
   push:
     branches:
       - master
@@ -31,8 +32,8 @@ on:
     - cron: '0 8 30 * *'  # Runs at 8 AM UTC (2 AM CST) on the 30th of every month (Firefox)
 
 jobs:
+  # Manually skip tests by including "/djd skip tests" in commit message. Useful when making changes to comments
   test:
-    # Manually skip tests by including "/djd skip tests" in commit message. Useful when making changes to comments
     if: "!contains(github.event.head_commit.message, '/djd skip tests')"
 
     # The ubuntu-latest image comes with multiple things pre-installed so don't have to install them as part of this yaml file
@@ -87,7 +88,7 @@ jobs:
       # ${{ env.MVN_EXIT_CODE == '0' && 'PASSED' || 'FAILED' }} is like ternary operator. Evaluates to PASSED when exit code is 0 and FAILED otherwise
       # NOTE: Have to use ${{ env.MVN_EXIT_CODE }} expression because shell varibles (like $MVN_TEST_CODE) only work inside run steps
       - name: Send email after runs
-        #if: github.event_name == 'schedule'
+        if: github.event_name == 'schedule'
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.gmail.com

@@ -24,8 +24,9 @@ on:
           - Firefox
 
   # Configure workflow to run on a schedule. Cron jobs run in UTC by default in GitHub Actions
+  # Runs on repo's default branch (master)
   schedule:
-    - cron: '0 8 10 * *'  # Runs at 8 AM UTC (2 AM CST) on the 10th of every month (Chrome)
+    - cron: '40 2 21 * *'  # Runs at 8 AM UTC (2 AM CST) on the 10th of every month (Chrome)
     - cron: '0 8 20 * *'  # Runs at 8 AM UTC (2 AM CST) on the 20th of every month (Edge)
     - cron: '0 8 30 * *'  # Runs at 8 AM UTC (2 AM CST) on the 30th of every month (Firefox)
 
@@ -70,11 +71,16 @@ jobs:
           mvn clean test -Denv=PRD -Dbrowser=$BROWSER -DtestSuite=DJDSuite.xml -Durl=https://www.rahulshettyacademy.com/loginpagePractise/
           echo "MVN_EXIT_CODE=$?" >> $GITHUB_ENV
 
-      - name: Upload HTML results report
+      - name: Upload HTML results report to GitHub
         uses: actions/upload-artifact@v4
         with:
           name: Test Results
           path: test-results/*.html # Match and upload any HTML file under the test-results directory
+
+      - name: Download HTML results report for later use
+        uses: actions/download-artifact@v2
+        with:
+          name: Test Results
 
       # Have to create and use app password instead of regular password to authenticate
       # https://support.google.com/accounts/answer/185833?visit_id=638748503085955270-2173767296&p=InvalidSecondFactor&rd=1
@@ -95,5 +101,7 @@ jobs:
             Status: ${{ env.MVN_EXIT_CODE == '0' && 'PASSED' || 'FAILED' }}
           
             See results at https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          #html_body: file://test-results/*.html
           to: "davidjdang81@gmail.com"
           from: "GitHub Actions"
+          attachments: test-results/*.html

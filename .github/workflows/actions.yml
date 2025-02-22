@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - master
+      - attach-to-email
     paths:
       - 'src/**'
       - '.github/workflows/**'
@@ -86,8 +87,8 @@ jobs:
       # https://support.google.com/accounts/answer/185833?visit_id=638748503085955270-2173767296&p=InvalidSecondFactor&rd=1
       # Have to use env.MVN_EXIT_CODE with ${{ .. }} because shell varibles (like $MVN_TEST_CODE) only work inside run steps
       # ${{ env.MVN_EXIT_CODE == '0' && 'PASSED' || 'FAILED' }} is like ternary operator. Evaluates to PASSED when exit code is 0 and FAILED otherwise
-      - name: Send email after SCHEDULED runs
-        if: github.event_name == 'schedule'
+      - name: Send email after runs
+        #if: github.event_name == 'schedule'
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.gmail.com

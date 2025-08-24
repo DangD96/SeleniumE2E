@@ -1,9 +1,6 @@
 package framework;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -11,68 +8,109 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
 
-@SuppressWarnings("unused")
 public abstract class BasePage {
-    protected final WebDriver driver;
-    protected final JavascriptExecutor js;
-    private final WebDriverWait WAIT;
+    protected WebDriver driver;
+    protected JavascriptExecutor js;
+    final WebDriverWait WAIT;
+    final int MAX_RETRIES = 5;
+    final long WAIT_MS = 500;
 
     public BasePage(WebDriver driver) {
         this.driver = driver;
         this.js = (JavascriptExecutor) driver;
-        this.WAIT = new WebDriverWait(driver, Duration.ofSeconds(10));
-        waitForAjax();
+        this.WAIT = new WebDriverWait(driver, Duration.ofSeconds(5));
+        WaitForAJAX();
     }
 
-    public WebElement waitForElementToBeClickable(By locator) {return WAIT.until(ExpectedConditions.elementToBeClickable(locator));}
+    public void Click(By locator) {
+        // passing locator into the lambda function as an argument
+        ActionWithRetry(locator, loc -> {driver.findElement(loc).click(); return null;}, true);
+    }
 
-    public WebElement waitForElementToBeClickable(WebElement element) {return WAIT.until(ExpectedConditions.elementToBeClickable(element));}
+    public void TypeText(By locator, String text) {
+        ActionWithRetry(locator, loc -> {driver.findElement(loc).sendKeys(text); return null;}, true);
+    }
 
-    public WebElement waitForElementToBeVisible(By locator) {return WAIT.until(ExpectedConditions.visibilityOfElementLocated(locator));}
+    public void Clear(By locator) {
+        ActionWithRetry(locator, loc -> {driver.findElement(loc).clear(); return null;}, true);
+    }
 
-    public WebElement waitForElementToBeVisible(WebElement element) {return WAIT.until(ExpectedConditions.visibilityOf(element));}
+    public WebElement GetElement(By locator) {
+        return ActionWithRetry(locator, loc -> driver.findElement(loc), false);
+    }
 
-    public List<WebElement> waitForElementsToBeVisible(By locator) {return WAIT.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator));}
+    public String GetText(By locator) {
+        return ActionWithRetry(locator, loc -> driver.findElement(loc).getText(), false);
+    }
 
-    public List<WebElement> waitForElementsToBeVisible(WebElement element) {return WAIT.until(ExpectedConditions.visibilityOfAllElements(element));}
-
-    public boolean waitForElementToBeInvisible(By locator) {return WAIT.until(ExpectedConditions.invisibilityOfElementLocated(locator));}
-
-    public boolean waitForElementToBeInvisible(WebElement element) {return WAIT.until(ExpectedConditions.invisibilityOf(element));}
-
-    public void typeText(WebElement element, String text) {element.sendKeys(text);}
-
-    public void typeText(By locator, String text) {driver.findElement(locator).sendKeys(text);}
-
-    @SuppressWarnings("Convert2Lambda")
-    public void waitForAjax() {
-        // wait for jQuery to load
-        // anonymous inner class
-        ExpectedCondition<Boolean> isJQueryLoaded = new ExpectedCondition<>() {
-            @Override
-            public Boolean apply(WebDriver driver) {
-                try {
-                    return ((int) js.executeScript("return jQuery.active") == 0);
-                } catch (Exception ignored) {
-                    // no jQuery present
-                    return true;
+    // Function = takes something, returns something
+    public <R> R ActionWithRetry(By locator, Function<By, R> function, boolean isInteractiveAction) {
+        int retries = 0;
+        while (retries < MAX_RETRIES) {
+            try {
+                if (isInteractiveAction) {
+                    WaitForElementToBeInteractable(locator); // for actions that need element to be interactable
+                } else {
+                    WaitForElementToBeVisible(locator); // for actions like that just need element to be visible
                 }
+                return function.apply(locator);
+            } catch (StaleElementReferenceException | ElementClickInterceptedException retry) {
+                retries++;
+                Sleep(WAIT_MS);
             }
-        };
-
-        // wait for Javascript to load
-        // anonymous inner class
-        ExpectedCondition<Boolean> isJsLoaded = new ExpectedCondition<>() {
-            @Override
-            public Boolean apply(WebDriver driver) {
-                return Objects.requireNonNull(js.executeScript("return document.readyState")).toString().equals("complete");
-            }
-        };
-
-        WAIT.until(isJQueryLoaded);
-        WAIT.until(isJsLoaded);
+        }
+        throw new RuntimeException(String.format("Action failed after %d retries for locator: %s", MAX_RETRIES, locator));
     }
 
-    public String getURL() {return driver.getCurrentUrl();}
+    public void Sleep(long ms) {
+        try {
+            Thread.sleep(ms);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public WebElement WaitForElementToBeInteractable(By locator) {
+        return WAIT.until(ExpectedConditions.elementToBeClickable(locator));
+    }
+
+    public WebElement WaitForElementToBeVisible(By locator) {
+        return WAIT.until(ExpectedConditions.visibilityOfElementLocated(locator));
+    }
+
+    public List<WebElement> WaitForElementsToBeVisible(By locator) {
+        return WAIT.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator));
+    }
+
+    public boolean WaitForElementToBeInvisible(By locator) {
+        return WAIT.until(ExpectedConditions.invisibilityOfElementLocated(locator));
+    }
+
+    public void WaitForAJAX() {
+        WAIT.until(IsJQueryLoaded());
+        WAIT.until(IsJSLoaded());
+    }
+
+    public ExpectedCondition<Boolean> IsJQueryLoaded() {
+        return driver -> {
+            try {
+                // will resolve to something if jQuery is active. Otherwise a ReferenceError
+                js.executeScript("jQuery.active");
+                return false;
+            } catch (Exception loaded) {
+                return true; // no jQuery present (jQuery.active == 0)
+            }
+        };
+    }
+
+    public ExpectedCondition<Boolean> IsJSLoaded() {
+        return driver -> Objects.requireNonNull(js.executeScript("return document.readyState"))
+                .toString().equals("complete");
+    }
+
+    public String GetURL() {
+        return driver.getCurrentUrl();
+    }
 }

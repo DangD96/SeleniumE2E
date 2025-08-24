@@ -63,7 +63,7 @@ public abstract class BasePage {
         return ActionWithRetry(locator, loc -> driver.findElement(loc).getText(), false);
     }
 
-    public int GetSize(By locator) {
+    public int GetCount(By locator) {
         return ActionWithRetry(locator, loc -> driver.findElements(loc).size(), false);
     }
 

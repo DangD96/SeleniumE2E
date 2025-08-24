@@ -40,7 +40,7 @@ public class CatalogPage extends BasePage {
 
 
     // region Performers
-    public ShoppingCartPage Checkout() {
+    public ShoppingCartPage GoToShoppingCart() {
         Click(CheckoutBtn());
         return new ShoppingCartPage(driver);
     }

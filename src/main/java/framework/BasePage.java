@@ -9,17 +9,19 @@ import java.time.Duration;
 import java.util.Objects;
 import java.util.function.Function;
 
+import static org.testng.Assert.*;
+
 public abstract class BasePage {
     protected WebDriver driver;
     protected JavascriptExecutor js;
-    final WebDriverWait WAIT;
-    final int MAX_RETRIES = 5;
-    final long WAIT_MS = 500;
+    static WebDriverWait WAIT;
+    static final int MAX_RETRIES = 5;
+    static final long WAIT_MS = 500;
 
     public BasePage(WebDriver driver) {
         this.driver = driver;
-        this.js = (JavascriptExecutor) driver;
-        this.WAIT = new WebDriverWait(driver, Duration.ofSeconds(5));
+        js = (JavascriptExecutor) driver;
+        WAIT = new WebDriverWait(driver, Duration.ofSeconds(5));
         WaitForAJAX();
     }
 
@@ -67,46 +69,16 @@ public abstract class BasePage {
         return ActionWithRetry(locator, loc -> driver.findElements(loc).size(), false);
     }
 
-    public Boolean IsDisplayed(By locator) {
-        return ActionWithRetry(locator, loc -> driver.findElement(loc).isDisplayed(), false);
-    }
-
-    public Boolean IsHidden(By locator) {
-        return !ActionWithRetry(locator, loc -> driver.findElement(loc).isDisplayed(), false);
-    }
-
-    public Boolean IsEnabled(By locator) {
-        return ActionWithRetry(locator, loc -> driver.findElement(loc).isEnabled(), false);
-    }
-
-    public Boolean IsDisabled(By locator) {
-        return !ActionWithRetry(locator, loc -> driver.findElement(loc).isEnabled(), false);
-    }
-
-    public Boolean IsExists(By locator) {
-        try {
-            driver.findElement(locator);
-            return true;
-        } catch (NoSuchElementException e) {
-            return false;
-        }
-    }
-
-    public Boolean IsNotExist(By locator) {
-        try {
-            driver.findElement(locator);
-            return false;
-        } catch (NoSuchElementException pass) {
-            return true;
-        }
-    }
-
-    public void Sleep(long ms) {
+    public static void Sleep(long ms) {
         try {
             Thread.sleep(ms);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public String GetURL() {
+        return driver.getCurrentUrl();
     }
 
     public void WaitForElementToBeInteractable(By locator) {
@@ -147,8 +119,21 @@ public abstract class BasePage {
                 .toString().equals("complete");
     }
 
-    public String GetURL() {
-        return driver.getCurrentUrl();
+    public Boolean IsDisplayed(By locator) {
+        return ActionWithRetry(locator, loc -> driver.findElement(loc).isDisplayed(), false);
+    }
+
+    public Boolean IsEnabled(By locator) {
+        return ActionWithRetry(locator, loc -> driver.findElement(loc).isEnabled(), false);
+    }
+
+    public Boolean IsExists(By locator) {
+        try {
+            driver.findElement(locator);
+            return true;
+        } catch (NoSuchElementException e) {
+            return false;
+        }
     }
 
     // to help with building locators via composition (parent-child elements in repeatable UI)
@@ -158,5 +143,61 @@ public abstract class BasePage {
         }
         String xpathAsString = baseLocator.toString().replace("By.xpath: ", "");
         return By.xpath(xpathAsString + relative);
+    }
+
+    public void AssertElementIsVisible(By locator) {
+        if (!IsDisplayed(locator)) Fail();
+    }
+
+    public void AssertElementIsHidden(By locator) {
+        if(IsDisplayed(locator)) Fail();
+    }
+
+    public void AssertElementExists(By locator) {
+        if(!IsExists(locator)) Fail();
+    }
+
+    public void AssertElementDoesNotExist(By locator) {
+        if(IsExists(locator)) Fail();
+    }
+
+    public void AssertElementIsEnabled(By locator) {
+        if(!IsEnabled(locator)) Fail();
+    }
+
+    public void AssertElementIsDisabled(By locator) {
+        if(IsEnabled(locator)) Fail();
+    }
+
+    public void AssertIsTrue(boolean condition) {
+        assertTrue(condition);
+    }
+
+    public void AssertIsTrue(boolean condition, String msg) {
+        assertTrue(condition, msg);
+    }
+
+    public void AssertIsFalse(boolean condition) {
+        assertFalse(condition);
+    }
+
+    public void AssertIsFalse(boolean condition, String msg) {
+        assertFalse(condition, msg);
+    }
+
+    public <T> void AssertEquals(T actual, T expected) {
+        assertEquals(actual, expected);
+    }
+
+    public <T> void AssertEquals(T actual, T expected, String msg) {
+        assertEquals(actual, expected, msg);
+    }
+
+    public void Fail() {
+        fail();
+    }
+
+    public void Fail(String msg) {
+        fail(msg);
     }
 }

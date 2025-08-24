@@ -100,6 +100,7 @@ public abstract class BaseTest {
 
     // Provide methods for each thread to get their thread specific variables
     public WebDriver getDriver() {return driver.get();}
+
     public ExtentTest getTestMethod() {return testMethod.get();}
 
     private void getSetupProperties() {

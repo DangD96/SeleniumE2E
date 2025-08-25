@@ -3,11 +3,11 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.djd</groupId>
-  <artifactId>SeleniumE2E</artifactId>
+  <artifactId>SparkFlow</artifactId>
   <version>1.0.0</version>
   <packaging>jar</packaging>
 
-  <name>SeleniumE2E</name>
+  <name>SparkFlow</name>
   <url>http://maven.apache.org</url>
 
   <properties>

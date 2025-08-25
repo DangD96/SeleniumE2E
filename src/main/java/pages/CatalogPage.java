@@ -1,6 +1,6 @@
 package pages;
 
-import framework.BaseDriver;
+import framework.SparkDriver;
 import org.openqa.selenium.By;
 
 public class CatalogPage {
@@ -21,47 +21,47 @@ public class CatalogPage {
     public static By product(int n) {return By.xpath(String.format("//app-card[%d]", n));}
 
     public static By productName(String name) {
-        return BaseDriver.appendToXpath(product(name), String.format("//a[text()='%s']", name));
+        return SparkDriver.appendToXpath(product(name), String.format("//a[text()='%s']", name));
     }
 
     public static By productName(int n) {return By.xpath(String.format("//app-card[%d]//a", n));}
 
-    public static By productPrice(String name) {return BaseDriver.appendToXpath(product(name), "//h5");}
+    public static By productPrice(String name) {return SparkDriver.appendToXpath(product(name), "//h5");}
 
-    public static By productAddBtn(String name) {return BaseDriver.appendToXpath(product(name), "//button");}
+    public static By productAddBtn(String name) {return SparkDriver.appendToXpath(product(name), "//button");}
     // endregion
 
 
     // region Performers
     public static void goToShoppingCart() {
-        BaseDriver.click(checkoutBtn());
+        SparkDriver.click(checkoutBtn());
     }
 
     public static void clickOnProduct(String name) {
-        BaseDriver.click(product(name));
+        SparkDriver.click(product(name));
     }
 
     public static void clickOnProduct(int n) {
-        BaseDriver.click(productName(n));
+        SparkDriver.click(productName(n));
     }
 
     public static void addProductToCart(String name) {
-        BaseDriver.click(productAddBtn(name));
+        SparkDriver.click(productAddBtn(name));
     }
     // endregion
 
 
     // region Getters
     public static String getProductName(int n) {
-        return BaseDriver.getText(productName(n));
+        return SparkDriver.getText(productName(n));
     }
 
     public static int getNumberOfProducts() {
-        return BaseDriver.getCount(product());
+        return SparkDriver.getCount(product());
     }
 
     public static String getProductPrice(String name) {
-        return BaseDriver.getText(productPrice(name));
+        return SparkDriver.getText(productPrice(name));
     }
     // endregion
 }

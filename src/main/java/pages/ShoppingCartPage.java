@@ -1,6 +1,6 @@
 package pages;
 
-import framework.BaseDriver;
+import framework.SparkDriver;
 import org.openqa.selenium.By;
 
 public class ShoppingCartPage {
@@ -16,26 +16,26 @@ public class ShoppingCartPage {
 
     public static By product(int n) {return By.xpath((String.format("//tr[td[contains(@class, 'col-sm')]][%d]", n)));}
 
-    public static By productName(int n) {return BaseDriver.appendToXpath(product(n), "//h4//a");}
+    public static By productName(int n) {return SparkDriver.appendToXpath(product(n), "//h4//a");}
 
-    public static By productRemoveBtn(String name) {return BaseDriver.appendToXpath(product(name), "//button");}
+    public static By productRemoveBtn(String name) {return SparkDriver.appendToXpath(product(name), "//button");}
     // endregion
 
 
     // region Performers
     public static void removeProduct(String name) {
-        BaseDriver.click(productRemoveBtn(name));
+        SparkDriver.click(productRemoveBtn(name));
     }
     // endregion
 
 
     // region Getters
     public static int getNumberOfProductsInCart() {
-        return BaseDriver.getCount(product());
+        return SparkDriver.getCount(product());
     }
 
     public static String getProductName(int row) {
-        return BaseDriver.getText(productName(row));
+        return SparkDriver.getText(productName(row));
     }
     // endregion
 }

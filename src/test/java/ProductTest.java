@@ -1,12 +1,12 @@
 import framework.Assert;
-import framework.BaseDriver;
-import framework.BaseTest;
+import framework.SparkDriver;
+import framework.SparkTest;
 import org.testng.annotations.Test;
 import pages.CatalogPage;
 import pages.LoginPage;
 import pages.ShoppingCartPage;
 
-public class ProductTest extends BaseTest {
+public class ProductTest extends SparkTest {
 
     @Test(description = "Add correct product to shopping cart")
     protected void addProductTest() {
@@ -17,7 +17,7 @@ public class ProductTest extends BaseTest {
         // Add to cart
         CatalogPage.addProductToCart("Nokia Edge");
         Assert.equals(CatalogPage.getProductPrice("Nokia Edge"), "$24.99");
-        Assert.isTrue(BaseDriver.getText(CatalogPage.checkoutBtn()).contains("Checkout ( 1 )"));
+        Assert.isTrue(SparkDriver.getText(CatalogPage.checkoutBtn()).contains("Checkout ( 1 )"));
 
         // Verify in cart
         CatalogPage.goToShoppingCart();

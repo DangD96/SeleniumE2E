@@ -1,6 +1,6 @@
 import framework.Assert;
-import framework.BaseDriver;
-import framework.BaseTest;
+import framework.SparkDriver;
+import framework.SparkTest;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import pages.CatalogPage;
@@ -9,7 +9,7 @@ import pages.LoginPage;
 import java.io.IOException;
 import java.util.HashMap;
 
-public class LoginTest extends BaseTest {
+public class LoginTest extends SparkTest {
     @Test(description = "Unsuccessful Login", dataProvider = "loginInvalidDataProvider")
     /* Method below runs n times, where n is the number of objects in the array returned by dataProvider in superclass.
     The Object returned by dataProvider during each iteration gets passed as argument to the input parameter I defined.
@@ -25,13 +25,13 @@ public class LoginTest extends BaseTest {
         LoginPage.clearPassword();
         LoginPage.login("rahulshettyacademy", "learning", "", "", false);
         Assert.elementIsVisible(CatalogPage.checkoutBtn());
-        Assert.equals(BaseDriver.getURL(), "https://rahulshettyacademy.com/angularpractice/shop");
+        Assert.equals(SparkDriver.getURL(), "https://rahulshettyacademy.com/angularpractice/shop");
         Assert.elementIsHidden(LoginPage.loginBtn());
     }
 
     @Test(description = "fail", enabled = false)
     protected void intentionalFail() {
-        BaseDriver.sleep(3000);
+        SparkDriver.sleep(3000);
         Assert.intentionalFail();
     }
 

@@ -1,6 +1,6 @@
 package pages;
 
-import framework.BaseDriver;
+import framework.SparkDriver;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.Select;
 
@@ -26,39 +26,39 @@ public class LoginPage {
 
     // region Performers
     public static void login(String username, String password, String userType, String userRole, boolean toggleTerms) {
-        BaseDriver.typeText(usernameField(), username);
-        BaseDriver.typeText(passwordField(), password);
+        SparkDriver.typeText(usernameField(), username);
+        SparkDriver.typeText(passwordField(), password);
 
         if (!userType.isEmpty()) selectUserType(userType);
         if (!userRole.isEmpty()) selectDropDownOption(userRole);
         if (toggleTerms) toggleTermsAndServices();
 
-        BaseDriver.click(loginBtn());
+        SparkDriver.click(loginBtn());
     }
 
     public static void selectDropDownOption(String option) {
-        Select roles = new Select(BaseDriver.getElement(roleDropdown()));
+        Select roles = new Select(SparkDriver.getElement(roleDropdown()));
         roles.selectByVisibleText(option);
     }
 
     public static void selectUserType(String userType) {
         if (userType.equalsIgnoreCase("Admin")) {
-            BaseDriver.click(adminRadioBtn());
+            SparkDriver.click(adminRadioBtn());
         } else {
-            BaseDriver.click(userRadioBtn());
+            SparkDriver.click(userRadioBtn());
         }
     }
 
     public static void clearUsername() {
-        BaseDriver.clear(usernameField());
+        SparkDriver.clear(usernameField());
     }
 
     public static void clearPassword() {
-        BaseDriver.clear(passwordField());
+        SparkDriver.clear(passwordField());
     }
 
     public static void toggleTermsAndServices() {
-        BaseDriver.click(tocCheckbox());
+        SparkDriver.click(tocCheckbox());
     }
     // endregion
 }

@@ -26,7 +26,7 @@ Source: https://codetabs.com/count-loc/count-loc-online.html
 
 
 # Background
-Selenium Framework written in Java for End to End (E2E) testing. Driven by an XML Test Suite. Tests can be run locally or remotely (via GitHub Actions).
+SparkFlow is a Selenium Framework written in Java for End to End (E2E) testing. Driven by an XML Test Suite. Tests can be run locally or remotely (via GitHub Actions).
 
 Page classes and Tests are included to demonstrate the integration with the framework. 
 
@@ -43,7 +43,7 @@ Example Test Suite is located in: `test-suites`
 
 # Framework Features
 * Implements a **modified** version of the traditional **Page Object Model** (POM) design pattern. 
-  * My version is mainly driven by static Page classes and the `BaseDriver` wrapper class.
+  * My version is mainly driven by static Page classes and the `SparkDriver` wrapper class.
   * I opted to go this direction for easier code maintenance and cleaner separation of responsibilities.
 * Uses **Maven** for build and dependency management.
 * Uses **TestNG** for assertions and test annotations.
@@ -75,7 +75,7 @@ To run tests locally using this framework:
   * > **Note:** For test class standards, see the [Tests](#tests) section.
 * In IntelliJ, create Maven run configurations that follow this format: 
   * `mvn clean test -D<browser> -D<testSuite> -D<url>`
-* The info in the angle brackets are runtime arguments/properties that are retrieved in `BaseTest`:
+* The info in the angle brackets are runtime arguments/properties that are retrieved in `SparkTest`:
   * testSuite: The name of your XML testing suite.
   * browser: The name of the browser to test on. Takes "Chrome", "Edge", or "Firefox".
   * url: The URL of the website for the tests.
@@ -121,7 +121,7 @@ Static classes that encapsulate a page's elements and behavior. I split Page cla
 
 ## Tests
 * All test class names must end in "Test". This is a requirement for TestNG to work correctly.
-* All test classes extend the `BaseTest` class.
+* All test classes extend the `SparkTest` class.
 * Test methods must use the `@Test` annotation.
 * Use the custom `Assert` class to make test assertions.
 * Test classes must be specified in an XML Test Suite file located in `test-suites` in order for the framework to pick up on them.

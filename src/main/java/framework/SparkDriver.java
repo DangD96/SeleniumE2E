@@ -17,8 +17,8 @@ import java.io.IOException;
 import java.time.Duration;
 import java.util.function.Function;
 
-// Custom static wrapper around common webdriver actions
-public class BaseDriver {
+// Custom static wrapper around common WebDriver actions
+public class SparkDriver {
     // Threadsafe variables because tests methods run in parallel
     static ThreadLocal<WebDriver> driver = new ThreadLocal<>();
     static ThreadLocal<WebDriverWait> wait = new ThreadLocal<>();

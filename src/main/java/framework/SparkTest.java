@@ -19,7 +19,7 @@ import java.time.ZoneOffset;
 import java.util.*;
 
 @Listeners({SuiteListener.class}) // Add listener to get name of the XML test suite
-public class BaseTest {
+public class SparkTest {
     private final static ThreadLocal<ExtentTest> testMethod = new ThreadLocal<>();
     private static ExtentReports report;
     private static String env;
@@ -39,12 +39,12 @@ public class BaseTest {
         // I'm getting these from the maven command line arguments
         try {
             getSuiteName();
-            BaseDriver.browser = getBrowser();
-            BaseDriver.env = getEnv();
-            BaseDriver.url = getUrl();
-            BaseDriver.FS = FS;
-            BaseDriver.USER_DIR = USER_DIR;
-            BaseDriver.REPORT_SAVE_PATH = REPORT_SAVE_PATH;
+            SparkDriver.browser = getBrowser();
+            SparkDriver.env = getEnv();
+            SparkDriver.url = getUrl();
+            SparkDriver.FS = FS;
+            SparkDriver.USER_DIR = USER_DIR;
+            SparkDriver.REPORT_SAVE_PATH = REPORT_SAVE_PATH;
         }
         catch (Exception e) {
             throw new RuntimeException(e);
@@ -55,8 +55,8 @@ public class BaseTest {
 
     @BeforeMethod()
     protected void launchApp() {
-        BaseDriver.configureDriver();
-        BaseDriver.startDriver();
+        SparkDriver.configureDriver();
+        SparkDriver.startDriver();
     }
 
     @BeforeMethod(dependsOnMethods = {"launchApp"})
@@ -73,7 +73,7 @@ public class BaseTest {
     protected void listenForResult(ITestResult result) throws IOException {
         ExtentTest testMethod = getTestMethod();
         if (result.getStatus() == ITestResult.FAILURE) {
-            String relativePathToScreenshot = BaseDriver.saveErrorScreenshot(result); // Needs relative path from project directory
+            String relativePathToScreenshot = SparkDriver.saveErrorScreenshot(result); // Needs relative path from project directory
             testMethod.fail(result.getThrowable()).addScreenCaptureFromPath(relativePathToScreenshot);
         }
         else {testMethod.log(Status.PASS, "Success");}
@@ -81,7 +81,8 @@ public class BaseTest {
 
     /** Null the thread specific driver object */
     @AfterMethod(dependsOnMethods = {"listenForResult"})
-    protected void tearDown() {BaseDriver.quitDriver();}
+    protected void tearDown() {
+        SparkDriver.quitDriver();}
 
     @AfterSuite()
     protected void saveReport() {

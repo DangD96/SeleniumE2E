@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="DJD Firefox Run" type="MavenRunConfiguration" factoryName="Maven">
+  <configuration default="false" name="DJD Chrome Run Parallel" type="MavenRunConfiguration" factoryName="Maven">
     <MavenSettings>
       <option name="myGeneralSettings" />
       <option name="myRunnerSettings" />
@@ -13,8 +13,8 @@
             <list>
               <option value="clean" />
               <option value="test" />
-              <option value="-Dbrowser=firefox" />
-              <option value="-DtestSuite=DJDSuite.xml" />
+              <option value="-Dbrowser=chrome" />
+              <option value="-DtestSuite=DJDSuiteParallel.xml" />
               <option value="-Durl=https://www.rahulshettyacademy.com/loginpagePractise/" />
             </list>
           </option>

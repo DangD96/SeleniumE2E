@@ -1,75 +1,67 @@
 package page_objects;
 
-import framework.BasePage;
+import framework.BaseDriver;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 
-import java.math.BigDecimal;
-
-public class CatalogPage extends BasePage {
-    public CatalogPage(WebDriver driver) {
-        super(driver);
-    }
-
+public class CatalogPage {
     // region Locators
-    public By CheckoutBtn() {return By.xpath("//a[contains(text(), 'Checkout')]");}
+    public static By checkoutBtn() {return By.xpath("//a[contains(text(), 'Checkout')]");}
 
-    public By EditButtonForName(String name) {
+    public static By editButtonForName(String name) {
         return By.xpath(String.format("//div[@class='row' and .//span[text()='%s']]//button[contains(@class,'edit-btn')]", name));
     }
 
-    public By Product() {return By.xpath("//app-card");}
+    public static By product() {return By.xpath("//app-card");}
 
-    // The "[.//" part is for searching for a descendant
-    public By Product(String name) {
+    public static By product(String name) {
+        // The "[.//" part is for searching for a descendant
         return By.xpath(String.format("//app-card[.//*[@class='card-title']//a[text()='%s']]", name));
     }
 
-    public By Product(int n) {return By.xpath(String.format("//app-card[%d]", n));}
+    public static By product(int n) {return By.xpath(String.format("//app-card[%d]", n));}
 
-    public By ProductName(String name) {
-        return AppendToXpath(Product(name), String.format("//a[text()='%s']", name));
+    public static By productName(String name) {
+        return BaseDriver.appendToXpath(product(name), String.format("//a[text()='%s']", name));
     }
 
-    public By ProductName(int n) {return By.xpath(String.format("//app-card[%d]//a", n));}
+    public static By productName(int n) {return By.xpath(String.format("//app-card[%d]//a", n));}
 
-    public By ProductPrice(String name) {return AppendToXpath(Product(name), "//h5");}
+    public static By productPrice(String name) {return BaseDriver.appendToXpath(product(name), "//h5");}
 
-    public By AddProductBtn(String name) {return AppendToXpath(Product(name), "//button");}
+    public static By productAddBtn(String name) {return BaseDriver.appendToXpath(product(name), "//button");}
     // endregion
 
 
     // region Performers
-    public ShoppingCartPage GoToShoppingCart() {
-        Click(CheckoutBtn());
-        return new ShoppingCartPage(driver);
+    public static void goToShoppingCart() {
+        BaseDriver.click(checkoutBtn());
     }
 
-    public void ClickOnProduct(String name) {
-        Click(Product(name));
+    public static void clickOnProduct(String name) {
+        BaseDriver.click(product(name));
     }
 
-    public void ClickOnProduct(int n) {
-        Click(ProductName(n));
+    public static void clickOnProduct(int n) {
+        BaseDriver.click(productName(n));
     }
 
-    public void AddProductToCart(String name) {
-        Click(AddProductBtn(name));
+    public static void addProductToCart(String name) {
+        BaseDriver.click(productAddBtn(name));
     }
     // endregion
 
 
     // region Getters
-    public String GetProductName(int n) {
-        return GetText(ProductName(n));
+    public static String getProductName(int n) {
+        return BaseDriver.getText(productName(n));
     }
 
-    public int GetNumberOfProducts() {
-        return GetCount(Product());
+    public static int getNumberOfProducts() {
+        return BaseDriver.getCount(product());
     }
 
-    public BigDecimal GetProductPrice(String name) {
-        return new BigDecimal(GetText(ProductPrice(name)));
+    public static String getProductPrice(String name) {
+        return BaseDriver.getText(productPrice(name));
     }
     // endregion
 }

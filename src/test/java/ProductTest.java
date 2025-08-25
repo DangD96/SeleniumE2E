@@ -1,3 +1,5 @@
+import framework.Assert;
+import framework.BaseDriver;
 import framework.BaseTest;
 import org.testng.annotations.Test;
 import page_objects.CatalogPage;
@@ -7,33 +9,31 @@ import page_objects.ShoppingCartPage;
 public class ProductTest extends BaseTest {
 
     @Test(description = "Add correct product to shopping cart")
-    protected void AddProductTest() {
-        LoginPage loginPage = new LoginPage(getDriver());
-        CatalogPage catalogPage = loginPage.Login("rahulshettyacademy", "learning", "", "Teacher", true);
-        catalogPage.AssertElementExists(catalogPage.CheckoutBtn());
-        catalogPage.AssertEquals(catalogPage.GetNumberOfProducts(),4);
+    protected void addProductTest() {
+        LoginPage.login("rahulshettyacademy", "learning", "", "Teacher", true);
+        Assert.elementIsVisible(CatalogPage.checkoutBtn());
+        Assert.equals(CatalogPage.getNumberOfProducts(), 4);
 
         // Add to cart
-        catalogPage.AddProductToCart("Nokia Edge");
-        catalogPage.AssertEquals(catalogPage.GetProductPrice("Nokia Edge").toString(), "24.99");
-        catalogPage.AssertIsTrue(catalogPage.GetText(catalogPage.CheckoutBtn()).contains("Checkout ( 1 )"));
+        CatalogPage.addProductToCart("Nokia Edge");
+        Assert.equals(CatalogPage.getProductPrice("Nokia Edge"), "$24.99");
+        Assert.isTrue(BaseDriver.getText(CatalogPage.checkoutBtn()).contains("Checkout ( 1 )"));
 
         // Verify in cart
-        ShoppingCartPage cart = catalogPage.GoToShoppingCart();
-        cart.AssertElementIsVisible(cart.CheckoutBtn());
-        cart.AssertEquals(cart.GetNumberOfProductsInCart(), 1);
-        cart.AssertEquals(cart.GetProductName(1), "Nokia Edge");
+        CatalogPage.goToShoppingCart();
+        Assert.elementIsVisible(ShoppingCartPage.checkoutBtn());
+        Assert.equals(ShoppingCartPage.getNumberOfProductsInCart(), 1);
+        Assert.equals(ShoppingCartPage.getProductName(1), "Nokia Edge");
 
         // Remove product from cart
-        cart.RemoveProduct("Nokia Edge");
-        cart.AssertEquals(cart.GetNumberOfProductsInCart(), 0);
+        ShoppingCartPage.removeProduct("Nokia Edge");
+        Assert.equals(ShoppingCartPage.getNumberOfProductsInCart(), 0);
     }
 
     @Test(description = "fail", enabled = false)
-    protected void IntentionalFail() throws InterruptedException {
-        LoginPage loginPage = new LoginPage(getDriver());
-        CatalogPage catalogPage = loginPage.Login("rahulshettyacademy", "learning", "", "Teacher", true);
+    protected void intentionalFail() throws InterruptedException {
+        LoginPage.login("rahulshettyacademy", "learning", "", "Teacher", true);
         Thread.sleep(2000);
-        catalogPage.Fail();
+        Assert.intentionalFail();
     }
 }

@@ -1,46 +1,41 @@
 package page_objects;
 
-import framework.BasePage;
+import framework.BaseDriver;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 
-public class ShoppingCartPage extends BasePage {
-    public ShoppingCartPage(WebDriver driver) {
-        super(driver);
-    }
-
+public class ShoppingCartPage {
     // region Locators
     // Using "." in XPath matches the entire visible text of the element, including text in child nodes
-    public By CheckoutBtn() {return By.xpath("//button[contains(., 'Checkout')]");}
+    public static By checkoutBtn() {return By.xpath("//button[contains(., 'Checkout')]");}
 
-    public By ContinueShoppingBtn() {return By.xpath("//button[contains(., 'Continue Shopping')]");}
+    public static By continueShoppingBtn() {return By.xpath("//button[contains(., 'Continue Shopping')]");}
 
-    public By Product() {return By.xpath("//tr[td[contains(@class, 'col-sm')]]");}
+    public static By product() {return By.xpath("//tr[td[contains(@class, 'col-sm')]]");}
 
-    public By Product(String name) {return By.xpath(String.format("//tr[td[contains(@class, 'col-sm')] and contains(., '%s')]", name));}
+    public static By product(String name) {return By.xpath(String.format("//tr[td[contains(@class, 'col-sm')] and contains(., '%s')]", name));}
 
-    public By Product(int n) {return By.xpath((String.format("//tr[td[contains(@class, 'col-sm')]][%d]", n)));}
+    public static By product(int n) {return By.xpath((String.format("//tr[td[contains(@class, 'col-sm')]][%d]", n)));}
 
-    public By ProductName(int n) {return AppendToXpath(Product(n), "//h4//a");}
+    public static By productName(int n) {return BaseDriver.appendToXpath(product(n), "//h4//a");}
 
-    public By RemoveProductBtn(String name) {return AppendToXpath(Product(name), "//button");}
+    public static By productRemoveBtn(String name) {return BaseDriver.appendToXpath(product(name), "//button");}
     // endregion
 
 
     // region Performers
-    public void RemoveProduct(String name) {
-        Click(RemoveProductBtn(name));
+    public static void removeProduct(String name) {
+        BaseDriver.click(productRemoveBtn(name));
     }
     // endregion
 
 
     // region Getters
-    public int GetNumberOfProductsInCart() {
-        return GetCount(Product());
+    public static int getNumberOfProductsInCart() {
+        return BaseDriver.getCount(product());
     }
 
-    public String GetProductName(int row) {
-        return GetText(ProductName(row));
+    public static String getProductName(int row) {
+        return BaseDriver.getText(productName(row));
     }
     // endregion
 }

@@ -2,26 +2,25 @@
 <table>
   <tr>
     <td><strong>Files:</strong></td>
-    <td align="right">25</td>
+    <td align="right">22</td>
   </tr>
   <tr>
     <td><strong>Lines:</strong></td>
-    <td align="right">1241</td>
+    <td align="right">1346</td>
   </tr>
   <tr>
     <td><strong>Blanks:</strong></td>
-    <td align="right">166</td>
+    <td align="right">198</td>
   </tr>
   <tr>
     <td><strong>Comments:</strong></td>
-    <td align="right">88</td>
+    <td align="right">78</td>
   </tr>
   <tr>
     <td><strong>Lines of Code:</strong></td>
-    <td align="right">987</td>
+    <td align="right">1070</td>
   </tr>
 </table>
-<img src="images/squirtle_thumbs_up.png" alt="Project Logo" width="200" height="150">
 
 Source: https://codetabs.com/count-loc/count-loc-online.html
 
@@ -43,8 +42,7 @@ Example Test Suite is located in: `test-suites`
 
 
 # Framework Features
-* Implements **Page Object Model** (POM) design pattern for ease of code maintenance and clear separation of page object responsibilities.
-* Provides wait methods in `BasePage` superclass so page objects can wait for elements to be visible/clickable before interacting with them.
+* Implements a custom **Page Object Model** (POM) design pattern for ease of code maintenance and clear separation of page object responsibilities.
 * Uses **Maven** for build and dependency management.
 * Uses **TestNG** for assertions and test annotations.
 * Uses the **Maven Surefire plugin** to integrate with TestNG to run tests.
@@ -61,7 +59,7 @@ Example Test Suite is located in: `test-suites`
 
 # Requirements
 * OS: Windows or MacOS or Linux
-* IDE: [IntelliJ Community Edition](https://www.jetbrains.com/idea/download/) (This works in Eclipse, but I think IntelliJ is much smoother to use)
+* IDE: [IntelliJ Community Edition](https://www.jetbrains.com/idea/download/) (Recommended)
 * JDK: [OpenJDK](https://openjdk.org/)
 * Java Version: 17
 
@@ -109,12 +107,6 @@ The email tells me what browser the test ran on, whether it passed or failed, an
 
 
 # Considered but Not Done
-
-## IRetryAnalyzer
-This framework does not use TestNG's `IRetryAnalyzer` interface for re-running flaky tests. 
-
-**I consider this bad practice**. If tests are flaky to begin with, they need to be updated to be more robust.
-
 ## PageFactory
 This framework does not use `PageFactory` to locate elements.
 
@@ -129,14 +121,11 @@ I split Page Object classes into 3 regions: Locators, Getters, and Performers:
 * The Getter region can return things to be used for test assertions.
 * The Performer region contains methods that act on WebElements found by using the values in the Locator region.
 
-All Page Objects extend the `BasePage` superclass. By doing this, all page objects will automatically wait for AJAX upon instantiation. Additionally, by calling the superclass's constructor, Page Objects get access to JavascriptExecutor, Wait methods, and other convenience methods. 
-
-
 ## Tests
 * All test class names must end in "Test". This is a requirement for TestNG to work correctly.
 * All test classes extend the `BaseTest` class.
 * Test methods must use the `@Test` annotation.
-* Use the custom `Assertion` class to make test assertions.
+* Use the custom `Assert` class to make test assertions.
 * Test classes must be specified in an XML Test Suite file located in `test-suites` in order for the framework to pick up on them.
 
 

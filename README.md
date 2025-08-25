@@ -26,7 +26,7 @@ Source: https://codetabs.com/count-loc/count-loc-online.html
 
 
 # Background
-SparkFlow is a Selenium Framework written in Java for End to End (E2E) testing. Driven by an XML Test Suite. Tests can be run locally or remotely (via GitHub Actions).
+SparkFlow is a Selenium Framework written in Java for End to End (E2E) testing. Driven by an XML Test Suite. Tests can be run locally or remotely via GitHub Actions.
 
 Page classes and Tests are included to demonstrate the integration with the framework. 
 
@@ -43,7 +43,7 @@ Example Test Suite is located in: `test-suites`
 
 # Framework Features
 * Implements a **modified** version of the traditional **Page Object Model** (POM) design pattern. 
-  * My version is mainly driven by static Page classes and the `SparkDriver` wrapper class.
+  * My version is mainly driven by static Page classes and the static `SparkDriver` wrapper class.
   * I opted to go this direction for easier code maintenance and cleaner separation of responsibilities.
 * Uses **Maven** for build and dependency management.
 * Uses **TestNG** for assertions and test annotations.

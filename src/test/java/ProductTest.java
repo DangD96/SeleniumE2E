@@ -2,9 +2,9 @@ import framework.Assert;
 import framework.BaseDriver;
 import framework.BaseTest;
 import org.testng.annotations.Test;
-import page_objects.CatalogPage;
-import page_objects.LoginPage;
-import page_objects.ShoppingCartPage;
+import pages.CatalogPage;
+import pages.LoginPage;
+import pages.ShoppingCartPage;
 
 public class ProductTest extends BaseTest {
 

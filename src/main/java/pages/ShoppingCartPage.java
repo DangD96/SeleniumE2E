@@ -1,4 +1,4 @@
-package page_objects;
+package pages;
 
 import framework.BaseDriver;
 import org.openqa.selenium.By;

@@ -28,13 +28,13 @@ Source: https://codetabs.com/count-loc/count-loc-online.html
 # Background
 Selenium Framework written in Java for End to End (E2E) testing. Driven by an XML Test Suite. Tests can be run locally or remotely (via GitHub Actions).
 
-Page objects and Tests are included to demonstrate the integration with the framework. 
+Page classes and Tests are included to demonstrate the integration with the framework. 
 
 Website under test located here: https://www.rahulshettyacademy.com/loginpagePractise/
 
 Core framework files are located in: `src/main/java/framework`
 
-Example Page Objects are located in: `src/main/java/page_objects`
+Example Page classes are located in: `src/main/java/pages`
 
 Example Tests are located in: `src/test/java`
 
@@ -42,7 +42,9 @@ Example Test Suite is located in: `test-suites`
 
 
 # Framework Features
-* Implements a custom **Page Object Model** (POM) design pattern for ease of code maintenance and clear separation of page object responsibilities.
+* Implements a **modified** version of the traditional **Page Object Model** (POM) design pattern. 
+  * My version is mainly driven by static Page classes and the `BaseDriver` wrapper class.
+  * I opted to go this direction for easier code maintenance and cleaner separation of responsibilities.
 * Uses **Maven** for build and dependency management.
 * Uses **TestNG** for assertions and test annotations.
 * Uses the **Maven Surefire plugin** to integrate with TestNG to run tests.
@@ -67,11 +69,9 @@ Example Test Suite is located in: `test-suites`
 # How To Run Tests
 To run tests locally using this framework:
 * Clone this repository.
-* Create your Page Objects in `src/main/java/page_objects`
-  * The example `PageObjectTemplate` class has been provided for reference.
-  * > **Note:** For page object standards, see the [Page Objects](#page-objects) section.
+* Create your Page classes in `src/main/java/pages`
+  * > **Note:** For page class standards, see the [Page Objects](#page-classes) section.
 * Create your Tests in `src/test/java`
-  * The example `TestTemplate` class has been provided for reference.
   * > **Note:** For test class standards, see the [Tests](#tests) section.
 * In IntelliJ, create Maven run configurations that follow this format: 
   * `mvn clean test -D<browser> -D<testSuite> -D<url>`
@@ -83,13 +83,10 @@ To run tests locally using this framework:
     * DJD Chrome Run
     * DJD Edge Run
     * DJD Firefox Run
-> **Note**: `BaseTest.getSetupProperties()` also retrieves an "env" property. If you run tests locally, this property does not need to be included in the Maven run configuration.
-> However, I also set up this repository to run remotely via GitHub Actions. When running remotely, the "env" property must be set to "PRD" to make the tests run on headless browsers.
-> This is because GitHub's Runners are headless environments. For more info about this, refer to the **Continuous Integration (CI) with GitHub Actions** section below.
 
 
 # Continuous Integration (CI) with GitHub Actions
-I configured this repository to run via GitHub Actions as well so we can get some Continuous Integration. This is controlled by the [.github/workflows/actions.yml](https://github.com/DangD96/SeleniumE2E/blob/master/.github/workflows/actions.yml) file.
+I configured this repository to run via GitHub Actions as well. This is controlled by the [.github/workflows/actions.yml](https://github.com/DangD96/SeleniumE2E/blob/master/.github/workflows/actions.yml) file.
 
 With GitHub Actions CI:
 * Tests can be triggered to run upon pushing to or merging to the master branch with changes to files under specific directories.
@@ -107,6 +104,7 @@ The email tells me what browser the test ran on, whether it passed or failed, an
 
 
 # Considered but Not Done
+
 ## PageFactory
 This framework does not use `PageFactory` to locate elements.
 
@@ -115,8 +113,8 @@ This is because this approach [is not recommended by Selenium contributors and c
 
 # Appendix
 
-## Page Objects
-I split Page Object classes into 3 regions: Locators, Getters, and Performers:
+## Page Classes
+Static classes that encapsulate a page's elements and behavior. I split Page classes into 3 regions: Locators, Getters, and Performers:
 * The Locator region holds the `By` locators for the page elements.
 * The Getter region can return things to be used for test assertions.
 * The Performer region contains methods that act on WebElements found by using the values in the Locator region.

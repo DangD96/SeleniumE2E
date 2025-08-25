@@ -75,7 +75,7 @@ To run tests locally using this framework:
   * > **Note:** For test class standards, see the [Tests](#tests) section.
 * In IntelliJ, create Maven run configurations that follow this format: 
   * `mvn clean test -D<browser> -D<testSuite> -D<url>`
-* The info in the angle brackets are runtime arguments/properties that are retrieved via `BaseTest.getSetupProperties()`:
+* The info in the angle brackets are runtime arguments/properties that are retrieved in `BaseTest`:
   * testSuite: The name of your XML testing suite.
   * browser: The name of the browser to test on. Takes "Chrome", "Edge", or "Firefox".
   * url: The URL of the website for the tests.

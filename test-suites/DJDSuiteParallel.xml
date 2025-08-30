@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="DJD Suite with Parallel Methods" parallel="methods" thread-count="10">
-    <test verbose="2" name="Logging In" enabled="false">
+    <test verbose="2" name="Logging In" enabled="true">
         <classes>
             <class name="LoginTest"/>
         </classes>
@@ -9,11 +9,6 @@
     <test verbose="2" name="Adding Product to Cart" enabled="false">
         <classes>
             <class name="ProductTest"/>
-        </classes>
-    </test>
-    <test verbose="2" name="Repeating actions">
-        <classes>
-            <class name="MyTest"/>
         </classes>
     </test>
 </suite>

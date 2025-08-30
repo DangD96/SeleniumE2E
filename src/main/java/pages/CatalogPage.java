@@ -4,6 +4,8 @@ import framework.Is;
 import framework.SparkDriver;
 import org.openqa.selenium.By;
 
+import static framework.Utilities.appendToXpath;
+
 public class CatalogPage {
     // region Locators
     public static By checkoutBtn() {return By.xpath("//a[contains(text(), 'Checkout')]");}
@@ -22,14 +24,14 @@ public class CatalogPage {
     public static By product(int n) {return By.xpath(String.format("//app-card[%d]", n));}
 
     public static By productName(String name) {
-        return SparkDriver.appendToXpath(product(name), String.format("//a[text()='%s']", name));
+        return appendToXpath(product(name), String.format("//a[text()='%s']", name));
     }
 
     public static By productName(int n) {return By.xpath(String.format("//app-card[%d]//a", n));}
 
-    public static By productPrice(String name) {return SparkDriver.appendToXpath(product(name), "//h5");}
+    public static By productPrice(String name) {return appendToXpath(product(name), "//h5");}
 
-    public static By productAddBtn(String name) {return SparkDriver.appendToXpath(product(name), "//button");}
+    public static By productAddBtn(String name) {return appendToXpath(product(name), "//button");}
     // endregion
 
 

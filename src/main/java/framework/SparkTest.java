@@ -5,8 +5,6 @@ import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import com.aventstack.extentreports.reporter.configuration.Theme;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 
@@ -20,35 +18,35 @@ import java.util.*;
 
 @Listeners({SuiteListener.class}) // Add listener to get name of the XML test suite
 public class SparkTest {
-    /** Thread safe variables and their getters (tests methods run in parallel) */
+    /** === Thread safe variables and their getters (tests methods run in parallel) === */
     private final static ThreadLocal<ExtentTest> testMethod = new ThreadLocal<>();
     private ExtentTest getTestMethod() {return testMethod.get();}
 
-    /** Constants */
-    private final String FS = File.separator; // System dependent file separator (so tests can run on windows or unix)
-    private final String USER_DIR = System.getProperty("user.dir"); // Returns working/project directory. In my case, the path to SeleniumE2E
+    /** === Constants === */
+    final String FS = File.separator; // System dependent file separator (so tests can run on Windows or Mac)
+    final static String USER_DIR = System.getProperty("user.dir"); // working/project directory. In my case, the path to SparkFlow root
     private final String PATH_TO_TEST_SOURCES_ROOT = USER_DIR+FS+"src"+FS+"test"+FS+"java";
 
-    /** Framework variables */
-    private static ExtentReports report;
-    private static String env;
+    /** === Test-level configuration variables === */
+    static String browser;
+    static String env;
+    static String url;
+    static String suiteName;
     private static Instant suiteStartInstant;
     private static Instant suiteEndInstant;
+    private static ExtentReports report;
     private static String REPORT_SAVE_PATH;
 
-    /** Load properties from maven run config and create the shell of the results report */
+    /** === Main test loop === */
     @BeforeSuite()
     protected void setUp() {
-        // System props can come from the maven command line arguments or the POM file
-        // I'm getting these from the maven command line arguments
+        // System properties can come from the maven command line arguments or the POM file
+        // Load system properties from maven run config and create the shell of the results report
         try {
-            getSuiteName();
-            SparkDriver.browser = getBrowser();
-            SparkDriver.env = getEnv();
-            SparkDriver.url = getUrl();
-            SparkDriver.FS = FS;
-            SparkDriver.USER_DIR = USER_DIR;
-            SparkDriver.REPORT_SAVE_PATH = REPORT_SAVE_PATH;
+            suiteName = getSuiteName();
+            browser = getBrowser();
+            env = getEnv();
+            url = getUrl();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -76,29 +74,29 @@ public class SparkTest {
     protected void listenForResult(ITestResult result) throws IOException {
         ExtentTest testMethod = getTestMethod();
         if (result.getStatus() == ITestResult.FAILURE) {
-            String relativePathToScreenshot = SparkDriver.saveErrorScreenshot(result); // Needs relative path from project directory
+            String relativePathToScreenshot = SparkDriver.takeErrorScreenshot(result); // Needs relative path from project directory
             testMethod.fail(result.getThrowable()).addScreenCaptureFromPath(relativePathToScreenshot);
         }
         else {testMethod.log(Status.PASS, "Success");}
     }
 
-    /** Null the thread specific driver object */
     @AfterMethod(dependsOnMethods = {"listenForResult"})
     protected void tearDown() {
-        SparkDriver.quitDriver();}
+        SparkDriver.quitDriver(); // Null the thread specific driver object
+    }
 
     @AfterSuite()
     protected void saveReport() {
         suiteEndInstant = LocalDateTime.now().toInstant(ZoneOffset.ofHours(0));
-        report.setSystemInfo("Total run time", getDurationOfTestSuite());
+        report.setSystemInfo("Total run time", getTestSuiteDuration());
         report.flush();
         if (!"PRD".equals(env)) {
             System.out.println("\n=====Test results can be found here: " + REPORT_SAVE_PATH + "======\n");
         }
     }
 
-    /** Get Maven properties */
-    private static String getBrowser() {
+    /** === Get Maven properties === */
+    private String getBrowser() {
         String browser = System.getProperty("browser");
         if (browser == null) {throw new PropertyNotSpecifiedException("browser");}
         return browser.toUpperCase();
@@ -121,8 +119,8 @@ public class SparkTest {
         return System.getProperty("env");
     }
 
+    /** === Results === */
     private void createReport() {
-        String suiteName = getSuiteName();
         String browser = getBrowser();
         String filename = suiteName + " " + getBrowser();
         String reportName = suiteName + " - " + browser;
@@ -136,7 +134,7 @@ public class SparkTest {
         report.attachReporter(reporter);
     }
 
-    private String getDurationOfTestSuite() {
+    private String getTestSuiteDuration() {
         Duration duration = Duration.between(suiteStartInstant, suiteEndInstant);
         int minutes = duration.toMinutesPart();
         double minutesFraction = (double) duration.toSecondsPart() / 60;
@@ -146,21 +144,14 @@ public class SparkTest {
         return runTime + " mins";
     }
 
+    /** === Data === */
     @SuppressWarnings("SameParameterValue")
     protected Object[] getTestData(String filename) throws IOException {
         String filePath = PATH_TO_TEST_SOURCES_ROOT + FS + "data" + FS + filename;
-        ArrayList<HashMap<String, String>> data = deserializeJSON(filePath);
+        ArrayList<HashMap<String, String>> data = Utilities.deserializeJSON(filePath);
         int size = data.size();
         Object[] objAry = new Object[size]; // Object array to store the hashmaps
         for (int i = 0; i < size; i++) {objAry[i] = data.get(i);}
         return objAry;
-    }
-
-    private ArrayList<HashMap<String, String>> deserializeJSON(String path) throws IOException {
-        /* Use Jackson API to convert JSON objects to HashMaps.
-        Return as ArrayList because getTestData will need to retrieve data from it
-        and that is faster compared to LinkedList */
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(new File(path), new TypeReference<>(){});
     }
 }

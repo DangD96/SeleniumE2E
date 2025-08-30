@@ -1,5 +1,6 @@
 package pages;
 
+import framework.Is;
 import framework.SparkDriver;
 import org.openqa.selenium.By;
 
@@ -35,6 +36,7 @@ public class CatalogPage {
     // region Performers
     public static void goToShoppingCart() {
         SparkDriver.click(checkoutBtn());
+        SparkDriver.repeatUntil(checkoutBtn(), SparkDriver.Click, product(""), Is.Displayed);
     }
 
     public static void clickOnProduct(String name) {

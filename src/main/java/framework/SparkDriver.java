@@ -15,7 +15,7 @@ import org.testng.ITestResult;
 import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
-import java.util.function.Function;
+import java.util.function.*;
 
 // Custom static wrapper around common WebDriver actions
 public class SparkDriver {
@@ -125,47 +125,77 @@ public class SparkDriver {
         return absolutePath.split(userDirAKAProjectName)[1]; // Get everything that comes after the project name
     }
 
-    // Function = takes something, returns something
-    public static <R> R actionWithRetry(By locator, Function<By, R> function, boolean isInteractiveAction) {
+    public static <R> R doAction(By locator, Function<By, R> function, boolean isInteractiveAction) {
+        try {
+            if (isInteractiveAction) {
+                waitForElementToBeInteractable(locator); // for actions that need element to be interactable
+            } else {
+                waitForElementToBeVisible(locator); // for actions like that just need element to be visible
+            }
+            return function.apply(locator);
+        } catch (StaleElementReferenceException retry) {
+            sleep(WAIT_MS);
+            if (isInteractiveAction) {
+                waitForElementToBeInteractable(locator); // for actions that need element to be interactable
+            } else {
+                waitForElementToBeVisible(locator); // for actions like that just need element to be visible
+            }
+            return function.apply(locator);
+        } catch (Exception e) {
+            throw new RuntimeException(String.format("Action failed on locator %s with error: %s", locator, e));
+        }
+    }
+
+    /** Mainly applies to interactive actions (performers) like click()
+     * @param locator1 locator for first element
+     * @param function function that acts on locator1
+     * @param locator2 locator for second element (can be the same as locator1)
+     * @param condition predicate that acts on locator2
+     */
+    public static <R> void repeatUntil(By locator1, Function<By, R> function, By locator2, Predicate<By> condition) {
         int retries = 0;
         while (retries < MAX_RETRIES) {
-            try {
-                if (isInteractiveAction) {
-                    waitForElementToBeInteractable(locator); // for actions that need element to be interactable
-                } else {
-                    waitForElementToBeVisible(locator); // for actions like that just need element to be visible
-                }
-                return function.apply(locator);
-            } catch (StaleElementReferenceException | ElementClickInterceptedException retry) {
+            doAction(locator1, function, true);
+            pauseForEffect();
+            if (condition.test(locator2)) {
+                return; // success
+            } else {
                 retries++;
                 sleep(WAIT_MS);
             }
         }
-        throw new RuntimeException(String.format("Action failed after %d retries for locator: %s", MAX_RETRIES, locator));
+        throw new RuntimeException(String.format("Action failed after %d retries", retries));
     }
+
+    public static Function<By, Void> Click = loc -> {getDriver().findElement(loc).click(); return null;};
 
     public static void click(By locator) {
         // passing locator into the lambda function as an argument
-        actionWithRetry(locator, loc -> {getDriver().findElement(loc).click(); return null;}, true);
+        doAction(locator, Click, true);
         pauseForEffect();
     }
 
+    /** Click element found by locator1 until element found by locator2 is visible */
+    public static void clickUntilElementIsVisible(By locator1, By locator2) {
+        repeatUntil(locator1, Click, locator2, Is.Displayed);
+    }
+
     public static void typeText(By locator, String text) {
-        actionWithRetry(locator, loc -> {getDriver().findElement(loc).sendKeys(text); return null;}, true);
+        doAction(locator, loc -> {getDriver().findElement(loc).sendKeys(text); return null;}, true);
         pauseForEffect();
     }
 
     public static void clear(By locator) {
-        actionWithRetry(locator, loc -> {getDriver().findElement(loc).clear(); return null;}, true);
+        doAction(locator, loc -> {getDriver().findElement(loc).clear();return null;}, true);
         pauseForEffect();
     }
 
     public static WebElement getElement(By locator) {
-        return actionWithRetry(locator, loc -> getDriver().findElement(loc), false);
+        return doAction(locator, loc -> getDriver().findElement(loc), false);
     }
 
     public static String getText(By locator) {
-        return actionWithRetry(locator, loc -> getDriver().findElement(loc).getText(), false);
+        return doAction(locator, loc -> getDriver().findElement(loc).getText(), false);
     }
 
     public static int getCount(By locator) {

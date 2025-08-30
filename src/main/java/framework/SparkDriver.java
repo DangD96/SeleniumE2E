@@ -19,22 +19,23 @@ import java.util.function.*;
 
 // Custom static wrapper around common WebDriver actions
 public class SparkDriver {
-    // Threadsafe variables because tests methods run in parallel
+    /** Thread safe variables and their getters (tests methods run in parallel) */
     static ThreadLocal<WebDriver> driver = new ThreadLocal<>();
     static ThreadLocal<WebDriverWait> wait = new ThreadLocal<>();
+    public static WebDriver getDriver() {return driver.get();}
+    public static WebDriverWait getWait() {return wait.get();}
 
+    /** Constants */
     static final int MAX_RETRIES = 10;
     static final long WAIT_MS = 1000;
+
+    /** Framework variables (populated by SparkTest) */
     static String browser;
     static String url;
     static String env;
     static String FS;
     static String USER_DIR;
     static String REPORT_SAVE_PATH;
-
-    // get thread specific variables
-    public static WebDriver getDriver() {return driver.get();}
-    public static WebDriverWait getWait() {return wait.get();}
 
     public static void configureDriver() {
         switch (browser) {
@@ -92,7 +93,7 @@ public class SparkDriver {
     }
 
     public static void pauseForEffect() {
-        sleep(500);
+        sleep(WAIT_MS);
     }
 
     public static String saveErrorScreenshot(ITestResult result) throws IOException {
@@ -128,51 +129,57 @@ public class SparkDriver {
     public static <R> R doAction(By locator, Function<By, R> function, boolean isInteractiveAction) {
         try {
             if (isInteractiveAction) {
-                waitForElementToBeInteractable(locator); // for actions that need element to be interactable
+                waitForElementToBeInteractable(locator); // for performer-type actions that need element to be interactable
+                function.apply(locator); // don't care about function's return value here
+                pauseForEffect();
+                return null;
             } else {
-                waitForElementToBeVisible(locator); // for actions like that just need element to be visible
+                waitForElementToBeVisible(locator); // for getter-type actions that don't need the element to be interactible
+                return function.apply(locator);
             }
-            return function.apply(locator);
         } catch (StaleElementReferenceException retry) {
-            sleep(WAIT_MS);
             if (isInteractiveAction) {
-                waitForElementToBeInteractable(locator); // for actions that need element to be interactable
+                waitForElementToBeInteractable(locator);
+                function.apply(locator);
+                pauseForEffect();
+                return null;
             } else {
-                waitForElementToBeVisible(locator); // for actions like that just need element to be visible
+                waitForElementToBeVisible(locator);
+                return function.apply(locator);
             }
-            return function.apply(locator);
         } catch (Exception e) {
             throw new RuntimeException(String.format("Action failed on locator %s with error: %s", locator, e));
         }
     }
 
-    /** Mainly applies to interactive actions (performers) like click()
-     * @param locator1 locator for first element
-     * @param function function that acts on locator1
-     * @param locator2 locator for second element (can be the same as locator1)
-     * @param condition predicate that acts on locator2
+    /** Mainly for interactive actions (performers) like click(). Not meant to be used by getters
+     * @param locator1  locator to find first element
+     * @param function  function that acts on element found via locator1
+     * @param locator2  locator to find second element
+     * @param condition predicate that tests element found via locator2
      */
     public static <R> void repeatUntil(By locator1, Function<By, R> function, By locator2, Predicate<By> condition) {
         int retries = 0;
         while (retries < MAX_RETRIES) {
             doAction(locator1, function, true);
-            pauseForEffect();
             if (condition.test(locator2)) {
                 return; // success
             } else {
                 retries++;
-                sleep(WAIT_MS);
             }
         }
         throw new RuntimeException(String.format("Action failed after %d retries", retries));
     }
 
-    public static Function<By, Void> Click = loc -> {getDriver().findElement(loc).click(); return null;};
+    /** Performing */
+    // member that is a lambda expresssion
+    public static Function<By, Void> Click = loc -> {
+        getDriver().findElement(loc).click();
+        return null;
+    };
 
     public static void click(By locator) {
-        // passing locator into the lambda function as an argument
         doAction(locator, Click, true);
-        pauseForEffect();
     }
 
     /** Click element found by locator1 until element found by locator2 is visible */
@@ -180,16 +187,19 @@ public class SparkDriver {
         repeatUntil(locator1, Click, locator2, Is.Displayed);
     }
 
+    public static void clickUntilElementIsInteractable(By locator1, By locator2) {
+        repeatUntil(locator1, Click, locator2, Is.Enabled);
+    }
+
     public static void typeText(By locator, String text) {
         doAction(locator, loc -> {getDriver().findElement(loc).sendKeys(text); return null;}, true);
-        pauseForEffect();
     }
 
     public static void clear(By locator) {
         doAction(locator, loc -> {getDriver().findElement(loc).clear();return null;}, true);
-        pauseForEffect();
     }
 
+    /** Getting */
     public static WebElement getElement(By locator) {
         return doAction(locator, loc -> getDriver().findElement(loc), false);
     }
@@ -206,16 +216,17 @@ public class SparkDriver {
         }
     }
 
+    public static String getURL() {
+        return getDriver().getCurrentUrl();
+    }
+
+    /** Waiting */
     public static void sleep(long ms) {
         try {
             Thread.sleep(ms);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public static String getURL() {
-        return getDriver().getCurrentUrl();
     }
 
     public static void waitForElementToBeInteractable(By locator) {
@@ -232,14 +243,5 @@ public class SparkDriver {
 
     public static void waitForElementToBeInvisible(By locator) {
         getWait().until(ExpectedConditions.invisibilityOfElementLocated(locator));
-    }
-
-    // to help with building locators via composition (parent-child elements in repeatable UI)
-    public static By appendToXpath(By baseLocator, String relative) {
-        if (!baseLocator.toString().startsWith("By.xpath: ")) {
-            throw new IllegalArgumentException("This method only supports XPath By objects");
-        }
-        String xpathAsString = baseLocator.toString().replace("By.xpath: ", "");
-        return By.xpath(xpathAsString + relative);
     }
 }

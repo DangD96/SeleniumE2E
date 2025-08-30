@@ -20,16 +20,20 @@ import java.util.*;
 
 @Listeners({SuiteListener.class}) // Add listener to get name of the XML test suite
 public class SparkTest {
+    /** Thread safe variables and their getters (tests methods run in parallel) */
     private final static ThreadLocal<ExtentTest> testMethod = new ThreadLocal<>();
+    private ExtentTest getTestMethod() {return testMethod.get();}
+
+    /** Constants */
+    private final String FS = File.separator; // System dependent file separator (so tests can run on windows or unix)
+    private final String USER_DIR = System.getProperty("user.dir"); // Returns working/project directory. In my case, the path to SeleniumE2E
+    private final String PATH_TO_TEST_SOURCES_ROOT = USER_DIR+FS+"src"+FS+"test"+FS+"java";
+
+    /** Framework variables */
     private static ExtentReports report;
     private static String env;
     private static Instant suiteStartInstant;
     private static Instant suiteEndInstant;
-    private final String FS = File.separator; // System dependent file separator (so tests can run on windows or unix)
-
-    // Returns working/project directory. In my case, the path to SeleniumE2E
-    private final String USER_DIR = System.getProperty("user.dir");
-    private final String PATH_TO_TEST_SOURCES_ROOT = USER_DIR+FS+"src"+FS+"test"+FS+"java";
     private static String REPORT_SAVE_PATH;
 
     /** Load properties from maven run config and create the shell of the results report */
@@ -45,8 +49,7 @@ public class SparkTest {
             SparkDriver.FS = FS;
             SparkDriver.USER_DIR = USER_DIR;
             SparkDriver.REPORT_SAVE_PATH = REPORT_SAVE_PATH;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
         createReport();
@@ -94,9 +97,7 @@ public class SparkTest {
         }
     }
 
-    // Provide methods for each thread to get their thread specific variables
-    private ExtentTest getTestMethod() {return testMethod.get();}
-
+    /** Get Maven properties */
     private static String getBrowser() {
         String browser = System.getProperty("browser");
         if (browser == null) {throw new PropertyNotSpecifiedException("browser");}

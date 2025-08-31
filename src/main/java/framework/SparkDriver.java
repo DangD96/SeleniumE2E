@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.time.Duration;
 import java.util.function.*;
 
-// Custom static wrapper around common WebDriver actions
+// Custom static wrapper around common WebDriver behaviors
 public class SparkDriver {
     /** === Thread safe variables and their getters (tests methods run in parallel) === */
     static ThreadLocal<WebDriver> driver = new ThreadLocal<>();
@@ -62,7 +62,7 @@ public class SparkDriver {
         // https://peter.sh/experiments/chromium-command-line-switches/
         if (options instanceof ChromiumOptions<?>) {
             ChromiumOptions<?> chromiumOptions = (ChromiumOptions<?>) options;
-            if (isPRD()) {
+            if (Helpers.isPRD()) {
                 // PRD tests will run in GitHub Runner environment, which is headless
                 // Sandboxing has potential to cause issues in CI/CD envs
                 chromiumOptions.addArguments("--headless", "--no-sandbox", "--disable-dev-shm-usage");
@@ -74,7 +74,7 @@ public class SparkDriver {
         // https://wiki.mozilla.org/Firefox/CommandLineOptions
         if (options instanceof FirefoxOptions) {
             FirefoxOptions firefoxOptions = (FirefoxOptions) options;
-            if (isPRD()) {
+            if (Helpers.isPRD()) {
                 firefoxOptions.addArguments("-headless");
             }
             firefoxOptions.addArguments("-private");
@@ -82,10 +82,6 @@ public class SparkDriver {
         }
 
         throw new IllegalArgumentException("Options type not supported");
-    }
-
-    public static Boolean isPRD() {
-        return "PRD".equals(SparkTest.env);
     }
 
     public static void startDriver() {
@@ -116,7 +112,7 @@ public class SparkDriver {
         FileUtils.copyFile(tempFile, destFile);
 
         String absolutePath = destFile.getAbsolutePath();
-        return Utilities.getPathRelativeToUserDir(absolutePath);
+        return Helpers.getPathRelativeToUserDir(absolutePath);
     }
 
     public static <R> R doAction(By locator, Function<By, R> function, boolean isInteractiveAction) {

@@ -4,7 +4,7 @@ import framework.Is;
 import framework.SparkDriver;
 import org.openqa.selenium.By;
 
-import static framework.Utilities.appendToXpath;
+import static framework.Helpers.extendXPath;
 
 public class TemplatePage {
     // region Locators
@@ -12,7 +12,7 @@ public class TemplatePage {
 
     public static By myProduct(String name) {return By.xpath(String.format("//app-card[.//*[@class='card-title']//a[text()='%s']]", name));}
 
-    public static By myProductPrice(String name) {return appendToXpath(myProduct(name), "//h5");}
+    public static By myProductPrice(String name) {return extendXPath(myProduct(name), "//h5");}
     // endregion
 
 

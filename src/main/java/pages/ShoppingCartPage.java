@@ -3,7 +3,7 @@ package pages;
 import framework.SparkDriver;
 import org.openqa.selenium.By;
 
-import static framework.Utilities.appendToXpath;
+import static framework.Helpers.extendXPath;
 
 public class ShoppingCartPage {
     // region Locators
@@ -18,9 +18,9 @@ public class ShoppingCartPage {
 
     public static By product(int n) {return By.xpath((String.format("//tr[td[contains(@class, 'col-sm')]][%d]", n)));}
 
-    public static By productName(int n) {return appendToXpath(product(n), "//h4//a");}
+    public static By productName(int n) {return extendXPath(product(n), "//h4//a");}
 
-    public static By productRemoveBtn(String name) {return appendToXpath(product(name), "//button");}
+    public static By productRemoveBtn(String name) {return extendXPath(product(name), "//button");}
     // endregion
 
 

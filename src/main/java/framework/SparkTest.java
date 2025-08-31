@@ -24,7 +24,7 @@ public class SparkTest {
 
     /** === Constants === */
     final String FS = File.separator; // System dependent file separator (so tests can run on Windows or Mac)
-    final static String USER_DIR = System.getProperty("user.dir"); // working/project directory. In my case, the path to SparkFlow root
+    final static String USER_DIR = System.getProperty("user.dir"); // Working/project directory. In my case, the path to SparkFlow root
     private final String PATH_TO_TEST_SOURCES_ROOT = USER_DIR+FS+"src"+FS+"test"+FS+"java";
 
     /** === Test-level configuration variables === */
@@ -76,8 +76,9 @@ public class SparkTest {
         if (result.getStatus() == ITestResult.FAILURE) {
             String relativePathToScreenshot = SparkDriver.takeErrorScreenshot(result); // Needs relative path from project directory
             testMethod.fail(result.getThrowable()).addScreenCaptureFromPath(relativePathToScreenshot);
+        } else {
+            testMethod.log(Status.PASS, "Success");
         }
-        else {testMethod.log(Status.PASS, "Success");}
     }
 
     @AfterMethod(dependsOnMethods = {"listenForResult"})
@@ -90,7 +91,7 @@ public class SparkTest {
         suiteEndInstant = LocalDateTime.now().toInstant(ZoneOffset.ofHours(0));
         report.setSystemInfo("Total run time", getTestSuiteDuration());
         report.flush();
-        if (!"PRD".equals(env)) {
+        if (!Helpers.isPRD()) {
             System.out.println("\n=====Test results can be found here: " + REPORT_SAVE_PATH + "======\n");
         }
     }
@@ -124,7 +125,7 @@ public class SparkTest {
         String browser = getBrowser();
         String filename = suiteName + " " + getBrowser();
         String reportName = suiteName + " - " + browser;
-        REPORT_SAVE_PATH = USER_DIR + FS + "test-results" + FS + filename.replace(" ", "_") + ".html"; // directory where output is to be printed
+        REPORT_SAVE_PATH = USER_DIR + FS + "test-results" + FS + filename.replace(" ", "_") + ".html";
         ExtentSparkReporter reporter = new ExtentSparkReporter(REPORT_SAVE_PATH);
         reporter.config().setReportName(reportName);
         reporter.config().setDocumentTitle("DJD Automation Report");
@@ -148,7 +149,7 @@ public class SparkTest {
     @SuppressWarnings("SameParameterValue")
     protected Object[] getTestData(String filename) throws IOException {
         String filePath = PATH_TO_TEST_SOURCES_ROOT + FS + "data" + FS + filename;
-        ArrayList<HashMap<String, String>> data = Utilities.deserializeJSON(filePath);
+        ArrayList<HashMap<String, String>> data = Helpers.deserializeJSON(filePath);
         int size = data.size();
         Object[] objAry = new Object[size]; // Object array to store the hashmaps
         for (int i = 0; i < size; i++) {objAry[i] = data.get(i);}

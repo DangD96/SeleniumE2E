@@ -4,10 +4,12 @@ import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.chromium.ChromiumOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.remote.AbstractDriverOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.ITestResult;
@@ -30,51 +32,60 @@ public class SparkDriver {
     static final long WAIT_MS = 1000;
 
     /** === Driver === */
+    // set driver variable in current thread
     public static void configureDriver() {
         switch (SparkTest.browser) {
-            case "EDGE":
-                driver.set(new EdgeDriver(getEdgeOptions())); // set driver variable in current thread
-                break;
-            case "FIREFOX":
-                driver.set(new FirefoxDriver(getFirefoxOptions()));
-                break;
-            case "CHROME":
-                driver.set(new ChromeDriver(getChromeOptions()));
-                break;
-            default:
-                throw new IllegalArgumentException("Browser not supported: " + SparkTest.browser);
+            case "CHROME" -> driver.set(new ChromeDriver(getChromeOptions()));
+            case "EDGE" -> driver.set(new EdgeDriver(getEdgeOptions()));
+            case "FIREFOX" -> driver.set(new FirefoxDriver(getFirefoxOptions()));
+            default -> throw new IllegalArgumentException("Browser not supported: " + SparkTest.browser);
         }
-    }
-
-    private static EdgeOptions getEdgeOptions() {
-        EdgeOptions edgeOptions = new EdgeOptions(); // https://peter.sh/experiments/chromium-command-line-switches/
-        if ("PRD".equals(SparkTest.env)) {
-            edgeOptions.addArguments("--no-sandbox"); // sandboxing has potential to cause issues in automated testing envs
-            edgeOptions.addArguments("--disable-dev-shm-usage");
-            edgeOptions.addArguments("--headless"); // PRD tests will run in GitHub Runner environment, which is headless
-        }
-        edgeOptions.addArguments("--guest"); // Need to add this so Edge doesn't show random popups
-        return edgeOptions;
-    }
-
-    private static FirefoxOptions getFirefoxOptions() {
-        FirefoxOptions firefoxOptions = new FirefoxOptions(); // https://wiki.mozilla.org/Firefox/CommandLineOptions
-        if ("PRD".equals(SparkTest.env)) {
-            firefoxOptions.addArguments("-headless");
-        }
-        firefoxOptions.addArguments("-private");
-        return firefoxOptions;
     }
 
     private static ChromeOptions getChromeOptions() {
-        ChromeOptions chromeOptions = new ChromeOptions(); // https://peter.sh/experiments/chromium-command-line-switches/
-        if ("PRD".equals(SparkTest.env)) {
-            chromeOptions.addArguments("--no-sandbox");
-            chromeOptions.addArguments("--disable-dev-shm-usage");
-            chromeOptions.addArguments("--headless");
+        ChromeOptions chromeOptions = new ChromeOptions();
+        return addArguments(chromeOptions);
+    }
+
+    private static EdgeOptions getEdgeOptions() {
+        EdgeOptions edgeOptions = new EdgeOptions();
+        return addArguments(edgeOptions);
+    }
+
+    private static FirefoxOptions getFirefoxOptions() {
+        FirefoxOptions firefoxOptions = new FirefoxOptions();
+        return addArguments(firefoxOptions);
+    }
+
+    @SuppressWarnings("PatternVariableCanBeUsed")
+    private static <T extends AbstractDriverOptions<?>> T addArguments(T options) {
+        // https://peter.sh/experiments/chromium-command-line-switches/
+        if (options instanceof ChromiumOptions<?>) {
+            ChromiumOptions<?> chromiumOptions = (ChromiumOptions<?>) options;
+            if (isPRD()) {
+                // PRD tests will run in GitHub Runner environment, which is headless
+                // Sandboxing has potential to cause issues in CI/CD envs
+                chromiumOptions.addArguments("--headless", "--no-sandbox", "--disable-dev-shm-usage");
+            }
+            chromiumOptions.addArguments("--guest");
+            return options; // chromiumOptions and options point to the same object
         }
-        chromeOptions.addArguments("--guest");
-        return chromeOptions;
+
+        // https://wiki.mozilla.org/Firefox/CommandLineOptions
+        if (options instanceof FirefoxOptions) {
+            FirefoxOptions firefoxOptions = (FirefoxOptions) options;
+            if (isPRD()) {
+                firefoxOptions.addArguments("-headless");
+            }
+            firefoxOptions.addArguments("-private");
+            return options;
+        }
+
+        throw new IllegalArgumentException("Options type not supported");
+    }
+
+    public static Boolean isPRD() {
+        return "PRD".equals(SparkTest.env);
     }
 
     public static void startDriver() {

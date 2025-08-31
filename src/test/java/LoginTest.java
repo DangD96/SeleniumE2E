@@ -1,5 +1,4 @@
 import framework.Assert;
-import framework.Is;
 import framework.SparkDriver;
 import framework.SparkTest;
 import org.testng.annotations.DataProvider;

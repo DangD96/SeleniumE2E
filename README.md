@@ -2,23 +2,15 @@
 <table>
   <tr>
     <td><strong>Files:</strong></td>
-    <td align="right">22</td>
-  </tr>
-  <tr>
-    <td><strong>Lines:</strong></td>
-    <td align="right">1346</td>
-  </tr>
-  <tr>
-    <td><strong>Blanks:</strong></td>
-    <td align="right">198</td>
+    <td align="right">28</td>
   </tr>
   <tr>
     <td><strong>Comments:</strong></td>
-    <td align="right">78</td>
+    <td align="right">103</td>
   </tr>
   <tr>
     <td><strong>Lines of Code:</strong></td>
-    <td align="right">1070</td>
+    <td align="right">1150</td>
   </tr>
 </table>
 

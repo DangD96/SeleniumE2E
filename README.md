@@ -1,18 +1,9 @@
 # For Fun
-<table>
-  <tr>
-    <td><strong>Files:</strong></td>
-    <td align="right">28</td>
-  </tr>
-  <tr>
-    <td><strong>Comments:</strong></td>
-    <td align="right">103</td>
-  </tr>
-  <tr>
-    <td><strong>Lines of Code:</strong></td>
-    <td align="right">1150</td>
-  </tr>
-</table>
+**Files:** 28
+
+**Lines of Actual Code:** 1150
+
+**Comments:** 103
 
 Source: https://codetabs.com/count-loc/count-loc-online.html
 

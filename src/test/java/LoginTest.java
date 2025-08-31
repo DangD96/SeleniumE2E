@@ -1,4 +1,5 @@
 import framework.Assert;
+import framework.Is;
 import framework.SparkDriver;
 import framework.SparkTest;
 import org.testng.annotations.DataProvider;
@@ -36,5 +37,7 @@ public class LoginTest extends SparkTest {
     }
 
     @DataProvider(parallel = true)
-    public Object[] loginInvalidDataProvider() throws IOException {return getTestData("LoginTestLoginInvalidData.json");}
+    public Object[] loginInvalidDataProvider() throws IOException {
+        return getTestData("LoginTestLoginInvalidData.json");
+    }
 }

@@ -7,7 +7,6 @@ import pages.LoginPage;
 import pages.ShoppingCartPage;
 
 public class ProductTest extends SparkTest {
-
     @Test(description = "Add correct product to shopping cart")
     protected void addProductTest() {
         LoginPage.login("rahulshettyacademy", "learning", "", "Teacher", true);
